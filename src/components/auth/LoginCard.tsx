@@ -49,7 +49,11 @@ export const LoginCard: React.FC = () => {
             >
               OPEN THE APP
             </button>
-            <div className="w-8 h-[1px] bg-neutral-800" />
+            <div className="pt-8 flex items-center gap-3">
+              <div className="w-16 h-[1px] bg-neutral-800" />
+              <span className="text-[8px] font-mono text-neutral-700 uppercase tracking-[0.3em]">or</span>
+              <div className="w-16 h-[1px] bg-neutral-800" />
+            </div>
             <button
               onClick={handleOpenApp}
               className="text-[10px] text-neutral-500 hover:text-white uppercase tracking-widest font-mono flex items-center gap-1.5 transition-colors cursor-pointer"

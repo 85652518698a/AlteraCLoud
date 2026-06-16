@@ -1,44 +1,20 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'authorization, content-type, x-client-info, apikey',
-}
+import { decode } from 'https://deno.land/x/jwt@v2.0.2/mod.ts'
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
-  }
-
   try {
     const authHeader = req.headers.get('Authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ error: 'Missing token' }), {
-        status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
+      return new Response('Missing token', { status: 401 })
     }
 
     const token = authHeader.split(' ')[1]
-    const tokenParts = token.split('.')
-    if (tokenParts.length !== 3) {
-      return new Response(JSON.stringify({ error: 'Invalid token format' }), {
-        status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
-    }
-
-    const payload = JSON.parse(
-      new TextDecoder().decode(
-        Uint8Array.from(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
-      )
-    )
+    const payload = decode(token)
     const email = payload?.email?.toLowerCase()?.trim()
 
     if (!email) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
+      return new Response('Unauthorized', { status: 403 })
     }
 
     const supabaseAdmin = createClient(
@@ -46,26 +22,33 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
     )
 
-    const { data: adminUser } = await supabaseAdmin
-      .from('admin_users').select('id').eq('email', email).maybeSingle()
+    // Check admin status from DB
+    const { data: adminUser, error: adminError } = await supabaseAdmin
+      .from('admin_users')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle()
 
-    if (!adminUser) {
-      return new Response(JSON.stringify({ error: 'Unauthorized: Admin access required' }), {
-        status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
+    if (adminError || !adminUser) {
+      return new Response('Unauthorized: Admin access required', { status: 403 })
     }
 
     const { data: logs, error } = await supabaseAdmin
-      .from('audit_logs').select('*').order('created_at', { ascending: false }).limit(50)
+      .from('audit_logs')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50)
 
     if (error) throw error
 
     return new Response(JSON.stringify(logs), {
-      status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      headers: { 'Content-Type': 'application/json' },
+      status: 200,
     })
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {
-      status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      headers: { 'Content-Type': 'application/json' },
+      status: 500,
     })
   }
 })
