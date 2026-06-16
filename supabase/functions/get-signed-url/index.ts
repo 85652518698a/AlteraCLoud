@@ -1,61 +1,89 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'authorization, content-type, x-client-info, apikey',
+}
+
 serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders })
+  }
+
   try {
-    const authHeader = req.headers.get('Authorization');
+    const authHeader = req.headers.get('Authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return new Response('Missing token', { status: 401 });
+      return new Response(JSON.stringify({ error: 'Missing token' }), {
+        status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
     }
 
-    const token = authHeader.split(' ')[1];
-    const tokenParts = token.split('.');
+    const token = authHeader.split(' ')[1]
+    const tokenParts = token.split('.')
     if (tokenParts.length !== 3) {
-      return new Response('Invalid token format', { status: 401 });
+      return new Response(JSON.stringify({ error: 'Invalid token format' }), {
+        status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
     }
-    
+
     const payload = JSON.parse(
       new TextDecoder().decode(
         Uint8Array.from(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
       )
-    );
-    const email = payload?.email?.toLowerCase()?.trim();
+    )
+    const email = payload?.email?.toLowerCase()?.trim()
 
     if (!email) {
-      return new Response('Unauthorized', { status: 403 });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
     }
 
-    const { fileId } = await req.json();
-    if (!fileId) return new Response('Missing fileId', { status: 400 });
+    const { fileId } = await req.json()
+    if (!fileId) {
+      return new Response(JSON.stringify({ error: 'Missing fileId' }), {
+        status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
+    }
 
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') || '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
-    );
+    )
 
     const { data: file, error: fetchError } = await supabaseAdmin
-      .from('files')
-      .select('storage_path')
-      .eq('id', fileId)
-      .single();
+      .from('files').select('storage_path, is_deployed').eq('id', fileId).single()
 
-    if (fetchError || !file) throw new Error('File not found');
+    if (fetchError || !file) {
+      return new Response(JSON.stringify({ error: 'File not found' }), {
+        status: 404, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
+    }
+
+    // Non-deployed files require admin access
+    if (!file.is_deployed) {
+      const { data: adminUser } = await supabaseAdmin
+        .from('admin_users').select('id').eq('email', email).maybeSingle()
+      if (!adminUser) {
+        return new Response(JSON.stringify({ error: 'Unauthorized: File not deployed' }), {
+          status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        })
+      }
+    }
 
     const { data: signedUrl, error: signError } = await supabaseAdmin.storage
-      .from('altera-resources')
-      .createSignedUrl(file.storage_path, 3600);
+      .from('altera-resources').createSignedUrl(file.storage_path, 3600)
 
-    if (signError) throw signError;
+    if (signError) throw signError
 
     return new Response(JSON.stringify({ url: signedUrl.signedUrl }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 200,
-    });
-
+      status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    })
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 500,
-    });
+      status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    })
   }
 })

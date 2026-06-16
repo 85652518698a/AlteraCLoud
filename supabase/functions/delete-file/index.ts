@@ -1,86 +1,93 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'authorization, content-type, x-client-info, apikey',
+}
+
 serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders })
+  }
+
   try {
-    const authHeader = req.headers.get('Authorization');
+    const authHeader = req.headers.get('Authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return new Response('Missing token', { status: 401 });
+      return new Response(JSON.stringify({ error: 'Missing token' }), {
+        status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
     }
 
-    const token = authHeader.split(' ')[1];
-    const tokenParts = token.split('.');
+    const token = authHeader.split(' ')[1]
+    const tokenParts = token.split('.')
     if (tokenParts.length !== 3) {
-      return new Response('Invalid token format', { status: 401 });
+      return new Response(JSON.stringify({ error: 'Invalid token format' }), {
+        status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
     }
-    
+
     const payload = JSON.parse(
       new TextDecoder().decode(
         Uint8Array.from(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
       )
-    );
-    const email = payload?.email?.toLowerCase()?.trim();
+    )
+    const email = payload?.email?.toLowerCase()?.trim()
 
     if (!email) {
-      return new Response('Unauthorized: Invalid token', { status: 403 });
+      return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+        status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
     }
 
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') || '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
-    );
+    )
 
-    // Check admin status from DB
-    const { data: adminUser, error: adminError } = await supabaseAdmin
-      .from('admin_users')
-      .select('id')
-      .eq('email', email)
-      .maybeSingle();
+    const { data: adminUser } = await supabaseAdmin
+      .from('admin_users').select('id').eq('email', email).maybeSingle()
 
-    if (adminError || !adminUser) {
-      return new Response('Unauthorized: Admin access required', { status: 403 });
+    if (!adminUser) {
+      return new Response(JSON.stringify({ error: 'Unauthorized: Admin access required' }), {
+        status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
     }
 
-    const { fileId } = await req.json();
-    if (!fileId) return new Response('Missing fileId', { status: 400 });
+    const { fileId } = await req.json()
+    if (!fileId) {
+      return new Response(JSON.stringify({ error: 'Missing fileId' }), {
+        status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
+    }
 
     const { data: file, error: fetchError } = await supabaseAdmin
-      .from('files')
-      .select('storage_path, name')
-      .eq('id', fileId)
-      .single();
+      .from('files').select('storage_path, name').eq('id', fileId).single()
 
-    if (fetchError || !file) throw new Error('File not found');
+    if (fetchError || !file) {
+      return new Response(JSON.stringify({ error: 'File not found' }), {
+        status: 404, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
+    }
 
     const { error: storageError } = await supabaseAdmin.storage
-      .from('altera-resources')
-      .remove([file.storage_path]);
+      .from('altera-resources').remove([file.storage_path])
 
-    if (storageError) throw storageError;
+    if (storageError) throw storageError
 
-    const { error: dbError } = await supabaseAdmin
-      .from('files')
-      .delete()
-      .eq('id', fileId);
-
-    if (dbError) throw dbError;
+    await supabaseAdmin.from('files').delete().eq('id', fileId)
 
     await supabaseAdmin.from('audit_logs').insert({
-      action: 'delete',
-      file_id: fileId,
-      file_name: file.name,
-      performed_by: email,
-    });
+      action: 'delete', file_id: fileId, file_name: file.name, performed_by: email,
+    })
 
     return new Response(JSON.stringify({ success: true }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 200,
-    });
-
+      status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    })
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 500,
-    });
+      status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    })
   }
 })
