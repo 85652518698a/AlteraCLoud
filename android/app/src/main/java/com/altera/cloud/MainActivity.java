@@ -1,13 +1,14 @@
 package com.altera.cloud;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.browser.customtabs.CustomTabsIntent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -25,7 +26,11 @@ public class MainActivity extends AppCompatActivity {
     private Button signInButton;
     private Button openAppButton;
     private TextView statusText;
+    private WebView webView;
+    private View loginView;
     private String firebaseIdToken;
+    private String userEmail;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        loginView = findViewById(R.id.loginView);
+        webView = findViewById(R.id.webView);
         signInButton = findViewById(R.id.signInButton);
         openAppButton = findViewById(R.id.openAppButton);
         statusText = findViewById(R.id.statusText);
@@ -65,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult();
+                userEmail = account.getEmail();
+                userName = account.getDisplayName();
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (Exception e) {
                 statusText.setText("Sign-in failed: " + e.getMessage());
@@ -99,13 +108,60 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openWebApp() {
-        String url = "https://altera-cloud.vercel.app";
-        if (firebaseIdToken != null) {
-            url += "?token=" + firebaseIdToken;
+        loginView.setVisibility(View.GONE);
+        webView.setVisibility(View.VISIBLE);
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+
+        webView.addJavascriptInterface(new Object() {
+            @JavascriptInterface
+            public String getFirebaseToken() {
+                return firebaseIdToken != null ? firebaseIdToken : "";
+            }
+            @JavascriptInterface
+            public String getUserEmail() {
+                return userEmail != null ? userEmail : "";
+            }
+            @JavascriptInterface
+            public String getUserName() {
+                return userName != null ? userName : "";
+            }
+        }, "AndroidNative");
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                injectAuth();
+            }
+        });
+
+        webView.loadUrl("https://altera-cloud.vercel.app");
+    }
+
+    private void injectAuth() {
+        String js = "javascript:(function() {" +
+            "var token = AndroidNative.getFirebaseToken();" +
+            "var email = AndroidNative.getUserEmail();" +
+            "var name = AndroidNative.getUserName();" +
+            "if (token && token.length > 0) {" +
+            "  window.__ANDROID_FIREBASE_TOKEN = token;" +
+            "  window.__ANDROID_USER_EMAIL = email;" +
+            "  window.__ANDROID_USER_NAME = name;" +
+            "  var evt = new CustomEvent('androidAuthReady', { detail: { token: token, email: email, name: name } });" +
+            "  window.dispatchEvent(evt);" +
+            "}" +
+            "})()";
+        webView.evaluateJavascript(js, null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (webView.getVisibility() == View.VISIBLE && webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
         }
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setShowTitle(false);
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(url));
     }
 }
