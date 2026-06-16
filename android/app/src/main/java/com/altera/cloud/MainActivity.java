@@ -3,6 +3,7 @@ package com.altera.cloud;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.JavascriptInterface;
@@ -111,23 +112,16 @@ public class MainActivity extends AppCompatActivity {
         loginView.setVisibility(View.GONE);
         webView.setVisibility(View.VISIBLE);
 
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setDomStorageEnabled(true);
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(false);
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
-        webView.addJavascriptInterface(new Object() {
-            @JavascriptInterface
-            public String getFirebaseToken() {
-                return firebaseIdToken != null ? firebaseIdToken : "";
-            }
-            @JavascriptInterface
-            public String getUserEmail() {
-                return userEmail != null ? userEmail : "";
-            }
-            @JavascriptInterface
-            public String getUserName() {
-                return userName != null ? userName : "";
-            }
-        }, "AndroidNative");
+        webView.addJavascriptInterface(new WebAppInterface(), "AndroidNative");
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -138,6 +132,38 @@ public class MainActivity extends AppCompatActivity {
         });
 
         webView.loadUrl("https://altera-cloud.vercel.app");
+    }
+
+    private class WebAppInterface {
+        @JavascriptInterface
+        public String getFirebaseToken() {
+            return firebaseIdToken != null ? firebaseIdToken : "";
+        }
+        @JavascriptInterface
+        public String getUserEmail() {
+            return userEmail != null ? userEmail : "";
+        }
+        @JavascriptInterface
+        public String getUserName() {
+            return userName != null ? userName : "";
+        }
+        @JavascriptInterface
+        public void signOut() {
+            runOnUiThread(() -> {
+                mAuth.signOut();
+                mGoogleSignInClient.signOut();
+                firebaseIdToken = null;
+                userEmail = null;
+                userName = null;
+                webView.setVisibility(View.GONE);
+                webView.removeAllViews();
+                webView.loadUrl("about:blank");
+                loginView.setVisibility(View.VISIBLE);
+                signInButton.setVisibility(View.VISIBLE);
+                openAppButton.setVisibility(View.GONE);
+                statusText.setText("");
+            });
+        }
     }
 
     private void injectAuth() {

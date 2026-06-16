@@ -110,6 +110,10 @@ export const authStore = {
 
   logout: async () => {
     androidToken = null;
+    // If running in Android WebView, call native sign-out
+    if ((window as any).AndroidNative?.signOut) {
+      (window as any).AndroidNative.signOut();
+    }
     await signOut(auth);
   },
 
