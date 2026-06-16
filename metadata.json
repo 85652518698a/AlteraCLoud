@@ -1,0 +1,6 @@
+{
+  "name": "Altera Cloud",
+  "description": "Your premium vault for notes, assignments, and digital excellence at CSMU. Structured, role-based academic hosting platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
