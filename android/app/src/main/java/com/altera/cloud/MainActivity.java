@@ -3,18 +3,19 @@ package com.altera.cloud;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends AppCompatActivity {
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
-        com.google.android.gms.tasks.Task<AuthResult> authTask = mAuth.signInWithCredential(
+        Task<AuthResult> authTask = mAuth.signInWithCredential(
                 GoogleAuthProvider.getCredential(idToken, null));
         authTask.addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onSignedIn(FirebaseUser user) {
-        signInButton.setVisibility(android.view.View.GONE);
-        openAppButton.setVisibility(android.view.View.VISIBLE);
+        signInButton.setVisibility(View.GONE);
+        openAppButton.setVisibility(View.VISIBLE);
         statusText.setText("Signed in as " + user.getEmail());
     }
 
