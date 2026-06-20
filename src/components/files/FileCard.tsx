@@ -66,6 +66,11 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
           <p className="text-[9px] text-neutral-500 font-mono mt-2 flex items-center gap-2">
             <span className="font-semibold text-neutral-400">{formatBytes(file.size_bytes)}</span>
             <span className="text-neutral-800">•</span>
+            <span className="flex items-center gap-1">
+              <Download className="w-2.5 h-2.5" />
+              {file.downloads ?? 0}
+            </span>
+            <span className="text-neutral-800">•</span>
             <span>{displayDate}</span>
           </p>
         </div>

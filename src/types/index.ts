@@ -11,6 +11,7 @@ export interface FileRecord {
   size_bytes: number;
   is_deployed: boolean;
   uploaded_by: string;
+  downloads: number;
   created_at: string;
   updated_at: string;
 }

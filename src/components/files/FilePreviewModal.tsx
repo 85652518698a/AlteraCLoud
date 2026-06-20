@@ -77,7 +77,7 @@ export const FilePreviewModal: React.FC = () => {
                 {file.name}
               </h3>
               <p className="text-[10px] font-mono text-neutral-500 uppercase mt-1">
-                {file.section} • {formatBytes(file.size_bytes)} • CHECKED IN {displayDate}
+                {file.section} • {formatBytes(file.size_bytes)} • ↓{file.downloads ?? 0} • CHECKED IN {displayDate}
               </p>
             </div>
           </div>

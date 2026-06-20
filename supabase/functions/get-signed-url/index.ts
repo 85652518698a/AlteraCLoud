@@ -73,6 +73,15 @@ serve(async (req) => {
       }
     }
 
+    // Increment download counter best-effort
+    const { data: dlFile } = await supabaseAdmin
+      .from('files').select('downloads').eq('id', fileId).maybeSingle()
+    if (dlFile) {
+      await supabaseAdmin.from('files')
+        .update({ downloads: (dlFile.downloads || 0) + 1 })
+        .eq('id', fileId)
+    }
+
     const { data: signedUrl, error: signError } = await supabaseAdmin.storage
       .from('altera-resources').createSignedUrl(file.storage_path, 3600)
 
