@@ -58,7 +58,7 @@ export const FileGrid: React.FC = () => {
   };
 
   const filteredFiles = files.filter(f => {
-    const matchesSection = f.section === activeSection;
+    const matchesSection = activeSection === 'all' || f.section === activeSection;
     const matchesSearch = searchQuery.trim() === '' ||
       f.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSection && matchesSearch;
@@ -83,7 +83,7 @@ export const FileGrid: React.FC = () => {
       <div className="flex items-center justify-between mb-4 mt-8 px-1 select-none">
         <div className="text-[11px] font-mono text-neutral-400 flex items-center gap-2">
           <span>DIRECTORY:</span>
-          <span className="text-white font-bold uppercase">{activeSection}</span>
+          <span className="text-white font-bold uppercase">{activeSection === 'all' ? 'ALL DIRECTORIES' : activeSection}</span>
           <span>•</span>
           <span>{filteredFiles.length} {filteredFiles.length === 1 ? 'FILE' : 'FILES'} INDEXED</span>
         </div>
