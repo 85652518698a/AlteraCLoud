@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAuthStore, authStore } from './store/authStore';
 import { Toaster } from 'react-hot-toast';
-import { useUIStore } from './store/uiStore';
+import { useUIStore, uiStore } from './store/uiStore';
 import { LandingPage } from './pages/LandingPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { AdminPage } from './pages/AdminPage';
@@ -17,6 +17,30 @@ export default function App() {
   // Initialize secure session upon mount
   useEffect(() => {
     authStore.initSession();
+  }, []);
+
+  // Sync URL path ↔ store-based routing
+  useEffect(() => {
+    const path = window.location.pathname.replace(/\/$/, '');
+    if (path === '/privacy') uiStore.setCurrentPage('privacy');
+    else if (path === '/terms') uiStore.setCurrentPage('terms');
+  }, []);
+
+  useEffect(() => {
+    const path = window.location.pathname.replace(/\/$/, '');
+    const expected = currentPage === 'privacy' ? '/privacy' : currentPage === 'terms' ? '/terms' : '/';
+    if (path !== expected) window.history.replaceState(null, '', expected);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const handlePop = () => {
+      const path = window.location.pathname.replace(/\/$/, '');
+      if (path === '/privacy') uiStore.setCurrentPage('privacy');
+      else if (path === '/terms') uiStore.setCurrentPage('terms');
+      else uiStore.setCurrentPage('landing');
+    };
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
   }, []);
 
   if (loading) {
