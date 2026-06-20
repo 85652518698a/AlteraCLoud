@@ -15,6 +15,7 @@ win:
     - target: nsis
       arch:
         - x64
+  icon: electron/icon.png
 
 nsis:
   oneClick: false
@@ -26,8 +27,10 @@ linux:
   target:
     - AppImage
     - deb
+  icon: electron/icon.png
 
 mac:
   target:
     - dmg
     - zip
+  icon: electron/icon.png
