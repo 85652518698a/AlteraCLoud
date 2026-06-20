@@ -10,17 +10,24 @@ export const Footer: React.FC = () => {
         </div>
         <div className="flex items-center gap-6">
           <button
+            onClick={() => uiStore.setCurrentPage('download')}
+            className="hover:text-neutral-300 transition-colors cursor-pointer uppercase tracking-wider"
+          >
+            DOWNLOAD APP
+          </button>
+          <span className="hidden sm:inline-block text-neutral-800">/</span>
+          <button
             onClick={() => uiStore.setCurrentPage('privacy')}
             className="hover:text-neutral-300 transition-colors cursor-pointer uppercase tracking-wider"
           >
-            PRIVACY POLICY
+            PRIVACY
           </button>
           <span className="hidden sm:inline-block text-neutral-800">/</span>
           <button
             onClick={() => uiStore.setCurrentPage('terms')}
             className="hover:text-neutral-300 transition-colors cursor-pointer uppercase tracking-wider"
           >
-            TERMS OF SERVICE
+            TERMS
           </button>
         </div>
       </div>

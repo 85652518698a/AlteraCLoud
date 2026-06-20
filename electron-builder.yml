@@ -1,0 +1,38 @@
+appId: space.alteracloud.app
+productName: Altera Cloud
+copyright: Copyright © 2026 Altera Cloud
+
+directories:
+  output: release
+  buildResources: public
+
+files:
+  - dist/**/*
+  - electron/**/*.cjs
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: public/favicon.ico
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  installerIcon: public/favicon.ico
+  uninstallerIcon: public/favicon.ico
+
+linux:
+  target:
+    - AppImage
+    - deb
+  icon: public/favicon.ico
+
+mac:
+  target:
+    - dmg
+    - zip
+  icon: public/favicon.ico

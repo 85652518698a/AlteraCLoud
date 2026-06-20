@@ -7,6 +7,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { AdminPage } from './pages/AdminPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
+import { DownloadPage } from './pages/DownloadPage';
 import { Spinner } from './components/ui/Spinner';
 
 export default function App() {
@@ -24,11 +25,12 @@ export default function App() {
     const path = window.location.pathname.replace(/\/$/, '');
     if (path === '/privacy') uiStore.setCurrentPage('privacy');
     else if (path === '/terms') uiStore.setCurrentPage('terms');
+    else if (path === '/download') uiStore.setCurrentPage('download');
   }, []);
 
   useEffect(() => {
     const path = window.location.pathname.replace(/\/$/, '');
-    const expected = currentPage === 'privacy' ? '/privacy' : currentPage === 'terms' ? '/terms' : '/';
+    const expected = currentPage === 'privacy' ? '/privacy' : currentPage === 'terms' ? '/terms' : currentPage === 'download' ? '/download' : '/';
     if (path !== expected) window.history.replaceState(null, '', expected);
   }, [currentPage]);
 
@@ -37,6 +39,7 @@ export default function App() {
       const path = window.location.pathname.replace(/\/$/, '');
       if (path === '/privacy') uiStore.setCurrentPage('privacy');
       else if (path === '/terms') uiStore.setCurrentPage('terms');
+      else if (path === '/download') uiStore.setCurrentPage('download');
       else uiStore.setCurrentPage('landing');
     };
     window.addEventListener('popstate', handlePop);
@@ -61,6 +64,8 @@ export default function App() {
         <PrivacyPage />
       ) : currentPage === 'terms' ? (
         <TermsPage />
+      ) : currentPage === 'download' ? (
+        <DownloadPage />
       ) : !user ? (
         <LandingPage />
       ) : currentPage === 'admin' && user.role === 'admin' ? (

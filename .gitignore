@@ -1,9 +1,14 @@
 node_modules/
 build/
 dist/
+release/
 coverage/
 .DS_Store
 *.log
 .env*
 !.env.example
 *.keystore
+*.exe
+*.dmg
+*.AppImage
+*.deb

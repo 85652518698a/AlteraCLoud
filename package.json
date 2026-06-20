@@ -1,15 +1,30 @@
 {
-  "name": "react-example",
+  "name": "altera-cloud",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "start": "vite preview",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "electron:dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "npm run build && electron-builder --win --config electron-builder.yml",
+    "electron:build:all": "npm run build && electron-builder --config electron-builder.yml"
+  },
+  "build": {
+    "appId": "space.alteracloud.app",
+    "productName": "Altera Cloud",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*.cjs"
+    ]
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.2",
@@ -41,9 +56,13 @@
     "@types/react-dom": "^18.2.18",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^10.0.3",
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "tsx": "^4.21.0",
-    "typescript": "~5.8.2"
+    "typescript": "~5.8.2",
+    "wait-on": "^9.0.10"
   }
 }

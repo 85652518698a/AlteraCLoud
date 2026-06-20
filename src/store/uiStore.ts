@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { SectionId, FileRecord } from '../types';
 
 interface UIState {
-  currentPage: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms';
+  currentPage: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download';
   activeSection: SectionId | 'all';
   searchQuery: string;
   selectedFileForPreview: FileRecord | null;
@@ -50,7 +50,7 @@ export const uiStore = {
   set,
   subscribe,
   
-  setCurrentPage: (page: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms') => {
+  setCurrentPage: (page: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download') => {
     set({ currentPage: page });
   },
 
