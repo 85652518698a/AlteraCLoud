@@ -5,6 +5,8 @@ import { useUIStore } from './store/uiStore';
 import { LandingPage } from './pages/LandingPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { AdminPage } from './pages/AdminPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { TermsPage } from './pages/TermsPage';
 import { Spinner } from './components/ui/Spinner';
 
 export default function App() {
@@ -31,7 +33,11 @@ export default function App() {
   return (
     <>
       {/* Visual Routing Hub */}
-      {!user ? (
+      {currentPage === 'privacy' ? (
+        <PrivacyPage />
+      ) : currentPage === 'terms' ? (
+        <TermsPage />
+      ) : !user ? (
         <LandingPage />
       ) : currentPage === 'admin' && user.role === 'admin' ? (
         <AdminPage />

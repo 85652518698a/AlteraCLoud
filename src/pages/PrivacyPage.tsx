@@ -1,0 +1,99 @@
+import React from 'react';
+import { Navbar } from '../components/layout/Navbar';
+import { PageWrapper } from '../components/layout/PageWrapper';
+import { Footer } from '../components/layout/Footer';
+import { ShieldCheck, FileText, Database, Eye, Mail } from 'lucide-react';
+
+const sections = [
+  {
+    icon: ShieldCheck,
+    title: 'Introduction',
+    content: `Altera-Cloud ("we," "our," or "us") is committed to protecting the privacy of students, faculty, and administrators who use our academic resource sharing platform. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our platform at alteracloud.space.`,
+  },
+  {
+    icon: Database,
+    title: 'Information We Collect',
+    content: `When you sign in using Google Authentication, we receive the following information from your Google account: your name, email address, and profile photo. This information is used solely to create and maintain your account on our platform. We do not collect any additional personal information beyond what is provided through Google's authentication service.`,
+  },
+  {
+    icon: Eye,
+    title: 'How We Use Your Information',
+    content: `We use the information collected for the following purposes: to authenticate your identity and grant you access to the platform, to personalize your experience by displaying your name and profile photo, to determine your role (admin or standard user) for access control purposes, to improve and optimize our platform based on usage patterns, and to communicate with you regarding platform updates or policy changes. We do not sell, rent, or trade your personal information to third parties.`,
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Data Storage and Security',
+    content: `All files uploaded to the platform are stored securely in Supabase Storage with restricted access controls. User account information is stored in Supabase databases with industry-standard encryption. Access to files is controlled through signed URLs with time-limited access, ensuring that only authenticated users can download resources. We implement reasonable security measures to protect your information from unauthorized access, alteration, disclosure, or destruction.`,
+  },
+  {
+    icon: FileText,
+    title: 'File Content and User Conduct',
+    content: `Users may upload educational materials such as notes, assignments, question papers, and lab manuals. We do not inspect or monitor the content of uploaded files beyond basic metadata. However, we reserve the right to remove any content that violates our Terms of Service or applicable laws. Users are solely responsible for the content they upload and must ensure they have the necessary rights to share such materials.`,
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Data Retention',
+    content: `We retain your account information for as long as your account remains active. If you choose to delete your account, your personal information will be removed from our systems within a reasonable timeframe. Uploaded files may be retained for backup and continuity purposes even after account deletion, but will no longer be associated with your personal information.`,
+  },
+  {
+    icon: Mail,
+    title: 'Contact Us',
+    content: `If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact the platform administrator through the official CSMU communication channels. We will respond to your inquiry within a reasonable timeframe.`,
+  },
+];
+
+export const PrivacyPage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-[#0A0A0A] flex flex-col justify-between text-white selection:bg-white selection:text-black">
+      <div className="flex-1">
+        <Navbar />
+        <PageWrapper>
+          <div className="max-w-3xl mx-auto">
+            <div className="mb-12 text-left select-none">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] mb-2 font-bold select-none">
+                <ShieldCheck className="w-3 h-3 text-white fill-white/10" />
+                <span>LEGAL & COMPLIANCE</span>
+              </div>
+              <h2 className="font-display font-black text-2xl md:text-3xl tracking-wide uppercase text-zinc-100">
+                Privacy Policy
+              </h2>
+              <p className="text-xs text-neutral-400 font-sans mt-2.5 leading-relaxed max-w-lg font-light">
+                Last updated: June 2026. Your privacy is important to us. This policy outlines how we handle your information.
+              </p>
+            </div>
+
+            <div className="space-y-8">
+              {sections.map((section) => {
+                const Icon = section.icon;
+                return (
+                  <div key={section.title} className="border border-neutral-900 rounded-lg p-6 bg-neutral-950/30 hover:border-neutral-800 transition-colors duration-300">
+                    <div className="flex items-start gap-4">
+                      <div className="p-2.5 bg-neutral-900/80 border border-neutral-850 rounded shrink-0 mt-0.5">
+                        <Icon className="w-4 h-4 text-neutral-300" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider">
+                          {section.title}
+                        </h3>
+                        <p className="text-[11px] font-sans text-neutral-400 leading-relaxed">
+                          {section.content}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-12 p-6 border border-neutral-900 rounded-lg bg-neutral-950/20 text-center">
+              <p className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">
+                ALTERA CLOUD • CHANNABASWESHWAR SYSTEM MANAGEMENT • CSMU RESOURCE LOCKER
+              </p>
+            </div>
+          </div>
+        </PageWrapper>
+      </div>
+      <Footer />
+    </div>
+  );
+};

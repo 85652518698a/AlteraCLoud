@@ -24,12 +24,14 @@ export const Navbar: React.FC = () => {
     }
   };
 
+  const isLegalPage = currentPage === 'privacy' || currentPage === 'terms';
+
   return (
     <nav className="w-full bg-black/90 backdrop-blur-md border-b border-neutral-900 sticky top-0 z-40 px-6 py-4 shadow-[0_1px_20px_rgba(0,0,0,0.8)]">
       <div className="max-w-[1240px] mx-auto flex items-center justify-between">
         {/* Responsive Logo Container */}
         <div 
-          onClick={navigateToDashboard}
+          onClick={() => uiStore.setCurrentPage(user ? 'dashboard' : 'landing')}
           className="flex items-center gap-2 cursor-pointer group select-none"
         >
           <div className="text-xl uppercase tracking-wide flex items-baseline">
@@ -46,7 +48,17 @@ export const Navbar: React.FC = () => {
         </div>
 
         {/* Navigation Actions */}
-        {user && (
+        {isLegalPage ? (
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => uiStore.setCurrentPage(user ? 'dashboard' : 'landing')}
+              className="text-[10px] font-mono font-bold text-neutral-300 hover:text-white flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 border border-neutral-800 hover:border-neutral-750 rounded-sm transition-all cursor-pointer uppercase tracking-wider"
+            >
+              <Library className="w-3.5 h-3.5" />
+              {user ? 'BACK TO PORTAL' : 'BACK TO HOME'}
+            </button>
+          </div>
+        ) : user && (
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-4">
               {currentPage === 'admin' ? (

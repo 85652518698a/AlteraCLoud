@@ -1,4 +1,5 @@
 import React from 'react';
+import { uiStore } from '../../store/uiStore';
 
 export const Footer: React.FC = () => {
   return (
@@ -8,9 +9,19 @@ export const Footer: React.FC = () => {
           © {new Date().getFullYear()} ALTERA CLOUD. CHANNABASWESHWAR SYSTEM MANAGEMENT.
         </div>
         <div className="flex items-center gap-6">
-          <span>SECURED LOCKER GATEWAY</span>
-          <span className="hidden sm:inline-block">/</span>
-          <span>INTEGRITY VERIFIED</span>
+          <button
+            onClick={() => uiStore.setCurrentPage('privacy')}
+            className="hover:text-neutral-300 transition-colors cursor-pointer uppercase tracking-wider"
+          >
+            PRIVACY POLICY
+          </button>
+          <span className="hidden sm:inline-block text-neutral-800">/</span>
+          <button
+            onClick={() => uiStore.setCurrentPage('terms')}
+            className="hover:text-neutral-300 transition-colors cursor-pointer uppercase tracking-wider"
+          >
+            TERMS OF SERVICE
+          </button>
         </div>
       </div>
     </footer>
