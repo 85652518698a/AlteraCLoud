@@ -1,4 +1,4 @@
-export type SectionId = 'notes' | 'assignment' | 'question_paper' | 'question_bank' | 'lab_manual';
+export type SectionId = 'notes' | 'assignment' | 'question_paper' | 'question_bank' | 'lab_manual' | 'images';
 
 export interface FileRecord {
   id: string;

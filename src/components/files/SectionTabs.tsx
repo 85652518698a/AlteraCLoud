@@ -2,7 +2,7 @@ import React from 'react';
 import { useUIStore, uiStore } from '../../store/uiStore';
 import { SECTIONS } from '../../constants/sections';
 import { SectionId } from '../../types';
-import { BookOpen, ClipboardList, FileQuestion, Database, FlaskConical } from 'lucide-react';
+import { BookOpen, ClipboardList, FileQuestion, Database, FlaskConical, Image } from 'lucide-react';
 
 // Help component to resolve the icon components based on ID
 const TabIcon: React.FC<{ iconName: string; className?: string }> = ({ iconName, className = 'w-4 h-4' }) => {
@@ -17,6 +17,8 @@ const TabIcon: React.FC<{ iconName: string; className?: string }> = ({ iconName,
       return <Database className={className} />;
     case 'FlaskConical':
       return <FlaskConical className={className} />;
+    case 'Image':
+      return <Image className={className} />;
     default:
       return <BookOpen className={className} />;
   }

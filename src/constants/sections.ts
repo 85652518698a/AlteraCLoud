@@ -30,5 +30,11 @@ export const SECTIONS: SectionMeta[] = [
     label: "Lab Manuals",
     icon: "FlaskConical",
     description: "Practical lab manuals and experiment guides"
+  },
+  {
+    id: "images",
+    label: "Images",
+    icon: "Image",
+    description: "Diagrams, charts, illustrations and visual resources"
   }
 ];
