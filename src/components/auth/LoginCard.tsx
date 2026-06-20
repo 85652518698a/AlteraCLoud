@@ -28,12 +28,12 @@ export const LoginCard: React.FC = () => {
         
         {/* Brand visual header logo */}
         <div className="space-y-4 select-none">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-neutral-900 border border-neutral-800 rounded mb-1 text-[9px] font-mono tracking-[0.2em] text-[#888]">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-neutral-900/80 border border-neutral-800 rounded mb-1 text-[9px] font-mono tracking-[0.2em] text-[#888]">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse"></span>
             <span>SECURE VAULT GATES ACTIVE</span>
           </div>
           <div className="text-5.5xl md:text-7xl font-display font-black tracking-[0.1em] text-white leading-none">
-            ALTERA<span className="font-light text-neutral-400 font-sans tracking-[0.15em] ml-2 text-4xl md:text-5.5xl leading-none">CS</span>
+            A<span className="text-accent">L</span>TERA<span className="font-light text-neutral-400 font-sans tracking-[0.15em] ml-2 text-4xl md:text-5.5xl leading-none">CS</span>
           </div>
           <p className="text-neutral-400 text-xs tracking-widest uppercase font-mono max-w-md mx-auto leading-relaxed">
             Your premium vault for notes, assignments, and digital excellence.
@@ -45,7 +45,7 @@ export const LoginCard: React.FC = () => {
           <div className="flex flex-col items-center gap-4.5">
             <button
               onClick={handleOpenApp}
-              className="px-10 py-3.5 bg-white text-black text-xs md:text-sm font-bold tracking-[0.15em] rounded-full hover:bg-neutral-200 active:scale-95 transition-all duration-150 uppercase shadow-[0_0_24px_rgba(255,255,255,0.15)] cursor-pointer"
+              className="px-10 py-3.5 bg-white text-black text-xs md:text-sm font-bold tracking-[0.15em] rounded-full hover:bg-neutral-200 active:scale-95 transition-all duration-150 uppercase shadow-[0_0_24px_rgba(255,255,255,0.15)] hover:shadow-glow-white cursor-pointer"
             >
               OPEN THE APP
             </button>
@@ -88,7 +88,7 @@ export const LoginCard: React.FC = () => {
 
       {/* Standard brand footer info */}
       <div className="mt-auto text-[9px] font-mono text-[#555555] tracking-widest uppercase">
-        STUDENT RESOURCES DEPOSITORY • CSMU ACADEMIC PORTAL
+        <span className="tracking-[0.3em]">✦</span> STUDENT RESOURCES DEPOSITORY • CSMU ACADEMIC PORTAL <span className="tracking-[0.3em]">✦</span>
       </div>
     </div>
   );

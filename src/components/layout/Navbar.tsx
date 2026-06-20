@@ -36,7 +36,7 @@ export const Navbar: React.FC = () => {
         >
           <div className="text-xl uppercase tracking-wide flex items-baseline">
             <span className="font-display font-black tracking-[0.08em] text-white transition-opacity group-hover:opacity-90">
-              ALTERA
+              A<span className="text-accent">L</span>TERA
             </span>
             <span className="font-display font-light tracking-[0.16em] text-neutral-400 ml-1.5">
               CLOUD
@@ -73,7 +73,7 @@ export const Navbar: React.FC = () => {
                 user.role === 'admin' && (
                   <button
                     onClick={navigateToAdmin}
-                    className="text-[10px] font-mono font-bold text-black flex items-center gap-1.5 px-3.5 py-1.5 bg-white border border-white rounded-sm hover:bg-neutral-200 transition-all cursor-pointer uppercase tracking-wider shadow-[0_0_12px_rgba(255,255,255,0.15)]"
+                    className="text-[10px] font-mono font-bold text-black flex items-center gap-1.5 px-3.5 py-1.5 bg-white border border-white rounded-sm hover:bg-neutral-200 transition-all cursor-pointer uppercase tracking-wider shadow-[0_0_12px_rgba(255,255,255,0.15)] hover:shadow-glow-white"
                   >
                     <ShieldCheck className="w-3.5 h-3.5" />
                     ADMIN CABINET
