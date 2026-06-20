@@ -10,7 +10,7 @@ import { FileGrid } from '../components/files/FileGrid';
 import { FileCard } from '../components/files/FileCard';
 import { FilePreviewModal } from '../components/files/FilePreviewModal';
 import { Footer } from '../components/layout/Footer';
-import { Bookmark, History } from 'lucide-react';
+import { Bookmark, Clock } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const activeFileForPreview = useUIStore((state) => state.selectedFileForPreview);
@@ -51,7 +51,7 @@ export const DashboardPage: React.FC = () => {
           {recentFiles.length > 0 && (
             <div className="mb-8">
               <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] mb-3 select-none">
-                <History className="w-3 h-3" />
+                <Clock className="w-3 h-3" />
                 <span>RECENTLY VIEWED</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -4,7 +4,7 @@ import { FileIcon } from '../ui/FileIcon';
 import { formatBytes } from '../../lib/formatBytes';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { addRecentlyViewed } from '../../lib/recentlyViewed';
-import { Download, X, Eye, ShieldAlert, FileText, ImageIcon } from 'lucide-react';
+import { Download, X, Eye, ShieldAlert, FileText, Image as ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const FilePreviewModal: React.FC = () => {

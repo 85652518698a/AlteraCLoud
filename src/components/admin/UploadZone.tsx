@@ -3,7 +3,7 @@ import { useAuthStore, authStore } from '../../store/authStore';
 import { validateFile } from '../../lib/validateFile';
 import { SECTIONS } from '../../constants/sections';
 import { SectionId } from '../../types';
-import { ProgressBar } from '../ui/ProgressBar';
+import { LottieUpload } from '../ui/LottieUpload';
 import { Upload, FileCode } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -195,7 +195,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
             </div>
           </div>
           <div className="pt-6 border-t border-neutral-950 mt-4">
-            {isUploading ? <ProgressBar progress={uploadProgress} className="mb-2" /> : (
+            {isUploading ? <div className="mb-2"><LottieUpload progress={uploadProgress} /></div> : (
               <button type="submit" disabled={!selectedFile}
                 className={`w-full py-3 text-xs font-semibold font-mono tracking-wider rounded uppercase text-center transition-all ${selectedFile ? 'bg-white hover:bg-neutral-200 text-black shadow-[0_0_12px_rgba(255,255,255,0.1)] cursor-pointer' : 'bg-neutral-900 border border-neutral-900 text-neutral-600 cursor-not-allowed'}`}>
                 DEPLOY FILE TO CLOUD
