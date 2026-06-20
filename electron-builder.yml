@@ -11,6 +11,7 @@ files:
   - electron/**/*.cjs
 
 win:
+  artifactName: "${productName}.Setup.${ext}"
   target:
     - target: nsis
       arch:
@@ -24,12 +25,14 @@ nsis:
   createDesktopShortcut: true
 
 linux:
+  artifactName: "${productName}.${ext}"
   target:
     - AppImage
     - deb
   icon: electron/icon.png
 
 mac:
+  artifactName: "${productName}.${ext}"
   target:
     - dmg
     - zip
