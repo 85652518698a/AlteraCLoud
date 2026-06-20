@@ -5,8 +5,10 @@ import { FileRecord } from '../../types';
 import { FileCard } from './FileCard';
 import { EmptyState } from '../ui/EmptyState';
 import { Spinner } from '../ui/Spinner';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+const PAGE_SIZE = 30;
 
 export const FileGrid: React.FC = () => {
   const activeSection = useUIStore(s => s.activeSection);
@@ -15,6 +17,11 @@ export const FileGrid: React.FC = () => {
   const [files, setFiles] = useState<FileRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    setPage(0);
+  }, [activeSection, searchQuery]);
 
   useEffect(() => {
     let active = true;
@@ -57,6 +64,9 @@ export const FileGrid: React.FC = () => {
     return matchesSection && matchesSearch;
   });
 
+  const totalPages = Math.max(1, Math.ceil(filteredFiles.length / PAGE_SIZE));
+  const pagedFiles = filteredFiles.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center p-20">
@@ -92,11 +102,37 @@ export const FileGrid: React.FC = () => {
           description={searchQuery ? "We tried looking up files matching your input, but came up empty-handed." : undefined}
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFiles.map((file) => (
-            <FileCard key={file.id} file={file} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pagedFiles.map((file) => (
+              <FileCard key={file.id} file={file} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-4 mt-8 select-none">
+              <button
+                onClick={() => setPage(p => Math.max(0, p - 1))}
+                disabled={page === 0}
+                className="flex items-center gap-1 px-3 py-1.5 bg-neutral-950 border border-neutral-900 rounded text-xs font-mono text-neutral-400 hover:text-white hover:border-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+                <span>PREV</span>
+              </button>
+              <span className="text-[10px] font-mono text-neutral-500">
+                PAGE {page + 1} OF {totalPages}
+              </span>
+              <button
+                onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                disabled={page >= totalPages - 1}
+                className="flex items-center gap-1 px-3 py-1.5 bg-neutral-950 border border-neutral-900 rounded text-xs font-mono text-neutral-400 hover:text-white hover:border-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              >
+                <span>NEXT</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

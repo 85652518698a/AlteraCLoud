@@ -4,6 +4,7 @@ import { FileIcon } from '../ui/FileIcon';
 import { formatBytes } from '../../lib/formatBytes';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { uiStore } from '../../store/uiStore';
+import { addRecentlyViewed } from '../../lib/recentlyViewed';
 import { Download, Eye } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -18,6 +19,7 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
     setDownloading(true);
     const toastId = toast.loading(`Downloading ${file.name}...`);
     try {
+      addRecentlyViewed(file);
       const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id });
       const link = document.createElement('a');
       link.href = url;
@@ -34,6 +36,7 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
   };
 
   const handlePreview = () => {
+    addRecentlyViewed(file);
     uiStore.setSelectedFileForPreview(file);
   };
 

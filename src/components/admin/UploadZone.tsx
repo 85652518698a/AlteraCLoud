@@ -61,7 +61,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
     if (!user) return;
 
     setIsUploading(true);
-    setUploadProgress(10);
+    setUploadProgress(0);
 
     try {
       const token = await authStore.getFirebaseIdToken();
@@ -76,25 +76,36 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
       formData.append('section', section);
       formData.append('isDeployed', String(isDeployed));
 
-      const interval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 85) { clearInterval(interval); return prev; }
-          return prev + Math.floor(Math.random() * 15) + 5;
+      const xhr = new XMLHttpRequest();
+
+      const response = await new Promise<any>((resolve, reject) => {
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            setUploadProgress(Math.round((event.loaded / event.total) * 95));
+          }
         });
-      }, 150);
 
-      const response = await fetch(`${FUNCTIONS_BASE}/upload-file`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: formData,
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try { resolve(JSON.parse(xhr.responseText)); }
+            catch { resolve(null); }
+          } else {
+            try {
+              const err = JSON.parse(xhr.responseText);
+              reject(new Error(err.error || 'Upload failed'));
+            } catch {
+              reject(new Error('Upload failed'));
+            }
+          }
+        });
+
+        xhr.addEventListener('error', () => reject(new Error('Network error')));
+        xhr.addEventListener('abort', () => reject(new Error('Upload cancelled')));
+
+        xhr.open('POST', `${FUNCTIONS_BASE}/upload-file`);
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        xhr.send(formData);
       });
-
-      clearInterval(interval);
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({ error: 'Upload failed' }));
-        throw new Error(errData.error || 'Storage write failed');
-      }
 
       setUploadProgress(100);
       toast.success(`${selectedFile.name} successfully deployed to standard vault`);

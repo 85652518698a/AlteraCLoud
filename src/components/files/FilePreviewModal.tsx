@@ -3,7 +3,8 @@ import { useUIStore, uiStore } from '../../store/uiStore';
 import { FileIcon } from '../ui/FileIcon';
 import { formatBytes } from '../../lib/formatBytes';
 import { callEdgeFunction } from '../../lib/edgeFunction';
-import { Download, X, Eye, ShieldAlert, FileText } from 'lucide-react';
+import { addRecentlyViewed } from '../../lib/recentlyViewed';
+import { Download, X, Eye, ShieldAlert, FileText, ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const FilePreviewModal: React.FC = () => {
@@ -22,6 +23,7 @@ export const FilePreviewModal: React.FC = () => {
     if (previewUrl) return previewUrl;
     setLoadingPreview(true);
     try {
+      addRecentlyViewed(file);
       const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id });
       setPreviewUrl(url);
       setLoadingPreview(false);
@@ -50,7 +52,10 @@ export const FilePreviewModal: React.FC = () => {
     if (url) setPreviewUrl(url);
   };
 
-  const isPDF = file.file_type.toLowerCase() === 'pdf';
+  const mime = file.mime_type?.toLowerCase() || '';
+  const isPDF = mime === 'application/pdf' || file.file_type?.toLowerCase() === 'pdf';
+  const isImage = mime.startsWith('image/') || ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(file.file_type?.toLowerCase());
+
   const displayDate = new Date(file.created_at).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
@@ -118,6 +123,27 @@ export const FilePreviewModal: React.FC = () => {
                       LOAD PREVIEW
                     </button>
                   </div>
+                )}
+              </div>
+            </div>
+          ) : isImage ? (
+            <div className="w-full h-full flex flex-col">
+              <div className="flex-1 flex items-center justify-center bg-neutral-950 rounded border border-neutral-950 overflow-hidden relative">
+                {loadingPreview ? (
+                  <div className="flex flex-col items-center justify-center text-neutral-500 select-none">
+                    <ImageIcon className="w-12 h-12 stroke-[1] text-neutral-600 mb-2 animate-pulse" />
+                    <span className="text-[10px] font-mono uppercase tracking-wider">Loading image...</span>
+                  </div>
+                ) : previewUrl ? (
+                  <img
+                    src={previewUrl}
+                    alt={file.name}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                ) : (
+                  <button onClick={handlePreview} className="px-6 py-3 bg-white text-black text-xs font-mono font-bold uppercase tracking-wider rounded-full hover:bg-neutral-200 transition-all cursor-pointer shadow-[0_0_12px_rgba(255,255,255,0.1)]">
+                    LOAD IMAGE
+                  </button>
                 )}
               </div>
             </div>
