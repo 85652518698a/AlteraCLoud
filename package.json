@@ -2,6 +2,8 @@
   "name": "altera-cloud",
   "private": true,
   "version": "1.0.0",
+  "description": "Altera Cloud - Academic Resource Sharing Platform for CSMU students",
+  "author": "Altera Cloud <csmu@alteracloud.space>",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -17,14 +19,7 @@
   },
   "build": {
     "appId": "space.alteracloud.app",
-    "productName": "Altera Cloud",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "dist/**/*",
-      "electron/**/*.cjs"
-    ]
+    "productName": "Altera Cloud"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.2",

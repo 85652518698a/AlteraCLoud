@@ -29,7 +29,7 @@ jobs:
         run: npm run build
 
       - name: Build Electron app
-        run: npx electron-builder --win --config electron-builder.yml
+        run: npx electron-builder --win --config electron-builder.yml --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
