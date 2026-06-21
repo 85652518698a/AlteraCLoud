@@ -46,67 +46,67 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
     )
 
-    const { data: adminUser } = await supabaseAdmin
+    const { data: caller } = await supabaseAdmin
       .from('admin_users').select('id').eq('email', email).maybeSingle()
 
-    if (!adminUser) {
+    if (!caller) {
       return new Response(JSON.stringify({ error: 'Unauthorized: Admin access required' }), {
         status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
       })
     }
 
-    const { fileId, section, course, is_deployed } = await req.json()
-    if (!fileId) {
-      return new Response(JSON.stringify({ error: 'Missing fileId' }), {
-        status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
-    }
+    const { action, targetEmail, displayName } = await req.json()
 
-    const { data: file, error: fetchError } = await supabaseAdmin
-      .from('files').select('name, section, is_deployed').eq('id', fileId).single()
-
-    if (fetchError || !file) {
-      return new Response(JSON.stringify({ error: 'File not found' }), {
-        status: 404, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
-    }
-
-    const updates: Record<string, any> = {}
-    const auditDetails: Record<string, any> = {}
-    let auditAction = 'edit_meta'
-
-    if (section !== undefined && section !== file.section) {
-      updates.section = section
-      auditDetails.oldSection = file.section
-      auditDetails.newSection = section
-    }
-
-    if (is_deployed !== undefined && is_deployed !== file.is_deployed) {
-      updates.is_deployed = is_deployed
-      auditAction = is_deployed ? 'deploy' : 'undeploy'
-    }
-
-    if (course !== undefined && course !== file.course) {
-      updates.course = course || null
-      auditDetails.oldCourse = file.course
-      auditDetails.newCourse = course
-    }
-
-    if (Object.keys(updates).length === 0) {
-      return new Response(JSON.stringify({ success: true, message: 'No changes' }), {
+    if (action === 'list') {
+      const { data: admins, error } = await supabaseAdmin
+        .from('admin_users').select('*').order('created_at', { ascending: true })
+      if (error) throw error
+      return new Response(JSON.stringify(admins), {
         status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
       })
     }
 
-    await supabaseAdmin.from('files').update(updates).eq('id', fileId)
+    if (action === 'add') {
+      if (!targetEmail) {
+        return new Response(JSON.stringify({ error: 'Missing targetEmail' }), {
+          status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        })
+      }
+      const { error } = await supabaseAdmin
+        .from('admin_users').insert({
+          email: targetEmail.toLowerCase().trim(),
+          display_name: displayName || targetEmail.split('@')[0],
+          added_by: email,
+        })
+      if (error) {
+        if (error.code === '23505') {
+          return new Response(JSON.stringify({ error: 'Admin already exists' }), {
+            status: 409, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+          })
+        }
+        throw error
+      }
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
+    }
 
-    await supabaseAdmin.from('audit_logs').insert({
-      action: auditAction, file_id: fileId, file_name: file.name,
-      performed_by: email, details: auditDetails,
-    })
+    if (action === 'remove') {
+      if (!targetEmail) {
+        return new Response(JSON.stringify({ error: 'Missing targetEmail' }), {
+          status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        })
+      }
+      const { error } = await supabaseAdmin
+        .from('admin_users').delete().eq('email', targetEmail.toLowerCase().trim())
+      if (error) throw error
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
+    }
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    return new Response(JSON.stringify({ error: 'Unknown action. Use: list, add, remove' }), {
+      status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
     })
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {

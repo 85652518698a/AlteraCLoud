@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { FileRecord } from '../../types';
 import { SECTIONS } from '../../constants/sections';
+import { COURSES } from '../../constants/courses';
 import { AdminFileRow } from './AdminFileRow';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { Eye, Search, Filter, Trash2, Upload, Download } from 'lucide-react';
@@ -14,6 +15,7 @@ interface AdminFileTableProps {
 export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionComplete }) => {
   const [localSearch, setLocalSearch] = useState('');
   const [sectionFilter, setSectionFilter] = useState('all');
+  const [courseFilter, setCourseFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkLoading, setBulkLoading] = useState(false);
@@ -24,12 +26,13 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
       f.uploaded_by.toLowerCase().includes(localSearch.toLowerCase());
     
     const matchesSection = sectionFilter === 'all' || f.section === sectionFilter;
+    const matchesCourse = !courseFilter || f.course === courseFilter;
     
     const matchesStatus = statusFilter === 'all' || 
       (statusFilter === 'deployed' && f.is_deployed) || 
       (statusFilter === 'draft' && !f.is_deployed);
 
-    return matchesSearch && matchesSection && matchesStatus;
+    return matchesSearch && matchesSection && matchesCourse && matchesStatus;
   });
 
   const allFilteredSelected = filtered.length > 0 && filtered.every(f => selectedIds.has(f.id));
@@ -111,6 +114,20 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
               <option value="all" className="bg-neutral-950 text-xs">ALL DIRECTORIES</option>
               {SECTIONS.map(s => (
                 <option key={s.id} value={s.id} className="bg-neutral-950 text-xs">{s.label.toUpperCase()}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-1.5 px-3 py-1 bg-neutral-950 border border-neutral-900 rounded text-neutral-400">
+            <Filter className="w-3 h-3 shrink-0" />
+            <select
+              value={courseFilter}
+              onChange={(e) => setCourseFilter(e.target.value)}
+              className="bg-transparent text-[11px] font-mono border-none focus:outline-none focus:ring-0 text-white uppercase font-bold"
+            >
+              <option value="" className="bg-neutral-950 text-xs">ALL COURSES</option>
+              {COURSES.map(c => (
+                <option key={c.id} value={c.id} className="bg-neutral-950 text-xs">{c.label.toUpperCase()}</option>
               ))}
             </select>
           </div>

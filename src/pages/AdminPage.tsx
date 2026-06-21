@@ -9,6 +9,7 @@ import { AdminStats } from '../components/admin/AdminStats';
 import { UploadZone } from '../components/admin/UploadZone';
 import { AdminFileTable } from '../components/admin/AdminFileTable';
 import { AuditLogTable } from '../components/admin/AuditLogTable';
+import { AdminUserManager } from '../components/admin/AdminUserManager';
 import { RenameModal } from '../components/admin/RenameModal';
 import { EditMetaModal } from '../components/admin/EditMetaModal';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
@@ -84,6 +85,7 @@ export const AdminPage: React.FC = () => {
             </h3>
             <AdminFileTable files={files} onActionComplete={triggerUpdate} />
           </div>
+          <AdminUserManager />
           <AuditLogTable />
         </PageWrapper>
       </div>

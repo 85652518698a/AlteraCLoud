@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useUIStore, uiStore } from '../../store/uiStore';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { SECTIONS } from '../../constants/sections';
+import { COURSES } from '../../constants/courses';
 import { SectionId } from '../../types';
 import { Button } from '../ui/Button';
 import { Settings, X } from 'lucide-react';
@@ -14,11 +15,12 @@ interface EditMetaModalProps {
 export const EditMetaModal: React.FC<EditMetaModalProps> = ({ onSuccess }) => {
   const file = useUIStore(s => s.editMetaModalFile);
   const [section, setSection] = useState<SectionId>('notes');
+  const [course, setCourse] = useState('');
   const [isDeployed, setIsDeployed] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (file) { setSection(file.section); setIsDeployed(file.is_deployed); }
+    if (file) { setSection(file.section); setCourse(file.course || ''); setIsDeployed(file.is_deployed); }
   }, [file]);
 
   if (!file) return null;
@@ -33,6 +35,7 @@ export const EditMetaModal: React.FC<EditMetaModalProps> = ({ onSuccess }) => {
       await callEdgeFunction('update-file', {
         fileId: file.id,
         section,
+        course,
         is_deployed: isDeployed,
       });
       toast.success('Asset flags revised successfully', { id: toastId });
@@ -54,13 +57,21 @@ export const EditMetaModal: React.FC<EditMetaModalProps> = ({ onSuccess }) => {
           <div><h3 className="text-zinc-100 font-display font-semibold tracking-wider text-sm uppercase">REDEFINE ASSET PREFERENCES</h3><p className="text-[10px] font-mono text-neutral-500">MANAGE SECTION OR DEPLOY FLAG</p></div>
         </div>
         <form onSubmit={handleMetaSubmit} className="space-y-4">
-          <div>
-            <label className="block text-[10px] font-mono text-neutral-500 uppercase mb-1.5 tracking-wider">Asset Location Section</label>
-            <select value={section} onChange={(e) => setSection(e.target.value as SectionId)}
-              className="w-full px-3 py-2.5 bg-neutral-950 border border-neutral-900 rounded text-xs text-zinc-300 focus:outline-none focus:border-zinc-500 font-mono">
-              {SECTIONS.map(sec => <option key={sec.id} value={sec.id} className="bg-neutral-950 text-xs">{sec.label.toUpperCase()}</option>)}
-            </select>
-          </div>
+            <div>
+              <label className="block text-[10px] font-mono text-neutral-500 uppercase mb-1.5 tracking-wider">Asset Location Section</label>
+              <select value={section} onChange={(e) => setSection(e.target.value as SectionId)}
+                className="w-full px-3 py-2.5 bg-neutral-950 border border-neutral-900 rounded text-xs text-zinc-300 focus:outline-none focus:border-zinc-500 font-mono">
+                {SECTIONS.map(sec => <option key={sec.id} value={sec.id} className="bg-neutral-950 text-xs">{sec.label.toUpperCase()}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-[10px] font-mono text-neutral-500 uppercase mb-1.5 tracking-wider">Course</label>
+              <select value={course} onChange={(e) => setCourse(e.target.value)}
+                className="w-full px-3 py-2.5 bg-neutral-950 border border-neutral-900 rounded text-xs text-zinc-300 focus:outline-none focus:border-zinc-500 font-mono">
+                <option value="" className="bg-neutral-950 text-xs">GENERAL</option>
+                {COURSES.map(c => <option key={c.id} value={c.id} className="bg-neutral-950 text-xs">{c.label.toUpperCase()}</option>)}
+              </select>
+            </div>
           <div className="flex items-center justify-between p-3.5 bg-neutral-900/30 border border-neutral-900 rounded select-none">
             <div><div className="text-xs font-semibold text-zinc-300">PUBLISH TO SYSTEM</div><div className="text-[10px] font-mono text-zinc-500 uppercase tracking-tight mt-0.5">Students can preview or download</div></div>
             <button type="button" role="switch" onClick={() => setIsDeployed(!isDeployed)}

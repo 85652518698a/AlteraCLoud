@@ -84,7 +84,10 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
             </div>
           </div>
         </td>
-        <td className="py-4 px-3 uppercase text-neutral-400 font-semibold tracking-wide whitespace-nowrap">{file.section}</td>
+        <td className="py-4 px-3 uppercase text-neutral-400 font-semibold tracking-wide whitespace-nowrap">
+          <div>{file.section}</div>
+          {file.course && <div className="text-[9px] text-neutral-600 font-normal">{file.course.toUpperCase()}</div>}
+        </td>
         <td className="py-4 px-3 text-neutral-500 whitespace-nowrap">{formatBytes(file.size_bytes)}</td>
         <td className="py-4 px-3 text-neutral-500 whitespace-nowrap">{displayDate}</td>
         <td className="py-4 px-3 text-center select-none whitespace-nowrap">
@@ -130,6 +133,7 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
               <span className="uppercase">{file.file_type.toUpperCase()}</span>
               <span>•</span>
               <span>{file.section}</span>
+              {file.course && <><span>•</span><span className="text-neutral-400">{file.course.toUpperCase()}</span></>}
               <span>•</span>
               <span>{formatBytes(file.size_bytes)}</span>
               <span>•</span>

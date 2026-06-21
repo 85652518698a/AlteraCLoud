@@ -3,6 +3,7 @@ import { useAuthStore, authStore } from '../../store/authStore';
 import { validateFile } from '../../lib/validateFile';
 import { SECTIONS } from '../../constants/sections';
 import { SectionId } from '../../types';
+import { COURSES } from '../../constants/courses';
 import { LottieUpload } from '../ui/LottieUpload';
 import { Upload, FileCode, X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -19,6 +20,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [section, setSection] = useState<SectionId>('notes');
+  const [course, setCourse] = useState('');
   const [isDeployed, setIsDeployed] = useState(false);
   const [customName, setCustomName] = useState('');
   const [dragActive, setDragActive] = useState(false);
@@ -96,6 +98,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
 
         formData.append('file', namedFile);
         formData.append('section', section);
+        formData.append('course', course);
         formData.append('isDeployed', String(isDeployed));
 
         const xhr = new XMLHttpRequest();
@@ -239,6 +242,14 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
               <select value={section} onChange={(e) => setSection(e.target.value as SectionId)} disabled={isUploading}
                 className="w-full px-3 py-2 bg-neutral-950 border border-neutral-900 rounded text-xs text-zinc-300 focus:outline-none focus:border-zinc-500 font-mono">
                 {SECTIONS.map(s => <option key={s.id} value={s.id} className="bg-neutral-950 text-xs">{s.label.toUpperCase()}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-[10px] font-mono text-neutral-500 uppercase mb-1.5 tracking-wider">Course (Optional)</label>
+              <select value={course} onChange={(e) => setCourse(e.target.value)} disabled={isUploading}
+                className="w-full px-3 py-2 bg-neutral-950 border border-neutral-900 rounded text-xs text-zinc-300 focus:outline-none focus:border-zinc-500 font-mono">
+                <option value="" className="bg-neutral-950 text-xs">GENERAL</option>
+                {COURSES.map(c => <option key={c.id} value={c.id} className="bg-neutral-950 text-xs">{c.label.toUpperCase()}</option>)}
               </select>
             </div>
             {selectedFiles.length === 1 && (

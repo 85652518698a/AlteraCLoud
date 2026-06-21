@@ -58,6 +58,7 @@ serve(async (req) => {
     const formData = await req.formData()
     const file = formData.get('file') as File
     const section = formData.get('section') as string
+    const course = (formData.get('course') as string) || null
     const isDeployed = formData.get('isDeployed') === 'true'
 
     if (!file || !section) {
@@ -75,7 +76,7 @@ serve(async (req) => {
     const { data: fileRecord, error: dbError } = await supabaseAdmin
       .from('files').insert({
         name: file.name, original_name: file.name, storage_path: storagePath,
-        section, file_type: file.type.split('/')[0], mime_type: file.type,
+        section, course, file_type: file.type.split('/')[0], mime_type: file.type,
         size_bytes: file.size, is_deployed: isDeployed, uploaded_by: email,
       }).select().single()
 

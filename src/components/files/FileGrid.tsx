@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useUIStore } from '../../store/uiStore';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useUIStore, uiStore } from '../../store/uiStore';
 import { supabase } from '../../config/supabase';
 import { FileRecord } from '../../types';
 import { FileCard } from './FileCard';
 import { EmptyState } from '../ui/EmptyState';
 import { Spinner } from '../ui/Spinner';
+import { COURSES } from '../../constants/courses';
 import { RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -13,6 +14,7 @@ const PAGE_SIZE = 30;
 export const FileGrid: React.FC = () => {
   const activeSection = useUIStore(s => s.activeSection);
   const searchQuery = useUIStore(s => s.searchQuery);
+  const activeCourse = useUIStore(s => s.activeCourse);
 
   const [files, setFiles] = useState<FileRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,36 +23,42 @@ export const FileGrid: React.FC = () => {
 
   useEffect(() => {
     setPage(0);
-  }, [activeSection, searchQuery]);
+  }, [activeSection, searchQuery, activeCourse]);
+
+  const fetchFiles = useCallback(async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('files')
+        .select('*')
+        .eq('is_deployed', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setFiles(data || []);
+    } catch (err) {
+      console.error('Failed to retrieve locker directory', err);
+      toast.error('Failed to synchronize locker files');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    let active = true;
-    const fetchFiles = async () => {
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('files')
-          .select('*')
-          .eq('is_deployed', true)
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        if (active) {
-          setFiles(data || []);
-        }
-      } catch (err) {
-        console.error('Failed to retrieve locker directory', err);
-        toast.error('Failed to synchronize locker files');
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    };
-
     fetchFiles();
-    return () => { active = false; };
-  }, [refreshTrigger]);
+  }, [fetchFiles, refreshTrigger]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('files-realtime')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'files', filter: 'is_deployed=eq.true' },
+        () => { fetchFiles(); }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [fetchFiles]);
 
   const handleReload = () => {
     setRefreshTrigger(prev => prev + 1);
@@ -59,9 +67,10 @@ export const FileGrid: React.FC = () => {
 
   const filteredFiles = files.filter(f => {
     const matchesSection = activeSection === 'all' || f.section === activeSection;
+    const matchesCourse = !activeCourse || f.course === activeCourse;
     const matchesSearch = searchQuery.trim() === '' ||
       f.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSection && matchesSearch;
+    return matchesSection && matchesCourse && matchesSearch;
   });
 
   const totalPages = Math.max(1, Math.ceil(filteredFiles.length / PAGE_SIZE));
@@ -80,8 +89,8 @@ export const FileGrid: React.FC = () => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-4 mt-8 px-1 select-none">
-        <div className="text-[11px] font-mono text-neutral-400 flex items-center gap-2">
+      <div className="flex items-center justify-between mb-2 mt-8 px-1 select-none">
+        <div className="text-[11px] font-mono text-neutral-400 flex items-center gap-2 flex-wrap">
           <span>DIRECTORY:</span>
           <span className="text-white font-bold uppercase">{activeSection === 'all' ? 'ALL DIRECTORIES' : activeSection}</span>
           <span>•</span>
@@ -94,6 +103,22 @@ export const FileGrid: React.FC = () => {
         >
           <RefreshCw className="w-3.5 h-3.5 animate-[spin_6s_linear_infinite]" />
         </button>
+      </div>
+
+      <div className="flex items-center gap-2 mb-4 px-1 select-none overflow-x-auto scrollbar-none">
+        {COURSES.map(c => (
+          <button
+            key={c.id}
+            onClick={() => uiStore.setActiveCourse(activeCourse === c.id ? '' : c.id)}
+            className={`text-[10px] font-mono px-2.5 py-1 rounded border transition-colors cursor-pointer whitespace-nowrap ${
+              activeCourse === c.id
+                ? 'text-white border-white bg-white/10'
+                : 'text-neutral-500 border-neutral-900 hover:text-neutral-300 hover:border-neutral-700'
+            }`}
+          >
+            {c.label}
+          </button>
+        ))}
       </div>
 
       {filteredFiles.length === 0 ? (

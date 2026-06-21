@@ -4,6 +4,7 @@ import { SectionId, FileRecord } from '../types';
 interface UIState {
   currentPage: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download';
   activeSection: SectionId | 'all';
+  activeCourse: string;
   searchQuery: string;
   selectedFileForPreview: FileRecord | null;
   renameModalFile: FileRecord | null;
@@ -21,6 +22,7 @@ interface UIState {
 let state: UIState = {
   currentPage: 'landing',
   activeSection: 'notes',
+  activeCourse: '',
   searchQuery: '',
   selectedFileForPreview: null,
   renameModalFile: null,
@@ -56,6 +58,10 @@ export const uiStore = {
 
   setActiveSection: (section: SectionId | 'all') => {
     set({ activeSection: section });
+  },
+
+  setActiveCourse: (course: string) => {
+    set({ activeCourse: course });
   },
 
   setSearchQuery: (query: string) => {

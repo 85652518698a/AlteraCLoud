@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { AuditLog } from '../../types';
 import { callEdgeFunction } from '../../lib/edgeFunction';
+import { supabase } from '../../config/supabase';
 import { Clock, Terminal, ChevronDown, ChevronUp } from 'lucide-react';
 
 export const AuditLogTable: React.FC = () => {
@@ -21,8 +22,21 @@ export const AuditLogTable: React.FC = () => {
 
   useEffect(() => {
     fetchLogs();
-    const poll = setInterval(fetchLogs, 20000);
-    return () => clearInterval(poll);
+
+    const channel = supabase
+      .channel('audit-logs-realtime')
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'audit_logs' },
+        () => { fetchLogs(); }
+      )
+      .subscribe();
+
+    const poll = setInterval(fetchLogs, 30000);
+
+    return () => {
+      clearInterval(poll);
+      supabase.removeChannel(channel);
+    };
   }, [fetchLogs]);
 
   const getActionBadge = (action: string) => {

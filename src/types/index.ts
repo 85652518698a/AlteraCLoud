@@ -12,6 +12,7 @@ export interface FileRecord {
   is_deployed: boolean;
   uploaded_by: string;
   downloads: number;
+  course: string | null;
   created_at: string;
   updated_at: string;
 }
