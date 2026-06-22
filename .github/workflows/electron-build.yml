@@ -11,37 +11,79 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-win:
     runs-on: windows-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build web app
-        run: npm run build
-
-      - name: Build Electron app
-        run: npx electron-builder --win --config electron-builder.yml --publish never
+      - run: npm ci
+      - run: npm run build
+      - run: npx electron-builder --win --config electron-builder.yml --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload EXE artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: Altera-Cloud-Setup
+          name: Altera-Cloud-Windows
           path: release/*.exe
 
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
+  build-linux:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          files: release/*.exe
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx electron-builder --linux --config electron-builder.yml --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Altera-Cloud-Linux
+          path: |
+            release/*.AppImage
+            release/*.deb
+
+  build-mac:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx electron-builder --mac --config electron-builder.yml --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Altera-Cloud-Mac
+          path: |
+            release/*.dmg
+            release/*.zip
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build-win, build-linux, build-mac]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+      - name: Collect artifacts for release
+        run: |
+          mkdir -p release
+          cp -r Altera-Cloud-Windows/* release/
+          cp -r Altera-Cloud-Linux/* release/ 2>/dev/null || true
+          cp -r Altera-Cloud-Mac/* release/ 2>/dev/null || true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
           generate_release_notes: true

@@ -10,6 +10,12 @@ files:
   - dist/**/*
   - electron/**/*.cjs
 
+publish:
+  provider: github
+  owner: 85652518698a
+  repo: AlteraCLoud
+  releaseType: release
+
 win:
   artifactName: "${productName}.Setup.${ext}"
   target:
@@ -23,6 +29,8 @@ nsis:
   perMachine: false
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Altera Cloud
 
 linux:
   artifactName: "${productName}.${ext}"
@@ -30,6 +38,7 @@ linux:
     - AppImage
     - deb
   icon: electron/icon.png
+  category: Education
 
 mac:
   artifactName: "${productName}.${ext}"
@@ -37,3 +46,4 @@ mac:
     - dmg
     - zip
   icon: electron/icon.png
+  category: public.app-category.education
