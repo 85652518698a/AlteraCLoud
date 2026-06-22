@@ -45,5 +45,5 @@ mac:
   target:
     - dmg
     - zip
-  icon: electron/icon.png
+  icon: electron/icon-512.png
   category: public.app-category.education
