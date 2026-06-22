@@ -26,11 +26,13 @@ export default function App() {
     if (path === '/privacy') uiStore.setCurrentPage('privacy');
     else if (path === '/terms') uiStore.setCurrentPage('terms');
     else if (path === '/download') uiStore.setCurrentPage('download');
+    else if (path === '/admin') uiStore.setCurrentPage('admin');
   }, []);
 
   useEffect(() => {
     const path = window.location.pathname.replace(/\/$/, '');
-    const expected = currentPage === 'privacy' ? '/privacy' : currentPage === 'terms' ? '/terms' : currentPage === 'download' ? '/download' : '/';
+    const page = currentPage;
+    const expected = page === 'privacy' ? '/privacy' : page === 'terms' ? '/terms' : page === 'download' ? '/download' : page === 'admin' ? '/admin' : '/';
     if (path !== expected) window.history.replaceState(null, '', expected);
   }, [currentPage]);
 
@@ -40,6 +42,7 @@ export default function App() {
       if (path === '/privacy') uiStore.setCurrentPage('privacy');
       else if (path === '/terms') uiStore.setCurrentPage('terms');
       else if (path === '/download') uiStore.setCurrentPage('download');
+      else if (path === '/admin') uiStore.setCurrentPage('admin');
       else uiStore.setCurrentPage('landing');
     };
     window.addEventListener('popstate', handlePop);

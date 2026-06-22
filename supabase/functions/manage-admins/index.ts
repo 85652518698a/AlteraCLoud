@@ -27,10 +27,11 @@ serve(async (req) => {
         status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
       })
     }
-
+    const base64 = tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')
+    const padded = base64 + '='.repeat((4 - base64.length % 4) % 4)
     const payload = JSON.parse(
       new TextDecoder().decode(
-        Uint8Array.from(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
+        Uint8Array.from(atob(padded), c => c.charCodeAt(0))
       )
     )
     const email = payload?.email?.toLowerCase()?.trim()

@@ -27,10 +27,11 @@ serve(async (req) => {
         status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
       })
     }
-
+    const base64 = tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')
+    const padded = base64 + '='.repeat((4 - base64.length % 4) % 4)
     const payload = JSON.parse(
       new TextDecoder().decode(
-        Uint8Array.from(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
+        Uint8Array.from(atob(padded), c => c.charCodeAt(0))
       )
     )
     const email = payload?.email?.toLowerCase()?.trim()
@@ -92,7 +93,7 @@ serve(async (req) => {
     const { data: fileRecord, error: dbError } = await supabaseAdmin
       .from('files').insert({
         name: file.name, original_name: file.name, storage_path: storagePath,
-        section, course, file_type: file.type.split('/')[0], mime_type: file.type,
+        section, course, file_type: ext, mime_type: file.type,
         size_bytes: file.size, is_deployed: isDeployed, uploaded_by: email,
       }).select().single()
 
