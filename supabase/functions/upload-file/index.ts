@@ -55,6 +55,9 @@ serve(async (req) => {
       })
     }
 
+    const MAX_SIZE = 50 * 1024 * 1024
+    const ALLOWED_EXTENSIONS = ['pdf', 'docx', 'doc', 'xls', 'xlsx', 'ppt', 'pptx', 'png', 'jpg', 'jpeg', 'gif', 'webp', 'zip', 'txt', 'csv']
+
     const formData = await req.formData()
     const file = formData.get('file') as File
     const section = formData.get('section') as string
@@ -63,6 +66,19 @@ serve(async (req) => {
 
     if (!file || !section) {
       return new Response(JSON.stringify({ error: 'Missing file or section' }), {
+        status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
+    }
+
+    const ext = file.name.split('.').pop()?.toLowerCase() || ''
+    if (!ALLOWED_EXTENSIONS.includes(ext)) {
+      return new Response(JSON.stringify({ error: `Unsupported file format: .${ext}. Allowed: ${ALLOWED_EXTENSIONS.join(', ')}` }), {
+        status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      })
+    }
+
+    if (file.size > MAX_SIZE) {
+      return new Response(JSON.stringify({ error: `File size ${(file.size / (1024 * 1024)).toFixed(1)}MB exceeds 50MB limit` }), {
         status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
       })
     }

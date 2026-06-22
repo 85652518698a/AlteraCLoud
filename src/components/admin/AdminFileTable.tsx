@@ -4,7 +4,7 @@ import { SECTIONS } from '../../constants/sections';
 import { COURSES } from '../../constants/courses';
 import { AdminFileRow } from './AdminFileRow';
 import { callEdgeFunction } from '../../lib/edgeFunction';
-import { Eye, Search, Filter, Trash2, Upload, Download } from 'lucide-react';
+import { Eye, Search, Filter, Trash2, Upload, Download, Bookmark } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface AdminFileTableProps {
@@ -19,6 +19,7 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkCourse, setBulkCourse] = useState('');
 
   const filtered = files.filter(f => {
     const matchesSearch = localSearch.trim() === '' || 
@@ -55,6 +56,32 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
   };
 
   const clearSelection = () => setSelectedIds(new Set());
+
+  const bulkAssignCourse = useCallback(async () => {
+    if (selectedIds.size === 0 || !bulkCourse) return;
+    setBulkLoading(true);
+    const toastId = toast.loading(`Assigning course to ${selectedIds.size} files...`);
+    let success = 0;
+    let fail = 0;
+    for (const fileId of selectedIds) {
+      try {
+        await callEdgeFunction('update-file', { fileId, course: bulkCourse });
+        success++;
+      } catch {
+        fail++;
+      }
+    }
+    const courseLabel = COURSES.find(c => c.id === bulkCourse)?.label || bulkCourse;
+    if (fail === 0) {
+      toast.success(`All ${success} files assigned to ${courseLabel}.`, { id: toastId });
+    } else {
+      toast.error(`${success} files assigned, ${fail} failed.`, { id: toastId });
+    }
+    setBulkLoading(false);
+    setBulkCourse('');
+    clearSelection();
+    onActionComplete();
+  }, [selectedIds, bulkCourse, onActionComplete]);
 
   const bulkAction = useCallback(async (action: 'deploy' | 'draft' | 'delete') => {
     if (selectedIds.size === 0) return;
@@ -149,7 +176,7 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
 
       {/* Bulk action bar */}
       {selectedIds.size > 0 && (
-        <div className="flex items-center gap-2 sm:gap-3 mb-4 p-3 bg-neutral-950/60 border border-neutral-800 rounded-lg text-[10px] sm:text-[11px] font-mono">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 p-3 bg-neutral-950/60 border border-neutral-800 rounded-lg text-[10px] sm:text-[11px] font-mono">
           <span className="text-neutral-400 font-bold whitespace-nowrap">{selectedIds.size} SELECTED</span>
           <div className="w-px h-4 bg-neutral-800" />
           <button onClick={() => bulkAction('deploy')} disabled={bulkLoading}
@@ -161,11 +188,23 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
             <Download className="w-3 h-3" /> DRAFT
           </button>
           <button onClick={() => bulkAction('delete')} disabled={bulkLoading}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/30 hover:bg-red-950/50 text-red-400 rounded transition-colors cursor-pointer disabled:opacity-40 ml-auto">
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-950/30 hover:bg-red-950/50 text-red-400 rounded transition-colors cursor-pointer disabled:opacity-40">
             <Trash2 className="w-3 h-3" /> DELETE
           </button>
+          <div className="w-px h-4 bg-neutral-800" />
+          <select value={bulkCourse} onChange={(e) => setBulkCourse(e.target.value)} disabled={bulkLoading}
+            className="bg-neutral-950 border border-neutral-900 rounded px-2 py-1 text-[10px] text-zinc-300 font-mono focus:outline-none focus:border-zinc-500">
+            <option value="" className="bg-neutral-950">COURSE...</option>
+            {COURSES.map(c => (
+              <option key={c.id} value={c.id} className="bg-neutral-950">{c.label.toUpperCase()}</option>
+            ))}
+          </select>
+          <button onClick={bulkAssignCourse} disabled={bulkLoading || !bulkCourse}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors cursor-pointer disabled:opacity-40">
+            <Bookmark className="w-3 h-3" /> ASSIGN
+          </button>
           <button onClick={clearSelection}
-            className="text-neutral-600 hover:text-white cursor-pointer px-2 ml-auto sm:ml-0">
+            className="text-neutral-600 hover:text-white cursor-pointer px-2 ml-auto">
             CLEAR
           </button>
         </div>
