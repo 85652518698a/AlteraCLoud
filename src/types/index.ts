@@ -42,3 +42,18 @@ export interface SectionMeta {
   icon: string; // Lucide icon name
   description: string;
 }
+
+export interface Collection {
+  id: string;
+  name: string;
+  description: string;
+  created_by: string;
+  created_at: string;
+}
+
+export interface CollectionFile {
+  id: string;
+  collection_id: string;
+  file_id: string;
+  added_at: string;
+}

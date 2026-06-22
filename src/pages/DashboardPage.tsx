@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useUIStore } from '../store/uiStore';
+import { useUIStore, uiStore } from '../store/uiStore';
 import { FileRecord } from '../types';
 import { getRecentlyViewed } from '../lib/recentlyViewed';
 import { Navbar } from '../components/layout/Navbar';
 import { PageWrapper } from '../components/layout/PageWrapper';
 import { SectionTabs } from '../components/files/SectionTabs';
-import { FileSearchBar } from '../components/files/FileSearchBar';
+import { SmartSearch } from '../components/files/SmartSearch';
 import { FileGrid } from '../components/files/FileGrid';
 import { FileCard } from '../components/files/FileCard';
 import { FilePreviewModal } from '../components/files/FilePreviewModal';
+import { CollectionSidebar } from '../components/files/CollectionSidebar';
 import { Footer } from '../components/layout/Footer';
 import { Bookmark, Clock } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const activeFileForPreview = useUIStore((state) => state.selectedFileForPreview);
+  const activeCollectionId = useUIStore(s => s.activeCollectionId);
+  const sidebarOpen = useUIStore(s => s.sidebarOpen);
   const [recentFiles, setRecentFiles] = useState<FileRecord[]>([]);
 
   useEffect(() => {
@@ -32,6 +35,13 @@ export const DashboardPage: React.FC = () => {
       <div className="flex-1">
         <Navbar />
 
+        <CollectionSidebar
+          files={[]}
+          onSelectCollection={(id) => uiStore.setActiveCollectionId(id)}
+          activeCollectionId={activeCollectionId}
+        />
+
+        <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-56' : 'ml-0'}`}>
         <PageWrapper>
           <div className="mb-10 text-left select-none max-w-2xl page-enter">
             <div className="flex items-center gap-1.5 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] mb-2 font-bold select-none">
@@ -71,13 +81,15 @@ export const DashboardPage: React.FC = () => {
 
           <div className="page-enter" style={{ animationDelay: '0.1s' }}>
             <SectionTabs />
-            <FileSearchBar />
+            <SmartSearch />
             <FileGrid />
           </div>
         </PageWrapper>
+
+        <Footer />
       </div>
 
-      <Footer />
+      </div>
 
       {activeFileForPreview && <FilePreviewModal />}
     </div>

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FileRecord } from '../../types';
 import { FileIcon } from '../ui/FileIcon';
 import { formatBytes } from '../../lib/formatBytes';
 import { callEdgeFunction } from '../../lib/edgeFunction';
-import { uiStore } from '../../store/uiStore';
+import { uiStore, useUIStore } from '../../store/uiStore';
 import { addRecentlyViewed } from '../../lib/recentlyViewed';
+import { QuickPreview } from './QuickPreview';
 import { Download, Eye } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -14,6 +15,24 @@ interface FileCardProps {
 
 export const FileCard: React.FC<FileCardProps> = ({ file }) => {
   const [downloading, setDownloading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const isSelected = useUIStore(s => s.selectedFileIds.has(file.id));
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = () => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = setTimeout(() => setShowPreview(true), 350);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    setShowPreview(false);
+  };
+
+  useEffect(() => {
+    return () => { if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current); };
+  }, []);
 
   const handleDownload = async () => {
     setDownloading(true);
@@ -47,15 +66,37 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
   });
 
   return (
-    <div className="group bg-[#0d0d0d] border border-neutral-900 rounded-lg p-5 hover:border-neutral-700 transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex flex-col justify-between h-[215px] hover:shadow-card-hover hover:-translate-y-0.5 relative overflow-hidden select-none card-border-gradient">
+    <div
+      ref={cardRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="group bg-[#0d0d0d] border border-neutral-900 rounded-lg p-5 hover:border-neutral-700 transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex flex-col justify-between h-[215px] hover:shadow-card-hover hover:-translate-y-0.5 relative overflow-visible select-none card-border-gradient"
+    >
+      {showPreview && (
+        <div className="absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-3 pointer-events-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <QuickPreview file={file} />
+        </div>
+      )}
       <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent group-hover:via-accent/30 transition-all duration-500" />
       <div>
         <div className="flex justify-between items-start gap-3">
           <div className="p-2 bg-neutral-900/80 border border-neutral-850 rounded text-white group-hover:scale-110 group-hover:border-accent/30 group-hover:shadow-glow-cyan-sm transition-all duration-300">
             <FileIcon extension={file.file_type} className="w-5 h-5" />
           </div>
-          <div className="text-[9px] font-mono text-neutral-500 bg-neutral-900/60 border border-neutral-850 px-2.5 py-0.5 rounded uppercase font-bold tracking-wider group-hover:text-accent/70 transition-colors duration-300">
-            {file.file_type || 'RAW'}
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={(e) => { e.stopPropagation(); uiStore.toggleFileSelection(file.id); }}
+              className={`p-0.5 rounded transition-colors cursor-pointer ${isSelected ? 'text-white' : 'text-neutral-700 hover:text-neutral-400'}`}
+              title={isSelected ? 'Deselect' : 'Select for batch download'}
+            >
+              {isSelected
+  ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><polyline points="20 6 9 17 4 12"/><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+  : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+}
+            </button>
+            <div className="text-[9px] font-mono text-neutral-500 bg-neutral-900/60 border border-neutral-850 px-2.5 py-0.5 rounded uppercase font-bold tracking-wider group-hover:text-accent/70 transition-colors duration-300">
+              {file.file_type || 'RAW'}
+            </div>
           </div>
         </div>
         <div className="mt-4.5">

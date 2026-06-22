@@ -5,6 +5,7 @@ import { FileRecord } from '../../types';
 import { FileCard } from './FileCard';
 import { EmptyState } from '../ui/EmptyState';
 import { Spinner } from '../ui/Spinner';
+import { ZipDownloadBar } from './ZipDownloadBar';
 import { COURSES } from '../../constants/courses';
 import { RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -15,15 +16,17 @@ export const FileGrid: React.FC = () => {
   const activeSection = useUIStore(s => s.activeSection);
   const searchQuery = useUIStore(s => s.searchQuery);
   const activeCourse = useUIStore(s => s.activeCourse);
+  const activeCollectionId = useUIStore(s => s.activeCollectionId);
 
   const [files, setFiles] = useState<FileRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [page, setPage] = useState(0);
+  const [collectionFileIds, setCollectionFileIds] = useState<Set<string> | null>(null);
 
   useEffect(() => {
     setPage(0);
-  }, [activeSection, searchQuery, activeCourse]);
+  }, [activeSection, searchQuery, activeCourse, activeCollectionId]);
 
   const fetchFiles = useCallback(async () => {
     setLoading(true);
@@ -60,6 +63,15 @@ export const FileGrid: React.FC = () => {
     return () => { supabase.removeChannel(channel); };
   }, [fetchFiles]);
 
+  useEffect(() => {
+    if (!activeCollectionId) { setCollectionFileIds(null); return; }
+    supabase.from('collection_files').select('file_id').eq('collection_id', activeCollectionId)
+      .then(({ data }) => {
+        if (data) setCollectionFileIds(new Set(data.map(cf => cf.file_id)));
+        else setCollectionFileIds(new Set());
+      });
+  }, [activeCollectionId]);
+
   const handleReload = () => {
     setRefreshTrigger(prev => prev + 1);
     toast.success('Locker directories synchronized');
@@ -70,7 +82,8 @@ export const FileGrid: React.FC = () => {
     const matchesCourse = !activeCourse || f.course === activeCourse;
     const matchesSearch = searchQuery.trim() === '' ||
       f.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSection && matchesCourse && matchesSearch;
+    const matchesCollection = !activeCollectionId || (collectionFileIds && collectionFileIds.has(f.id));
+    return matchesSection && matchesCourse && matchesSearch && matchesCollection;
   });
 
   const totalPages = Math.max(1, Math.ceil(filteredFiles.length / PAGE_SIZE));
@@ -128,6 +141,7 @@ export const FileGrid: React.FC = () => {
         />
       ) : (
         <>
+          <ZipDownloadBar files={filteredFiles} />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {pagedFiles.map((file) => (
               <FileCard key={file.id} file={file} />

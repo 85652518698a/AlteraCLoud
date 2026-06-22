@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { SectionId, FileRecord } from '../types';
 
 interface UIState {
-  currentPage: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download' | 'view';
+  currentPage: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download' | 'view' | 'print';
   activeSection: SectionId | 'all';
   activeCourse: string;
   searchQuery: string;
@@ -18,6 +18,9 @@ interface UIState {
     targetName: string;
     onConfirm: () => void;
   } | null;
+  selectedFileIds: Set<string>;
+  activeCollectionId: string | null;
+  sidebarOpen: boolean;
 }
 
 let state: UIState = {
@@ -30,6 +33,9 @@ let state: UIState = {
   renameModalFile: null,
   editMetaModalFile: null,
   confirmDialogData: null,
+  selectedFileIds: new Set(),
+  activeCollectionId: null,
+  sidebarOpen: true,
 };
 
 const listeners = new Set<(state: UIState) => void>();
@@ -54,7 +60,7 @@ export const uiStore = {
   set,
   subscribe,
   
-  setCurrentPage: (page: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download' | 'view') => {
+  setCurrentPage: (page: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download' | 'view' | 'print') => {
     set({ currentPage: page });
   },
 
@@ -89,6 +95,28 @@ export const uiStore = {
 
   setEditMetaModalFile: (file: FileRecord | null) => {
     set({ editMetaModalFile: file });
+  },
+
+  toggleFileSelection: (fileId: string) => {
+    const next = new Set(state.selectedFileIds);
+    if (next.has(fileId)) next.delete(fileId); else next.add(fileId);
+    set({ selectedFileIds: next });
+  },
+
+  clearFileSelection: () => {
+    set({ selectedFileIds: new Set() });
+  },
+
+  setActiveCollectionId: (id: string | null) => {
+    set({ activeCollectionId: id });
+  },
+
+  setSidebarOpen: (open: boolean) => {
+    set({ sidebarOpen: open });
+  },
+
+  selectAllFiles: (ids: string[]) => {
+    set({ selectedFileIds: new Set(ids) });
   },
 
   showConfirmDialog: (data: {

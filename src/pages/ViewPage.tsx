@@ -7,6 +7,7 @@ import { FileIcon } from '../components/ui/FileIcon';
 import { formatBytes } from '../lib/formatBytes';
 import { Spinner } from '../components/ui/Spinner';
 import { FileRecord } from '../types';
+import { AddToCollectionButton } from '../components/files/AddToCollectionButton';
 import { ChevronLeft, Download, Eye, FileText, Image as ImageIcon, ShieldAlert, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -84,6 +85,17 @@ export const ViewPage: React.FC = () => {
       toast.success(`${activeFile.name} downloaded`, { id: toastId });
     } catch (err) {
       toast.error('Download failed', { id: toastId });
+    }
+  };
+
+  const handleShareLink = async () => {
+    if (!activeFile) return;
+    const url = `${window.location.origin}/view/${activeFile.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success('Link copied to clipboard');
+    } catch {
+      toast.error('Failed to copy link');
     }
   };
 
@@ -165,6 +177,23 @@ export const ViewPage: React.FC = () => {
               {displayDate}
             </span>
           </div>
+          <AddToCollectionButton fileId={activeFile.id} />
+          <button
+            onClick={() => { window.open(`/print/${activeFile.id}`, '_blank'); }}
+            className="flex items-center gap-1.5 px-3 py-2 border border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-600 rounded-sm text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer"
+            title="Print view"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            <span className="hidden sm:inline">PRINT</span>
+          </button>
+          <button
+            onClick={handleShareLink}
+            className="flex items-center gap-1.5 px-3 py-2 border border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-600 rounded-sm text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer"
+            title="Copy share link"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span className="hidden sm:inline">SHARE</span>
+          </button>
           <button
             onClick={handleDownload}
             disabled={loading}
