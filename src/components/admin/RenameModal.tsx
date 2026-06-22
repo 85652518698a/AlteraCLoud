@@ -32,8 +32,9 @@ export const RenameModal: React.FC<RenameModalProps> = ({ onSuccess }) => {
     setLoading(true);
     const toastId = toast.loading('Syncing changes on cloud...');
     try {
-      const ext = file.name.split('.').pop() || '';
-      const fullNewName = `${newName.trim()}.${ext}`;
+      const dotIndex = file.name.lastIndexOf('.');
+      const ext = dotIndex !== -1 ? file.name.substring(dotIndex + 1) : '';
+      const fullNewName = ext ? `${newName.trim()}.${ext}` : newName.trim();
       await callEdgeFunction('rename-file', { fileId: file.id, newName: fullNewName });
       toast.success('Resource renamed successfully', { id: toastId });
       onSuccess();
@@ -60,7 +61,7 @@ export const RenameModal: React.FC<RenameModalProps> = ({ onSuccess }) => {
               <input type="text" required value={newName} onChange={(e) => setNewName(e.target.value)}
                 placeholder="Type new name..."
                 className="w-full px-3.5 py-2.5 bg-neutral-950 border border-neutral-900 text-xs text-white rounded focus:border-zinc-500 focus:outline-none transition-colors font-mono" />
-              <span className="absolute right-4.5 top-1/2 -translate-y-1/2 text-neutral-500 text-xs font-mono select-none">.{file.name.split('.').pop() || 'raw'}</span>
+              {(() => { const di = file.name.lastIndexOf('.'); const ext = di !== -1 ? file.name.substring(di + 1) : ''; return ext ? <span className="absolute right-4.5 top-1/2 -translate-y-1/2 text-neutral-500 text-xs font-mono select-none">.{ext}</span> : null; })()}
             </div>
           </div>
           <div className="pt-3 border-t border-neutral-950 flex justify-end gap-3 select-none">

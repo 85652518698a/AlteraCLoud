@@ -156,7 +156,7 @@ export const FilePreviewModal: React.FC = () => {
                 {file.name}
               </h4>
               <p className="text-[10px] font-mono text-neutral-500 mb-6">
-                FORMAT: {file.file_type.toUpperCase()} • SIZE: {formatBytes(file.size_bytes)}
+                FORMAT: {(file.file_type || 'bin').toUpperCase()} • SIZE: {formatBytes(file.size_bytes)}
               </p>
 
               <div className="p-4.5 bg-neutral-900/30 border border-neutral-900 rounded text-left flex gap-3 text-xs mb-6 max-w-sm">

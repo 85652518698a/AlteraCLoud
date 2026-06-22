@@ -17,10 +17,10 @@ export const ConfirmDialog: React.FC = () => {
 
   const isMatched = inputValue.trim() === data.targetName.trim();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isMatched) {
-      data.onConfirm();
+      await data.onConfirm();
       uiStore.closeConfirmDialog();
     }
   };

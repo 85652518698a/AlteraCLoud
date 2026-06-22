@@ -77,7 +77,7 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
             <div className="truncate flex flex-col justify-center min-w-0">
               <span className="text-zinc-100 font-mono text-xs font-bold truncate select-all hover:text-white" title={file.name}>{file.name}</span>
               <span className="text-[10px] font-mono text-neutral-500 uppercase flex items-center gap-1 mt-0.5 flex-wrap">
-                <span>{file.file_type.toUpperCase()}</span>
+                <span>{(file.file_type || 'bin').toUpperCase()}</span>
                 <span>•</span>
                 <span>By {file.uploaded_by.split('@')[0]}</span>
               </span>
@@ -130,7 +130,7 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
               <span className="text-zinc-100 font-mono text-xs font-bold truncate select-all">{file.name}</span>
             </div>
             <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-500 flex-wrap">
-              <span className="uppercase">{file.file_type.toUpperCase()}</span>
+              <span className="uppercase">{(file.file_type || 'bin').toUpperCase()}</span>
               <span>•</span>
               <span>{file.section}</span>
               {file.course && <><span>•</span><span className="text-neutral-400">{file.course.toUpperCase()}</span></>}

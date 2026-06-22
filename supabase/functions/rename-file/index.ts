@@ -72,7 +72,8 @@ serve(async (req) => {
     }
 
     const oldPath = file.storage_path
-    const newPath = oldPath.replace(/([^/]+)$/, newName)
+    const dir = oldPath.substring(0, oldPath.lastIndexOf('/') + 1)
+    const newPath = dir + newName
 
     const { error: moveError } = await supabaseAdmin.storage
       .from('altera-resources').move(oldPath, newPath)
