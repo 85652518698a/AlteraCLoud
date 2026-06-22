@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useUIStore, uiStore } from '../store/uiStore';
-import { supabase } from '../config/supabase';
 import { callEdgeFunction } from '../lib/edgeFunction';
 import { addRecentlyViewed } from '../lib/recentlyViewed';
 import { FileIcon } from '../components/ui/FileIcon';
@@ -33,13 +32,15 @@ export const ViewPage: React.FC = () => {
     const fileId = match?.[1];
     if (!fileId) return;
     setFetching(true);
-    supabase.from('files').select('*').eq('id', fileId).maybeSingle().then(({ data, error }) => {
-      if (data) {
-        setLocalFile(data);
-        uiStore.setViewFile(data);
-      }
-      setFetching(false);
-    });
+    callEdgeFunction<FileRecord>('get-file', { fileId }, false)
+      .then((data) => {
+        if (data) {
+          setLocalFile(data);
+          uiStore.setViewFile(data);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setFetching(false));
   }, [file, currentPage]);
 
   const getSignedUrl = useCallback(async (recordView = false) => {
