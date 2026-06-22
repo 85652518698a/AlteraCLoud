@@ -31,7 +31,8 @@ export const PreviewPage: React.FC = () => {
       try {
         const result = await callEdgeFunction<{ file: FileRecord; url?: string }>(
           'get-signed-url',
-          { fileId }
+          { fileId },
+          false
         );
         setFile(result.file);
         if (result.url) {

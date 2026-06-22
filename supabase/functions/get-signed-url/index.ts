@@ -13,33 +13,10 @@ serve(async (req) => {
   }
 
   try {
-    const authHeader = req.headers.get('Authorization')
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ error: 'Missing token' }), {
-        status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
-    }
-
-    const token = authHeader.split(' ')[1]
-    const tokenParts = token.split('.')
-    if (tokenParts.length !== 3) {
-      return new Response(JSON.stringify({ error: 'Invalid token format' }), {
-        status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
-    }
-
-    const payload = JSON.parse(
-      new TextDecoder().decode(
-        Uint8Array.from(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
-      )
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') || '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
     )
-    const email = payload?.email?.toLowerCase()?.trim()
-
-    if (!email) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      })
-    }
 
     const { fileId } = await req.json()
     if (!fileId) {
@@ -47,11 +24,6 @@ serve(async (req) => {
         status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
       })
     }
-
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') || '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
-    )
 
     const { data: file, error: fetchError } = await supabaseAdmin
       .from('files').select('storage_path, is_deployed').eq('id', fileId).single()
@@ -64,6 +36,34 @@ serve(async (req) => {
 
     // Non-deployed files require admin access
     if (!file.is_deployed) {
+      const authHeader = req.headers.get('Authorization')
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return new Response(JSON.stringify({ error: 'Missing token' }), {
+          status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        })
+      }
+
+      const token = authHeader.split(' ')[1]
+      const tokenParts = token.split('.')
+      if (tokenParts.length !== 3) {
+        return new Response(JSON.stringify({ error: 'Invalid token format' }), {
+          status: 401, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        })
+      }
+
+      const payload = JSON.parse(
+        new TextDecoder().decode(
+          Uint8Array.from(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
+        )
+      )
+      const email = payload?.email?.toLowerCase()?.trim()
+
+      if (!email) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 403, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        })
+      }
+
       const { data: adminUser } = await supabaseAdmin
         .from('admin_users').select('id').eq('email', email).maybeSingle()
       if (!adminUser) {

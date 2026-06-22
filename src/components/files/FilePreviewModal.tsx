@@ -24,7 +24,7 @@ export const FilePreviewModal: React.FC = () => {
     setLoadingPreview(true);
     try {
       addRecentlyViewed(file);
-      const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id });
+      const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id }, false);
       setPreviewUrl(url);
       setLoadingPreview(false);
       return url;

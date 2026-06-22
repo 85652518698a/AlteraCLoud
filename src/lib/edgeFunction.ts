@@ -4,17 +4,20 @@ const FUNCTIONS_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
 
 export async function callEdgeFunction<T = any>(
   functionName: string,
-  body: any
+  body: any,
+  requireAuth = true,
 ): Promise<T> {
-  const token = await authStore.getFirebaseIdToken();
-  if (!token) throw new Error('Not authenticated');
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+
+  if (requireAuth) {
+    const token = await authStore.getFirebaseIdToken();
+    if (!token) throw new Error('Not authenticated');
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   const response = await fetch(`${FUNCTIONS_BASE}/${functionName}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
+    headers,
     body: JSON.stringify(body),
   });
 

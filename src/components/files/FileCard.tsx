@@ -20,7 +20,7 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
     const toastId = toast.loading(`Downloading ${file.name}...`);
     try {
       addRecentlyViewed(file);
-      const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id });
+      const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id }, false);
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', file.name);
