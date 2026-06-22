@@ -12,3 +12,4 @@ coverage/
 *.dmg
 *.AppImage
 *.deb
+.temp/
