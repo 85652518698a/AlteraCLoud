@@ -9,11 +9,9 @@ export async function callEdgeFunction<T = any>(
 ): Promise<T> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 
-  if (requireAuth) {
-    const token = await authStore.getFirebaseIdToken();
-    if (!token) throw new Error('Not authenticated');
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+  const token = await authStore.getFirebaseIdToken();
+  if (requireAuth && !token) throw new Error('Not authenticated');
+  if (token) headers['Authorization'] = `Bearer ${token}`;
 
   const response = await fetch(`${FUNCTIONS_BASE}/${functionName}`, {
     method: 'POST',
