@@ -75,6 +75,11 @@ export default {
         elevated: '0 4px 24px rgba(0,0,0,0.8)',
         'glow-brand': '0 0 20px rgba(34,211,238,0.15)',
         'glow-white': '0 0 24px rgba(255,255,255,0.1)',
+        'glow-cyan': '0 0 30px rgba(34,211,238,0.2)',
+        'glow-cyan-sm': '0 0 12px rgba(34,211,238,0.1)',
+        'glow-subtle': '0 0 40px rgba(255,255,255,0.03)',
+        'inner-glow': 'inset 0 1px 0 rgba(255,255,255,0.04)',
+        'card-edge': '0 0 0 1px rgba(34,211,238,0.08)',
       },
       animation: {
         'fade-in': 'fadeIn 0.2s ease',
@@ -82,6 +87,11 @@ export default {
         'scale-in': 'scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
         'glow-pulse': 'glowPulse 2s ease-in-out infinite',
         'shimmer': 'shimmer 1.5s ease-in-out infinite',
+        'fade-in-up': 'fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+        'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        'float-slow': 'floatSlow 6s ease-in-out infinite',
+        'ping-slow': 'pingSlow 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -103,6 +113,26 @@ export default {
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
+        },
+        fadeInUp: {
+          '0%': { transform: 'translateY(24px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        slideInRight: {
+          '0%': { transform: 'translateX(16px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        floatSlow: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-12px)' },
+        },
+        pingSlow: {
+          '0%': { transform: 'scale(1)', opacity: '1' },
+          '50%, 100%': { transform: 'scale(1.8)', opacity: '0' },
+        },
+        pulseSoft: {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.8' },
         },
       },
       backdropBlur: {

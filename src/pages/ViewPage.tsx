@@ -7,7 +7,7 @@ import { FileIcon } from '../components/ui/FileIcon';
 import { formatBytes } from '../lib/formatBytes';
 import { Spinner } from '../components/ui/Spinner';
 import { FileRecord } from '../types';
-import { ChevronLeft, Download, Eye, FileText, Image as ImageIcon, ShieldAlert } from 'lucide-react';
+import { ChevronLeft, Download, Eye, FileText, Image as ImageIcon, ShieldAlert, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ViewPage: React.FC = () => {
@@ -161,7 +161,7 @@ export const ViewPage: React.FC = () => {
               {activeFile.downloads ?? 0}
             </span>
             <span className="flex items-center gap-1">
-              <span className="text-[10px]">??</span>
+              <Clock className="w-3 h-3" />
               {displayDate}
             </span>
           </div>
@@ -272,7 +272,7 @@ export const ViewPage: React.FC = () => {
                 {activeFile.downloads ?? 0} downloads
               </span>
               <span className="flex items-center gap-1">
-                <span className="text-[10px]">??</span>
+                <Clock className="w-3 h-3" />
                 {displayDate}
               </span>
             </div>
@@ -297,7 +297,7 @@ export const ViewPage: React.FC = () => {
             </span>
             <span className="text-neutral-800">|</span>
             <span className="flex items-center gap-1">
-              <span className="text-[10px]">??</span> {displayDate}
+              <Clock className="w-3 h-3" /> {displayDate}
             </span>
           </div>
         )}

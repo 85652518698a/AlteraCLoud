@@ -47,19 +47,19 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
   });
 
   return (
-    <div className="group bg-[#0d0d0d] border border-neutral-900 rounded-lg p-5 hover:border-neutral-700 transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex flex-col justify-between h-[215px] hover:shadow-card-hover relative overflow-hidden select-none">
+    <div className="group bg-[#0d0d0d] border border-neutral-900 rounded-lg p-5 hover:border-neutral-700 transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex flex-col justify-between h-[215px] hover:shadow-card-hover hover:-translate-y-0.5 relative overflow-hidden select-none card-border-gradient">
       <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent group-hover:via-accent/30 transition-all duration-500" />
       <div>
         <div className="flex justify-between items-start gap-3">
-          <div className="p-2 bg-neutral-900/80 border border-neutral-850 rounded text-white group-hover:scale-105 group-hover:border-neutral-700 transition-all duration-300">
+          <div className="p-2 bg-neutral-900/80 border border-neutral-850 rounded text-white group-hover:scale-110 group-hover:border-accent/30 group-hover:shadow-glow-cyan-sm transition-all duration-300">
             <FileIcon extension={file.file_type} className="w-5 h-5" />
           </div>
-          <div className="text-[9px] font-mono text-neutral-400 bg-neutral-900/60 border border-neutral-850 px-2.5 py-0.5 rounded uppercase font-bold tracking-wider">
+          <div className="text-[9px] font-mono text-neutral-500 bg-neutral-900/60 border border-neutral-850 px-2.5 py-0.5 rounded uppercase font-bold tracking-wider group-hover:text-accent/70 transition-colors duration-300">
             {file.file_type || 'RAW'}
           </div>
         </div>
         <div className="mt-4.5">
-          <h4 className="text-zinc-100 font-mono text-xs font-bold leading-relaxed break-all line-clamp-2 select-all hover:text-white transition-colors" title={file.name}>
+          <h4 className="text-zinc-100 font-mono text-xs font-bold leading-relaxed break-all line-clamp-2 select-all group-hover:text-white transition-colors duration-200" title={file.name}>
             {file.name}
           </h4>
           <p className="text-[9px] text-neutral-500 font-mono mt-2 flex items-center gap-2 shimmer-bg rounded px-0.5">
@@ -74,18 +74,18 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
           </p>
         </div>
       </div>
-      <div className="flex gap-2.5 select-none pt-4 border-t border-neutral-900">
+      <div className="flex gap-2.5 select-none pt-4 border-t border-neutral-900 group-hover:border-neutral-800 transition-colors duration-300">
         <button
           onClick={handleView}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border border-neutral-800 hover:border-neutral-600 bg-neutral-900/40 text-neutral-300 hover:text-white rounded-sm text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border border-neutral-800 hover:border-accent/40 bg-neutral-900/40 text-neutral-300 hover:text-white rounded-sm text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer hover:bg-neutral-800/40"
         >
-          <Eye className="w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" />
+          <Eye className="w-3.5 h-3.5 text-neutral-500 group-hover:text-accent/60 transition-colors" />
           <span>VIEW</span>
         </button>
         <button
           onClick={handleDownload}
           disabled={downloading}
-          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-white border border-white text-black rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-neutral-200 hover:shadow-glow-white transition-all duration-200 cursor-pointer disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-white border border-white text-black rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-neutral-200 hover:shadow-glow-white transition-all duration-200 cursor-pointer disabled:opacity-50 active:scale-95"
         >
           <Download className="w-3.5 h-3.5" />
           <span>{downloading ? 'FETCHING' : 'DOWNLOAD'}</span>
