@@ -18,7 +18,7 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
     )
 
-    const { fileId } = await req.json()
+    const { fileId, recordView } = await req.json()
     if (!fileId) {
       return new Response(JSON.stringify({ error: 'Missing fileId' }), {
         status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders },
@@ -73,13 +73,19 @@ serve(async (req) => {
       }
     }
 
-    // Increment download counter best-effort
-    const { data: dlFile } = await supabaseAdmin
-      .from('files').select('downloads').eq('id', fileId).maybeSingle()
-    if (dlFile) {
-      await supabaseAdmin.from('files')
-        .update({ downloads: (dlFile.downloads || 0) + 1 })
-        .eq('id', fileId)
+    // Increment view or download counter best-effort
+    const { data: counterFile } = await supabaseAdmin
+      .from('files').select('downloads, views').eq('id', fileId).maybeSingle()
+    if (counterFile) {
+      if (recordView) {
+        await supabaseAdmin.from('files')
+          .update({ views: (counterFile.views || 0) + 1 })
+          .eq('id', fileId)
+      } else {
+        await supabaseAdmin.from('files')
+          .update({ downloads: (counterFile.downloads || 0) + 1 })
+          .eq('id', fileId)
+      }
     }
 
     const { data: signedUrl, error: signError } = await supabaseAdmin.storage

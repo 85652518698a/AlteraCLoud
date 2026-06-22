@@ -35,12 +35,11 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
     }
   };
 
-  const handlePreview = () => {
+  const handleView = () => {
     addRecentlyViewed(file);
-    uiStore.setSelectedFileForPreview(file);
+    uiStore.openFileViewer(file);
   };
 
-  const isPDF = file.file_type?.toLowerCase() === 'pdf';
   const displayDate = new Date(file.created_at).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
@@ -76,23 +75,17 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
         </div>
       </div>
       <div className="flex gap-2.5 select-none pt-4 border-t border-neutral-900">
-        {isPDF && (
-          <button
-            onClick={handlePreview}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border border-neutral-800 hover:border-neutral-600 bg-neutral-900/40 text-neutral-300 hover:text-white rounded-sm text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer"
-          >
-            <Eye className="w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" />
-            <span>PREVIEW</span>
-          </button>
-        )}
+        <button
+          onClick={handleView}
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border border-neutral-800 hover:border-neutral-600 bg-neutral-900/40 text-neutral-300 hover:text-white rounded-sm text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer"
+        >
+          <Eye className="w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" />
+          <span>VIEW</span>
+        </button>
         <button
           onClick={handleDownload}
           disabled={downloading}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 border rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                isPDF
-                  ? 'bg-neutral-950 border-neutral-850 text-neutral-300 hover:bg-white hover:text-black hover:border-white'
-                  : 'bg-white border-white text-black hover:bg-neutral-200 hover:shadow-glow-white'
-              }`}
+          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-white border border-white text-black rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-neutral-200 hover:shadow-glow-white transition-all duration-200 cursor-pointer disabled:opacity-50"
         >
           <Download className="w-3.5 h-3.5" />
           <span>{downloading ? 'FETCHING' : 'DOWNLOAD'}</span>

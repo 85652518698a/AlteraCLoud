@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { SectionId, FileRecord } from '../types';
 
 interface UIState {
-  currentPage: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download';
+  currentPage: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download' | 'view';
   activeSection: SectionId | 'all';
   activeCourse: string;
   searchQuery: string;
   selectedFileForPreview: FileRecord | null;
+  viewFile: FileRecord | null;
   renameModalFile: FileRecord | null;
   editMetaModalFile: FileRecord | null;
   confirmDialogData: {
@@ -25,6 +26,7 @@ let state: UIState = {
   activeCourse: '',
   searchQuery: '',
   selectedFileForPreview: null,
+  viewFile: null,
   renameModalFile: null,
   editMetaModalFile: null,
   confirmDialogData: null,
@@ -52,7 +54,7 @@ export const uiStore = {
   set,
   subscribe,
   
-  setCurrentPage: (page: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download') => {
+  setCurrentPage: (page: 'landing' | 'dashboard' | 'admin' | 'privacy' | 'terms' | 'download' | 'view') => {
     set({ currentPage: page });
   },
 
@@ -70,6 +72,15 @@ export const uiStore = {
 
   setSelectedFileForPreview: (file: FileRecord | null) => {
     set({ selectedFileForPreview: file });
+  },
+
+  setViewFile: (file: FileRecord | null) => {
+    set({ viewFile: file });
+  },
+
+  openFileViewer: (file: FileRecord) => {
+    set({ viewFile: file, currentPage: 'view' });
+    window.history.replaceState(null, '', `/view/${file.id}`);
   },
 
   setRenameModalFile: (file: FileRecord | null) => {
