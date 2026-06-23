@@ -30,7 +30,7 @@ export const ViewPage: React.FC = () => {
   // Fetch file directly if navigating to /view/:id without store state
   useEffect(() => {
     if (file) return;
-    if (currentPage !== 'view') return;
+    if (currentPage !== 'view' && !window.location.pathname.match(/^\/view\/([^/]+)/)) return;
     const match = window.location.pathname.match(/^\/view\/([^/]+)/);
     const fileId = match?.[1];
     if (!fileId) return;
