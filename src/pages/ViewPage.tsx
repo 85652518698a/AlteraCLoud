@@ -14,7 +14,10 @@ export const ViewPage: React.FC = () => {
   const file = useUIStore(s => s.viewFile);
   const currentPage = useUIStore(s => s.currentPage);
   const [localFile, setLocalFile] = useState<FileRecord | null>(null);
-  const [fetching, setFetching] = useState(false);
+  const [fetchError, setFetchError] = useState('');
+
+  const needsFetch = !file && currentPage === 'view' && !!window.location.pathname.match(/^\/view\/([^/]+)/);
+  const [fetching, setFetching] = useState(needsFetch);
   const [signedUrl, setSignedUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [previewLoaded, setPreviewLoaded] = useState(false);
@@ -32,15 +35,22 @@ export const ViewPage: React.FC = () => {
     const fileId = match?.[1];
     if (!fileId) return;
     setFetching(true);
+    setFetchError('');
     callEdgeFunction<FileRecord>('get-file', { fileId }, false)
       .then((data) => {
         if (data) {
           setLocalFile(data);
           uiStore.setViewFile(data);
+          setFetching(false);
+        } else {
+          setFetchError('This file could not be retrieved. It may have been removed or is not publicly accessible.');
+          setFetching(false);
         }
       })
-      .catch(() => {})
-      .finally(() => setFetching(false));
+      .catch((err) => {
+        setFetchError(err instanceof Error ? err.message : 'Failed to load file. Please try again.');
+        setFetching(false);
+      });
   }, [file, currentPage]);
 
   const getSignedUrl = useCallback(async (recordView = false) => {
@@ -118,15 +128,18 @@ export const ViewPage: React.FC = () => {
   }
 
   if (!activeFile) {
+    if (fetching) return null;
     return (
-      <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-center text-white">
-        <p className="text-neutral-500 text-xs font-mono">File not found</p>
-        <button
-          onClick={handleBack}
-          className="mt-4 px-4 py-2 bg-white text-black text-xs font-mono font-bold uppercase rounded-sm hover:bg-neutral-200 transition-colors cursor-pointer"
-        >
-          Back to Dashboard
-        </button>
+      <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-center text-white px-6">
+        <div className="p-4 bg-neutral-950 border border-neutral-900 rounded-lg max-w-md text-center">
+          <p className="text-neutral-400 text-xs font-mono">{fetchError || 'File not found'}</p>
+          <button
+            onClick={handleBack}
+            className="mt-4 px-4 py-2 bg-white text-black text-xs font-mono font-bold uppercase rounded-sm hover:bg-neutral-200 transition-colors cursor-pointer"
+          >
+            Back to Dashboard
+          </button>
+        </div>
       </div>
     );
   }
