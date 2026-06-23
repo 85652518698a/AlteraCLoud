@@ -16,7 +16,7 @@ export const ViewPage: React.FC = () => {
   const [localFile, setLocalFile] = useState<FileRecord | null>(null);
   const [fetchError, setFetchError] = useState('');
 
-  const needsFetch = !file && currentPage === 'view' && !!window.location.pathname.match(/^\/view\/([^/]+)/);
+  const needsFetch = !file && !!window.location.pathname.match(/^\/view\/([^/]+)/);
   const [fetching, setFetching] = useState(needsFetch);
   const [signedUrl, setSignedUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

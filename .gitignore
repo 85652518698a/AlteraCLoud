@@ -13,3 +13,5 @@ coverage/
 *.AppImage
 *.deb
 .temp/
+
+.vercel
