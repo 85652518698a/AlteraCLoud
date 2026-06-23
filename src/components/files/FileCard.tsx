@@ -6,7 +6,7 @@ import { callEdgeFunction } from '../../lib/edgeFunction';
 import { uiStore, useUIStore } from '../../store/uiStore';
 import { addRecentlyViewed } from '../../lib/recentlyViewed';
 import { QuickPreview } from './QuickPreview';
-import { Download, Eye } from 'lucide-react';
+import { Download } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface FileCardProps {
@@ -52,11 +52,6 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
     } finally {
       setDownloading(false);
     }
-  };
-
-  const handleView = () => {
-    addRecentlyViewed(file);
-    uiStore.openFileViewer(file);
   };
 
   const displayDate = new Date(file.created_at).toLocaleDateString(undefined, {
@@ -116,13 +111,6 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
         </div>
       </div>
       <div className="flex gap-2.5 select-none pt-4 border-t border-neutral-900 group-hover:border-neutral-800 transition-colors duration-300">
-        <button
-          onClick={handleView}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border border-neutral-800 hover:border-accent/40 bg-neutral-900/40 text-neutral-300 hover:text-white rounded-sm text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer hover:bg-neutral-800/40"
-        >
-          <Eye className="w-3.5 h-3.5 text-neutral-500 group-hover:text-accent/60 transition-colors" />
-          <span>VIEW</span>
-        </button>
         <button
           onClick={handleDownload}
           disabled={downloading}

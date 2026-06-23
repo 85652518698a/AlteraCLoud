@@ -3,11 +3,10 @@ import { FileRecord } from '../../types';
 import { FileIcon } from '../ui/FileIcon';
 import { formatBytes } from '../../lib/formatBytes';
 import { callEdgeFunction } from '../../lib/edgeFunction';
-import { uiStore } from '../../store/uiStore';
 import { addRecentlyViewed } from '../../lib/recentlyViewed';
 import { SECTIONS } from '../../constants/sections';
 import { COURSES } from '../../constants/courses';
-import { Eye, Download, Clock } from 'lucide-react';
+import { Download, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface QuickPreviewProps {
@@ -42,11 +41,6 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
       .finally(() => { if (!cancelled) setLoadingPreview(false); });
     return () => { cancelled = true; };
   }, [file.id, isImage]);
-
-  const handleView = () => {
-    addRecentlyViewed(file);
-    uiStore.openFileViewer(file);
-  };
 
   const handleDownload = async () => {
     const toastId = toast.loading(`Downloading ${file.name}...`);
@@ -111,7 +105,7 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
             {file.downloads ?? 0}
           </span>
           <span className="flex items-center gap-1">
-            <Eye className="w-2.5 h-2.5" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-2.5 h-2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             {file.views ?? 0}
           </span>
           <span className="flex items-center gap-1">
@@ -121,13 +115,6 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
         </div>
 
         <div className="flex gap-2 pt-3 border-t border-neutral-900">
-          <button
-            onClick={handleView}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 border border-neutral-800 hover:border-accent/40 bg-neutral-900/40 text-neutral-300 hover:text-white rounded-sm text-[10px] font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer hover:bg-neutral-800/40"
-          >
-            <Eye className="w-3 h-3" />
-            <span>VIEW</span>
-          </button>
           <button
             onClick={handleDownload}
             className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-white text-black rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-neutral-200 transition-all duration-200 cursor-pointer"

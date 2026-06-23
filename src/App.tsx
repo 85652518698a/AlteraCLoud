@@ -8,8 +8,7 @@ import { AdminPage } from './pages/AdminPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
 import { DownloadPage } from './pages/DownloadPage';
-import { ViewPage } from './pages/ViewPage';
-import { PrintPage } from './pages/PrintPage';
+
 import { Spinner } from './components/ui/Spinner';
 
 export default function App() {
@@ -29,14 +28,13 @@ export default function App() {
     else if (path === '/terms') uiStore.setCurrentPage('terms');
     else if (path === '/download') uiStore.setCurrentPage('download');
     else if (path === '/admin') uiStore.setCurrentPage('admin');
-    else if (path.startsWith('/view/')) uiStore.setCurrentPage('view');
-    else if (path.startsWith('/print/')) uiStore.setCurrentPage('print');
+
   }, []);
 
   useEffect(() => {
     const path = window.location.pathname.replace(/\/$/, '');
     const page = currentPage;
-    const expected = page === 'privacy' ? '/privacy' : page === 'terms' ? '/terms' : page === 'download' ? '/download' : page === 'admin' ? '/admin' : page === 'view' || page === 'print' ? path : '/';
+    const expected = page === 'privacy' ? '/privacy' : page === 'terms' ? '/terms' : page === 'download' ? '/download' : page === 'admin' ? '/admin' : '/';
     if (path !== expected) window.history.replaceState(null, '', expected);
   }, [currentPage]);
 
@@ -47,10 +45,7 @@ export default function App() {
       else if (path === '/terms') uiStore.setCurrentPage('terms');
       else if (path === '/download') uiStore.setCurrentPage('download');
       else if (path === '/admin') uiStore.setCurrentPage('admin');
-      else if (path.startsWith('/view/')) uiStore.setCurrentPage('view');
-      else if (path.startsWith('/print/')) uiStore.setCurrentPage('print');
       else {
-        uiStore.setViewFile(null);
         uiStore.setCurrentPage('landing');
       }
     };
@@ -78,10 +73,6 @@ export default function App() {
         <TermsPage />
       ) : currentPage === 'download' ? (
         <DownloadPage />
-      ) : currentPage === 'view' ? (
-        <ViewPage />
-      ) : currentPage === 'print' ? (
-        <PrintPage />
       ) : !user ? (
         <LandingPage />
       ) : currentPage === 'admin' && user.role === 'admin' ? (

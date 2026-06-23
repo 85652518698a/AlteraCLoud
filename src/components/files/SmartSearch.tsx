@@ -71,10 +71,9 @@ export const SmartSearch: React.FC = () => {
   };
 
   const handleSelect = (file: FileRecord) => {
-    uiStore.setSearchQuery('');
-    setLocalQuery('');
+    uiStore.setSearchQuery(file.name);
+    setLocalQuery(file.name);
     setShowDropdown(false);
-    uiStore.openFileViewer(file);
   };
 
   useEffect(() => {
