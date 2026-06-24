@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ghost, FolderOpen } from 'lucide-react';
+import { FolderOpen } from 'lucide-react';
 
 interface EmptyStateProps {
   title?: string;
@@ -11,14 +11,14 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   description = "No digital files have been checked into this academic directory yet."
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-12 border border-dashed border-neutral-900 rounded-lg text-center my-6">
-      <div className="p-4 bg-neutral-950 text-neutral-600 rounded-full mb-3 animate-pulse">
+    <div className="flex flex-col items-center justify-center p-12 border-3 border-black text-center my-6 bg-white">
+      <div className="p-4 bg-white text-black border-2 border-black mb-3">
         <FolderOpen className="w-8 h-8 stroke-[1.2]" />
       </div>
-      <h3 className="text-sm font-display font-medium tracking-wider text-zinc-300 uppercase mb-1">
+      <h3 className="text-sm font-display font-bold tracking-wider text-black uppercase mb-1">
         {title}
       </h3>
-      <p className="text-xs font-sans text-neutral-500 max-w-sm">
+      <p className="text-xs font-sans text-neutral-700 max-w-sm font-medium">
         {description}
       </p>
     </div>

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { uiStore, useUIStore } from '../../store/uiStore';
 import { useAuthStore } from '../../store/authStore';
 import { supabase } from '../../config/supabase';
 import { callEdgeFunction } from '../../lib/edgeFunction';
-import { Collection, CollectionFile, FileRecord } from '../../types';
+import { Collection, FileRecord } from '../../types';
 import { Bookmark, Plus, Trash2, ChevronLeft, ChevronRight, FolderOpen } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -42,114 +42,143 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
   }, [collections]);
 
   const handleCreate = async () => {
-    if (!newName.trim() || !user) return;
-    setCreating(true);
+    const name = newName.trim();
+    if (!name) return;
     try {
-      const col = await callEdgeFunction<Collection>('create-collection', { name: newName.trim(), description: '' }, true);
-      setCollections(prev => [col, ...prev]);
+      await callEdgeFunction('create-collection', { name }, true);
+      const { data } = await supabase.from('collections').select('*').order('created_at', { ascending: false });
+      if (data) setCollections(data);
       setNewName('');
-      toast.success(`Collection "${col.name}" created`);
-    } catch (err) {
-      toast.error('Failed to create collection');
-    } finally {
       setCreating(false);
+      toast.success(`Collection "${name}" created`);
+    } catch {
+      toast.error('Failed to create collection');
     }
   };
 
-  const handleDelete = async (col: Collection) => {
-    if (col.created_by !== user?.uid) { toast.error('Only the owner can delete'); return; }
+  const handleDelete = async (id: string, name: string) => {
     try {
-      await callEdgeFunction('delete-collection', { collectionId: col.id }, true);
-      setCollections(prev => prev.filter(c => c.id !== col.id));
-      if (activeCollectionId === col.id) onSelectCollection(null);
-      toast.success(`Collection deleted`);
+      await callEdgeFunction('delete-collection', { collectionId: id }, true);
+      setCollections(prev => prev.filter(c => c.id !== id));
+      if (activeCollectionId === id) onSelectCollection(null);
+      toast.success(`Collection "${name}" deleted`);
     } catch {
       toast.error('Failed to delete collection');
     }
   };
 
   return (
-    <div className={`fixed left-0 top-16 bottom-0 z-40 transition-all duration-300 ${open ? 'w-56' : 'w-10'}`}>
-      <button
-        onClick={() => uiStore.setSidebarOpen(!open)}
-        className="absolute -right-3 top-4 z-50 w-6 h-6 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-600 transition-colors cursor-pointer"
-      >
-        {open ? <ChevronLeft className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-      </button>
+    <div className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r-2 border-black z-30 transition-all duration-200 flex flex-col ${open ? 'w-56' : 'w-0 overflow-hidden'}`}>
+      <div className="flex items-center justify-between p-3 border-b-2 border-black shrink-0">
+        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-black">COLLECTIONS</span>
+        <button
+          onClick={() => uiStore.setSidebarOpen(false)}
+          className="text-black hover:text-[#FF3B30] transition-colors duration-150 cursor-pointer"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+      </div>
 
-      <div className="h-full bg-[#0a0a0a] border-r border-neutral-900 overflow-hidden">
-        {open && (
-          <div className="p-3 h-full flex flex-col">
-            <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-500 uppercase tracking-wider mb-3 select-none">
-              <Bookmark className="w-3 h-3" />
-              <span className="font-bold">COLLECTIONS</span>
+      {user && (
+        <div className="p-3 border-b-2 border-black">
+          {creating ? (
+            <div className="flex gap-1">
+              <input
+                type="text"
+                value={newName}
+                onChange={e => setNewName(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') handleCreate(); if (e.key === 'Escape') { setCreating(false); setNewName(''); } }}
+                placeholder="Collection name..."
+                className="flex-1 text-[10px] font-mono px-2 py-1 bg-white border-2 border-black text-black placeholder-neutral-500 font-bold"
+                autoFocus
+              />
+              <button onClick={handleCreate} className="px-2 py-1 bg-black text-white text-[10px] font-mono font-bold border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-colors duration-150 cursor-pointer">
+                <Plus className="w-3 h-3" />
+              </button>
             </div>
+          ) : (
+            <button
+              onClick={() => setCreating(true)}
+              className="w-full flex items-center justify-center gap-1 px-2 py-1.5 bg-white border-2 border-black text-[10px] font-mono font-bold text-black hover:bg-black hover:text-white transition-colors duration-150 cursor-pointer uppercase tracking-wider"
+            >
+              <Plus className="w-3 h-3" />
+              NEW COLLECTION
+            </button>
+          )}
+        </div>
+      )}
 
-            {user && (
-              <div className="flex gap-1 mb-3">
-                <input
-                  value={newName}
-                  onChange={e => setNewName(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') handleCreate(); }}
-                  placeholder="New collection..."
-                  className="flex-1 px-2 py-1 text-[10px] font-mono bg-neutral-950 border border-neutral-900 rounded text-white placeholder-neutral-600 focus:border-neutral-700 focus:outline-none"
-                />
-                <button
-                  onClick={handleCreate}
-                  disabled={creating || !newName.trim()}
-                  className="px-2 py-1 bg-white text-black rounded text-[10px] font-mono font-bold hover:bg-neutral-200 transition-colors cursor-pointer disabled:opacity-50"
-                >
-                  <Plus className="w-3 h-3" />
-                </button>
-              </div>
-            )}
+      <div className="flex-1 overflow-y-auto p-2 space-y-1">
+        <button
+          onClick={() => onSelectCollection(null)}
+          className={`w-full text-left px-3 py-2 text-[10px] font-mono border-2 transition-colors duration-150 cursor-pointer font-bold ${
+            !activeCollectionId
+              ? 'bg-black text-white border-black'
+              : 'bg-white text-black border-black hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30]'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <FolderOpen className="w-3 h-3 shrink-0" />
+            <span className="truncate uppercase tracking-wider">ALL FILES</span>
+          </div>
+        </button>
 
-            <div className="flex-1 overflow-y-auto space-y-0.5 scrollbar-none">
+        {collections.map(col => {
+          const fileCount = collectionFileMap[col.id]?.length || 0;
+          return (
+            <div key={col.id} className="flex gap-1">
               <button
-                onClick={() => onSelectCollection(null)}
-                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-[11px] font-mono text-left transition-colors cursor-pointer ${
-                  activeCollectionId === null ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:text-white hover:bg-neutral-900/50'
+                onClick={() => onSelectCollection(col.id)}
+                className={`flex-1 text-left px-3 py-2 text-[10px] font-mono border-2 transition-colors duration-150 cursor-pointer font-bold ${
+                  activeCollectionId === col.id
+                    ? 'bg-black text-white border-black'
+                    : 'bg-white text-black border-black hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30]'
                 }`}
               >
-                <FolderOpen className="w-3 h-3 shrink-0" />
-                <span>All Files</span>
-              </button>
-
-              {collections.map(col => (
-                <div key={col.id} className="group flex items-center">
-                  <button
-                    onClick={() => onSelectCollection(col.id)}
-                    className={`flex-1 flex items-center gap-2 px-2 py-1.5 rounded text-[11px] font-mono text-left transition-colors cursor-pointer ${
-                      activeCollectionId === col.id ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:text-white hover:bg-neutral-900/50'
-                    }`}
-                  >
-                    <Bookmark className="w-3 h-3 shrink-0" />
-                    <span className="truncate">{col.name}</span>
-                    <span className="text-[9px] text-neutral-600 ml-auto shrink-0">
-                      {collectionFileMap[col.id]?.length || 0}
-                    </span>
-                  </button>
-                  {col.created_by === user?.uid && (
-                    <button
-                      onClick={() => handleDelete(col)}
-                      className="p-1 text-neutral-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
-                      title="Delete collection"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
-                  )}
+                <div className="flex items-center gap-2">
+                  <Bookmark className="w-3 h-3 shrink-0" />
+                  <span className="truncate uppercase tracking-wider">{col.name}</span>
+                  <span className="ml-auto text-[9px] opacity-60">({fileCount})</span>
                 </div>
-              ))}
-
-              {collections.length === 0 && (
-                <p className="text-[10px] font-mono text-neutral-600 px-2 py-4 text-center">
-                  No collections yet.<br />Create one to organize files.
-                </p>
+              </button>
+              {user && (
+                <button
+                  onClick={() => handleDelete(col.id, col.name)}
+                  className="px-2 py-2 bg-white border-2 border-black text-neutral-700 hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30] transition-colors duration-150 cursor-pointer"
+                  title={`Delete "${col.name}"`}
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
               )}
             </div>
-          </div>
-        )}
+          );
+        })}
+      </div>
+
+      <div className="border-t-2 border-black p-2">
+        <button
+          onClick={() => uiStore.setSidebarOpen(true)}
+          className="w-full flex items-center justify-center gap-1 px-3 py-2 bg-white border-2 border-black text-[10px] font-mono font-bold text-black hover:bg-black hover:text-white transition-colors duration-150 cursor-pointer"
+        >
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
       </div>
     </div>
+  );
+};
+
+export const SidebarToggle: React.FC = () => {
+  const sidebarOpen = useUIStore(s => s.sidebarOpen);
+
+  if (sidebarOpen) return null;
+
+  return (
+    <button
+      onClick={() => uiStore.setSidebarOpen(true)}
+      className="fixed left-2 top-20 z-30 p-2 bg-white border-2 border-black hover:bg-black hover:text-white transition-colors duration-150 cursor-pointer"
+      title="Open collections"
+    >
+      <Bookmark className="w-4 h-4" />
+    </button>
   );
 };

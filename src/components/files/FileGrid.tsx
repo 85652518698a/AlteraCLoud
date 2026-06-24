@@ -93,7 +93,7 @@ export const FileGrid: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center p-20">
         <Spinner size="lg" />
-        <span className="text-[10px] font-mono tracking-widest text-neutral-500 mt-4 uppercase">
+        <span className="text-[10px] font-mono tracking-widest text-neutral-600 mt-4 uppercase font-bold">
           Synthesizing Encrypted Vault Indices...
         </span>
       </div>
@@ -103,18 +103,18 @@ export const FileGrid: React.FC = () => {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-2 mt-8 px-1 select-none">
-        <div className="text-[11px] font-mono text-neutral-400 flex items-center gap-2 flex-wrap">
+        <div className="text-[11px] font-mono text-neutral-700 flex items-center gap-2 flex-wrap font-bold">
           <span>DIRECTORY:</span>
-          <span className="text-white font-bold uppercase">{activeSection === 'all' ? 'ALL DIRECTORIES' : activeSection}</span>
+          <span className="text-black font-bold uppercase">{activeSection === 'all' ? 'ALL DIRECTORIES' : activeSection}</span>
           <span>•</span>
           <span>{filteredFiles.length} {filteredFiles.length === 1 ? 'FILE' : 'FILES'} INDEXED</span>
         </div>
         <button
           onClick={handleReload}
           title="Force-synchronize vault files"
-          className="text-neutral-500 hover:text-white transition-colors cursor-pointer p-1 rounded hover:bg-neutral-900 border border-transparent hover:border-neutral-905"
+          className="text-neutral-600 hover:text-[#FF3B30] transition-colors cursor-pointer p-1 border-2 border-black hover:border-[#FF3B30]"
         >
-          <RefreshCw className="w-3.5 h-3.5 animate-[spin_6s_linear_infinite]" />
+          <RefreshCw className="w-3.5 h-3.5" />
         </button>
       </div>
 
@@ -123,10 +123,10 @@ export const FileGrid: React.FC = () => {
           <button
             key={c.id}
             onClick={() => uiStore.setActiveCourse(activeCourse === c.id ? '' : c.id)}
-            className={`text-[10px] font-mono px-2.5 py-1 rounded border transition-colors cursor-pointer whitespace-nowrap ${
+            className={`text-[10px] font-mono px-2.5 py-1 border-2 transition-colors duration-150 cursor-pointer whitespace-nowrap font-bold ${
               activeCourse === c.id
-                ? 'text-white border-white bg-white/10'
-                : 'text-neutral-500 border-neutral-900 hover:text-neutral-300 hover:border-neutral-700'
+                ? 'text-white bg-black border-black'
+                : 'text-black bg-white border-black hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30]'
             }`}
           >
             {c.label}
@@ -153,18 +153,18 @@ export const FileGrid: React.FC = () => {
               <button
                 onClick={() => setPage(p => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="flex items-center gap-1 px-3 py-1.5 bg-neutral-950 border border-neutral-900 rounded text-xs font-mono text-neutral-400 hover:text-white hover:border-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-3 py-1.5 bg-white border-2 border-black text-xs font-mono text-black font-bold hover:bg-black hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer active:translate-y-0.5"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
                 <span>PREV</span>
               </button>
-              <span className="text-[10px] font-mono text-neutral-500">
+              <span className="text-[10px] font-mono text-neutral-700 font-bold">
                 PAGE {page + 1} OF {totalPages}
               </span>
               <button
                 onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
                 disabled={page >= totalPages - 1}
-                className="flex items-center gap-1 px-3 py-1.5 bg-neutral-950 border border-neutral-900 rounded text-xs font-mono text-neutral-400 hover:text-white hover:border-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="flex items-center gap-1 px-3 py-1.5 bg-white border-2 border-black text-xs font-mono text-black font-bold hover:bg-black hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer active:translate-y-0.5"
               >
                 <span>NEXT</span>
                 <ChevronRight className="w-3.5 h-3.5" />

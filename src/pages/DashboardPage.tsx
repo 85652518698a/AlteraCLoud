@@ -31,7 +31,7 @@ export const DashboardPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex flex-col justify-between text-white selection:bg-white selection:text-black">
+    <div className="min-h-screen bg-white flex flex-col justify-between text-black selection:bg-[#FF3B30] selection:text-white">
       <div className="flex-1">
         <Navbar />
 
@@ -41,33 +41,32 @@ export const DashboardPage: React.FC = () => {
           activeCollectionId={activeCollectionId}
         />
 
-        <div className={`transition-all duration-300 ${sidebarOpen ? 'ml-56' : 'ml-0'}`}>
+        <div className={`transition-all duration-200 ${sidebarOpen ? 'ml-56' : 'ml-0'}`}>
         <PageWrapper>
-          <div className="mb-10 text-left select-none max-w-2xl page-enter">
-            <div className="flex items-center gap-1.5 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] mb-2 font-bold select-none">
-              <Bookmark className="w-3 h-3 text-white fill-white/10" />
+          <div className="mb-10 text-left select-none max-w-2xl">
+            <div className="section-heading">
               <span>CSMU RESOURCE LOCKER GATES</span>
             </div>
 
             <div className="flex items-center gap-4">
-              <h2 className="font-display font-black text-2xl md:text-3xl tracking-wide uppercase text-zinc-100">
+              <h2 className="font-display font-black text-2xl md:text-3xl tracking-wide uppercase text-black">
                 Academic Resource Portal
               </h2>
-              <div className="hidden sm:block w-px h-8 bg-gradient-to-b from-transparent via-neutral-800 to-transparent" />
-              <span className="hidden sm:inline-block text-[9px] font-mono text-accent/60 border border-accent/10 bg-accent/5 px-2 py-0.5 rounded-sm uppercase tracking-wider font-semibold">
+              <div className="hidden sm:block w-px h-8 bg-black" />
+              <span className="hidden sm:inline-block text-[9px] font-mono text-[#FF3B30] border-2 border-[#FF3B30] bg-white px-2 py-0.5 uppercase tracking-wider font-bold">
                 LIVE
               </span>
             </div>
 
-            <p className="text-xs text-neutral-400 font-sans mt-2.5 leading-relaxed max-w-lg font-light">
+            <p className="text-xs text-neutral-700 font-sans mt-2.5 leading-relaxed max-w-lg font-medium">
               Securely access notes, assignments, previous year question papers, and lab manuals approved directly by CSMU faculty examiners.
             </p>
           </div>
 
           {recentFiles.length > 0 && (
-            <div className="mb-8 page-enter" style={{ animationDelay: '0.05s' }}>
-              <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] mb-3 select-none">
-                <Clock className="w-3 h-3" />
+            <div className="mb-8">
+              <div className="section-heading">
+                <Clock className="w-3 h-3 inline-block mr-1" />
                 <span>RECENTLY VIEWED</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -75,11 +74,11 @@ export const DashboardPage: React.FC = () => {
                   <FileCard key={file.id} file={file} />
                 ))}
               </div>
-              <hr className="border-neutral-950 my-8" />
+              <div className="brutal-divider" />
             </div>
           )}
 
-          <div className="page-enter" style={{ animationDelay: '0.1s' }}>
+          <div>
             <SectionTabs />
             <SmartSearch />
             <FileGrid />

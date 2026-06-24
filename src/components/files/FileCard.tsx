@@ -65,56 +65,55 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
       ref={cardRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group bg-[#0d0d0d] border border-neutral-900 rounded-lg p-5 hover:border-neutral-700 transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex flex-col justify-between h-[215px] hover:shadow-card-hover hover:-translate-y-0.5 relative overflow-visible select-none card-border-gradient"
+      className="group bg-white border-3 border-black p-5 hover:translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150 flex flex-col justify-between h-[215px] relative overflow-visible select-none shadow-[4px_4px_0px_0px_#000000]"
     >
       {showPreview && (
         <div className="absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-3 pointer-events-auto" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           <QuickPreview file={file} />
         </div>
       )}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent group-hover:via-accent/30 transition-all duration-500" />
       <div>
         <div className="flex justify-between items-start gap-3">
-          <div className="p-2 bg-neutral-900/80 border border-neutral-850 rounded text-white group-hover:scale-110 group-hover:border-accent/30 group-hover:shadow-glow-cyan-sm transition-all duration-300">
+          <div className="p-2 bg-white border-2 border-black text-black">
             <FileIcon extension={file.file_type} className="w-5 h-5" />
           </div>
           <div className="flex items-center gap-1.5">
             <button
               onClick={(e) => { e.stopPropagation(); uiStore.toggleFileSelection(file.id); }}
-              className={`p-0.5 rounded transition-colors cursor-pointer ${isSelected ? 'text-white' : 'text-neutral-700 hover:text-neutral-400'}`}
+              className={`p-0.5 transition-colors cursor-pointer ${isSelected ? 'text-black' : 'text-neutral-600 hover:text-black'}`}
               title={isSelected ? 'Deselect' : 'Select for batch download'}
             >
               {isSelected
-  ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><polyline points="20 6 9 17 4 12"/><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
-  : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+  ? <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><polyline points="20 6 9 17 4 12"/><rect x="3" y="3" width="18" height="18" rx="0" ry="0"/></svg>
+  : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><rect x="3" y="3" width="18" height="18" rx="0" ry="0"/></svg>
 }
             </button>
-            <div className="text-[9px] font-mono text-neutral-500 bg-neutral-900/60 border border-neutral-850 px-2.5 py-0.5 rounded uppercase font-bold tracking-wider group-hover:text-accent/70 transition-colors duration-300">
+            <div className="text-[9px] font-mono text-black bg-white border-2 border-black px-2.5 py-0.5 uppercase font-bold tracking-wider">
               {file.file_type || 'RAW'}
             </div>
           </div>
         </div>
         <div className="mt-4.5">
-          <h4 className="text-zinc-100 font-mono text-xs font-bold leading-relaxed break-all line-clamp-2 select-all group-hover:text-white transition-colors duration-200" title={file.name}>
+          <h4 className="text-black font-mono text-xs font-bold leading-relaxed break-all line-clamp-2 select-all" title={file.name}>
             {file.name}
           </h4>
-          <p className="text-[9px] text-neutral-500 font-mono mt-2 flex items-center gap-2 shimmer-bg rounded px-0.5">
-            <span className="font-semibold text-neutral-400">{formatBytes(file.size_bytes)}</span>
-            <span className="text-neutral-800">•</span>
+          <p className="text-[9px] text-neutral-700 font-mono mt-2 flex items-center gap-2 px-0.5 font-bold">
+            <span className="font-semibold text-neutral-800">{formatBytes(file.size_bytes)}</span>
+            <span className="text-black">•</span>
             <span className="flex items-center gap-1">
               <Download className="w-2.5 h-2.5" />
               {file.downloads ?? 0}
             </span>
-            <span className="text-neutral-800">•</span>
+            <span className="text-black">•</span>
             <span>{displayDate}</span>
           </p>
         </div>
       </div>
-      <div className="flex gap-2.5 select-none pt-4 border-t border-neutral-900 group-hover:border-neutral-800 transition-colors duration-300">
+      <div className="flex gap-2.5 select-none pt-4 border-t-2 border-black">
         <button
           onClick={handleDownload}
           disabled={downloading}
-          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-white border border-white text-black rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-neutral-200 hover:shadow-glow-white transition-all duration-200 cursor-pointer disabled:opacity-50 active:scale-95"
+          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-black border-2 border-black text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer disabled:opacity-50 active:translate-y-0.5"
         >
           <Download className="w-3.5 h-3.5" />
           <span>{downloading ? 'FETCHING' : 'DOWNLOAD'}</span>

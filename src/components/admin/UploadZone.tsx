@@ -174,11 +174,11 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
   const totalSize = selectedFiles.reduce((acc, f) => acc + f.size, 0);
 
   return (
-    <div className="bg-neutral-950/40 border border-neutral-900 rounded-lg p-6 mb-8 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
-      <h3 className="text-zinc-200 font-display font-semibold tracking-wider text-xs uppercase mb-4 flex items-center gap-2">
+    <div className="bg-white border-3 border-black p-6 mb-8">
+      <div className="section-heading">
         <span>DEPOT VAULT GATEWAY</span>
-        <span className="text-neutral-600 font-mono text-[9px] font-normal">/ INGESTION POINT</span>
-      </h3>
+        <span className="text-neutral-600 font-mono text-[9px] font-normal ml-2">/ INGESTION POINT</span>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <div className="md:col-span-7">
           <div
@@ -187,30 +187,28 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
             onDragLeave={handleDrag}
             onDrop={handleDrop}
             onClick={!isUploading ? triggerPicker : undefined}
-            className={`relative border border-dashed rounded flex flex-col items-center justify-center text-center p-6 cursor-pointer select-none transition-all duration-200 min-h-[200px] ${
+            className={`relative border-2 border-black flex flex-col items-center justify-center text-center p-6 cursor-pointer select-none transition-all duration-150 min-h-[200px] bg-white ${
               dragActive
-                ? 'border-white bg-white/5 shadow-[rgba(255,255,255,0.08)_0_0_24px]'
-                : selectedFiles.length > 0
-                  ? 'border-neutral-700 bg-neutral-900/30'
-                  : 'border-neutral-800 hover:border-neutral-700 hover:bg-neutral-900/10'
+                ? 'bg-[#FF3B30] text-white border-[#FF3B30]'
+                : 'hover:bg-neutral-100'
             } ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileChange} disabled={isUploading} multiple />
             {selectedFiles.length > 0 ? (
               <div className="w-full space-y-3 pointer-events-none">
-                <div className="flex items-center justify-center gap-2 text-emerald-400">
+                <div className="flex items-center justify-center gap-2 text-black">
                   <FileCode className="w-5 h-5 stroke-[1.5]" />
                   <span className="text-xs font-mono font-bold">{selectedFiles.length} FILE(S) SELECTED</span>
                 </div>
                 <div className="max-h-36 overflow-y-auto space-y-1 px-2">
                   {selectedFiles.map((f, i) => (
                     <div key={`${f.name}-${f.size}-${i}`} className="flex items-center justify-between gap-2 text-left pointer-events-auto">
-                      <span className="text-[10px] font-mono text-neutral-300 truncate flex-1">{f.name}</span>
-                      <span className="text-[9px] font-mono text-neutral-500 shrink-0">{(f.size / (1024 * 1024)).toFixed(1)}MB</span>
+                      <span className="text-[10px] font-mono text-black truncate flex-1 font-bold">{f.name}</span>
+                      <span className="text-[9px] font-mono text-neutral-700 shrink-0 font-bold">{(f.size / (1024 * 1024)).toFixed(1)}MB</span>
                       {!isUploading && (
                         <button
                           onClick={(e) => { e.stopPropagation(); removeFile(i); }}
-                          className="text-neutral-600 hover:text-red-400 transition-colors p-0.5"
+                          className="text-neutral-700 hover:text-[#FF3B30] transition-colors p-0.5"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -218,18 +216,18 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
                     </div>
                   ))}
                 </div>
-                <p className="text-[9px] font-mono text-neutral-600">
+                <p className="text-[9px] font-mono text-neutral-700 font-bold">
                   TOTAL: {(totalSize / (1024 * 1024)).toFixed(2)} MB • CLICK TO ADD MORE
                 </p>
               </div>
             ) : (
               <div className="space-y-3 pointer-events-none">
-                <div className="p-3 bg-neutral-950 text-neutral-500 border border-neutral-850 rounded-full w-12 h-12 flex items-center justify-center mx-auto">
+                <div className="p-3 bg-white text-black border-2 border-black w-12 h-12 flex items-center justify-center mx-auto">
                   <Upload className="w-5 h-5 stroke-[1.5]" />
                 </div>
                 <div>
-                  <p className="text-xs text-neutral-300 font-sans tracking-wide">Drag and drop files here, or <span className="text-white font-bold underline">browse local directory</span></p>
-                  <p className="text-[9px] font-mono text-neutral-500 mt-2 uppercase tracking-widest">PDF, DOCUMENT, EXCEL, PRESENTATION, ZIP (MAX 50MB EACH)</p>
+                  <p className="text-xs text-black font-sans tracking-wide font-bold">Drag and drop files here, or <span className="underline">browse local directory</span></p>
+                  <p className="text-[9px] font-mono text-neutral-700 mt-2 uppercase tracking-widest font-bold">PDF, DOCUMENT, EXCEL, PRESENTATION, ZIP (MAX 50MB EACH)</p>
                 </div>
               </div>
             )}
@@ -238,45 +236,45 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
         <form onSubmit={handleUploadSubmit} className="md:col-span-5 flex flex-col justify-between">
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-mono text-neutral-500 uppercase mb-1.5 tracking-wider">Section Folder</label>
+              <label className="block text-[10px] font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Section Folder</label>
               <select value={section} onChange={(e) => setSection(e.target.value as SectionId)} disabled={isUploading}
-                className="w-full px-3 py-2 bg-neutral-950 border border-neutral-900 rounded text-xs text-zinc-300 focus:outline-none focus:border-zinc-500 font-mono">
-                {SECTIONS.map(s => <option key={s.id} value={s.id} className="bg-neutral-950 text-xs">{s.label.toUpperCase()}</option>)}
+                className="w-full px-3 py-2 bg-white border-2 border-black text-xs text-black font-mono font-bold">
+                {SECTIONS.map(s => <option key={s.id} value={s.id} className="bg-white text-xs font-bold">{s.label.toUpperCase()}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-[10px] font-mono text-neutral-500 uppercase mb-1.5 tracking-wider">Course (Optional)</label>
+              <label className="block text-[10px] font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Course (Optional)</label>
               <select value={course} onChange={(e) => setCourse(e.target.value)} disabled={isUploading}
-                className="w-full px-3 py-2 bg-neutral-950 border border-neutral-900 rounded text-xs text-zinc-300 focus:outline-none focus:border-zinc-500 font-mono">
-                <option value="" className="bg-neutral-950 text-xs">GENERAL</option>
-                {COURSES.map(c => <option key={c.id} value={c.id} className="bg-neutral-950 text-xs">{c.label.toUpperCase()}</option>)}
+                className="w-full px-3 py-2 bg-white border-2 border-black text-xs text-black font-mono font-bold">
+                <option value="" className="bg-white text-xs font-bold">GENERAL</option>
+                {COURSES.map(c => <option key={c.id} value={c.id} className="bg-white text-xs font-bold">{c.label.toUpperCase()}</option>)}
               </select>
             </div>
             {selectedFiles.length === 1 && (
               <div>
-                <label className="block text-[10px] font-mono text-neutral-500 uppercase mb-1.5 tracking-wider">Display Name inside Locker</label>
+                <label className="block text-[10px] font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Display Name inside Locker</label>
                 <input type="text" disabled={isUploading}
                   placeholder="Name display inside system..." value={customName} onChange={(e) => setCustomName(e.target.value)}
-                  className="w-full px-3 py-2 bg-neutral-950 border border-neutral-900 rounded text-xs text-zinc-300 focus:outline-none focus:border-zinc-500 font-mono disabled:opacity-40" />
+                  className="w-full px-3 py-2 bg-white border-2 border-black text-xs text-black font-mono font-bold disabled:opacity-40" />
               </div>
             )}
-            <div className="flex items-center justify-between p-3.5 bg-neutral-950 border border-neutral-900/40 rounded">
+            <div className="flex items-center justify-between p-3.5 bg-white border-2 border-black">
               <div>
-                <div className="text-xs font-semibold text-zinc-300">DEPLOY DOCUMENTS NOW</div>
-                <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-tight mt-0.5">Make instantly visible to CSMU Students</div>
+                <div className="text-xs font-bold text-black">DEPLOY DOCUMENTS NOW</div>
+                <div className="text-[10px] font-mono text-neutral-700 uppercase tracking-tight mt-0.5 font-bold">Make instantly visible to CSMU Students</div>
               </div>
               <button type="button" role="switch" disabled={isUploading || selectedFiles.length === 0}
                 onClick={() => setIsDeployed(!isDeployed)}
-                className={`w-10 h-6 flex items-center rounded-full p-0.5 cursor-pointer select-none transition-colors duration-150 relative ${isDeployed ? 'bg-white' : 'bg-neutral-800'} ${selectedFiles.length === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}>
-                <div className={`w-5 h-5 rounded-full bg-black shadow-[0_1px_3px_rgba(0,0,0,0.4)] transform duration-150 transition-transform ${isDeployed ? 'translate-x-4' : 'translate-x-0'}`} />
+                className={`w-10 h-6 flex items-center p-0.5 cursor-pointer select-none transition-colors duration-150 border-2 border-black ${isDeployed ? 'bg-black' : 'bg-white'} ${selectedFiles.length === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}>
+                <div className={`w-5 h-5 bg-white border-2 border-black transition-transform duration-150 ${isDeployed ? 'translate-x-4' : 'translate-x-0'}`} />
               </button>
             </div>
           </div>
-          <div className="pt-6 border-t border-neutral-950 mt-4">
+          <div className="pt-6 border-t-2 border-black mt-4">
             {isUploading ? (
               <div className="space-y-2">
                 {currentFileIndex >= 0 && (
-                  <p className="text-[10px] font-mono text-neutral-400 text-center">
+                  <p className="text-[10px] font-mono text-neutral-700 text-center font-bold">
                     UPLOADING {currentFileIndex + 1} OF {selectedFiles.length}: {selectedFiles[currentFileIndex]?.name}
                   </p>
                 )}
@@ -284,7 +282,11 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
               </div>
             ) : (
               <button type="submit" disabled={selectedFiles.length === 0}
-                className={`w-full py-3 text-xs font-semibold font-mono tracking-wider rounded uppercase text-center transition-all ${selectedFiles.length > 0 ? 'bg-white hover:bg-neutral-200 text-black shadow-[0_0_12px_rgba(255,255,255,0.1)] cursor-pointer' : 'bg-neutral-900 border border-neutral-900 text-neutral-600 cursor-not-allowed'}`}>
+                className={`w-full py-3 text-xs font-bold font-mono tracking-wider uppercase text-center border-2 transition-all duration-150 ${
+                  selectedFiles.length > 0
+                    ? 'bg-black text-white border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] cursor-pointer active:translate-y-0.5'
+                    : 'bg-white text-neutral-600 border-black cursor-not-allowed'
+                }`}>
                 DEPLOY {selectedFiles.length > 1 ? `ALL ${selectedFiles.length} FILES` : 'FILE'} TO CLOUD
               </button>
             )}

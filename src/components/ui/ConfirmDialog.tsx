@@ -27,24 +27,23 @@ export const ConfirmDialog: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity" onClick={uiStore.closeConfirmDialog} />
-      <div className="relative w-full max-w-md bg-[#111111] border border-red-950/40 rounded-lg shadow-2xl p-6 overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-red-600 animate-pulse" />
+      <div className="absolute inset-0 bg-black/80" onClick={uiStore.closeConfirmDialog} />
+      <div className="relative w-full max-w-md bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_#000000]">
         <div className="flex items-start gap-4 mb-4">
-          <div className="p-2.5 bg-red-950/40 border border-red-500/20 rounded-lg text-red-500 shrink-0">
-            <AlertTriangle className="w-5 h-5 animate-bounce" />
+          <div className="p-2.5 bg-white border-2 border-[#FF3B30] text-[#FF3B30] shrink-0">
+            <AlertTriangle className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider font-display text-white">{data.title}</h3>
-            <p className="text-xs text-neutral-400 mt-1 leading-relaxed">{data.description}</p>
+            <h3 className="text-sm font-bold uppercase tracking-wider font-display text-black">{data.title}</h3>
+            <p className="text-xs text-neutral-700 mt-1 leading-relaxed font-medium">{data.description}</p>
           </div>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-neutral-950 border border-neutral-800 p-3 rounded-lg text-center select-none font-mono text-xs my-2 text-neutral-300">
+          <div className="bg-white border-2 border-black p-3 text-center select-none font-mono text-xs text-black font-bold">
             {data.targetName}
           </div>
           <div className="space-y-1.5">
-            <label className="block text-[10px] uppercase tracking-widest text-neutral-500 font-mono">
+            <label className="block text-[10px] uppercase tracking-widest text-neutral-700 font-mono font-bold">
               Type the file name below to authorize:
             </label>
             <input
@@ -52,7 +51,7 @@ export const ConfirmDialog: React.FC = () => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Confirm item signature..."
-              className="w-full bg-neutral-950 border border-neutral-800 focus:border-red-500 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none placeholder-neutral-700 transition-colors"
+              className="w-full bg-white border-2 border-black px-3 py-2 text-xs font-mono text-black focus:border-[#FF3B30] placeholder-neutral-500 transition-colors font-bold"
             />
           </div>
           <div className="flex gap-2 justify-end pt-2">
@@ -64,7 +63,6 @@ export const ConfirmDialog: React.FC = () => {
               variant="danger"
               size="sm"
               disabled={!isMatched}
-              className={`font-mono text-xs shadow-none border-red-500 ${isMatched ? 'hover:bg-red-500 hover:text-white' : ''}`}
             >
               EXECUTE DESTRUCTION
             </Button>

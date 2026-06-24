@@ -7,139 +7,67 @@
 @layer base {
   * {
     scrollbar-width: thin;
-    scrollbar-color: #2a2a2a #0a0a0a;
+    scrollbar-color: #000000 #ffffff;
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: #0a0a0a;
+    background: #ffffff;
+    border-left: 2px solid #000000;
   }
   ::-webkit-scrollbar-thumb {
-    background: #2a2a2a;
-    border-radius: 3px;
+    background: #000000;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #444;
+    background: #FF3B30;
   }
 
   ::selection {
-    background: rgba(34, 211, 238, 0.2);
+    background: #FF3B30;
     color: #ffffff;
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #0A0A0A;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #000000;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
 @layer components {
-  .glow-border {
-    position: relative;
-  }
-  .glow-border::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(34,211,238,0.3), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .glow-border:hover::after {
-    opacity: 1;
+  .brutal-border {
+    border: 3px solid #000000;
   }
 
-  .shimmer-bg {
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(34,211,238,0.03) 50%,
-      transparent 100%
-    );
-    background-size: 200% 100%;
+  .brutal-border-thick {
+    border: 5px solid #000000;
   }
 
-  .glow-card {
-    position: relative;
-    isolation: isolate;
-  }
-  .glow-card::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    background: linear-gradient(135deg, rgba(34,211,238,0.15), transparent 40%, transparent 60%, rgba(34,211,238,0.08));
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: -1;
-    pointer-events: none;
-  }
-  .glow-card:hover::before {
-    opacity: 1;
-  }
-
-  .text-gradient {
-    background: linear-gradient(135deg, #ffffff 0%, rgba(34,211,238,0.7) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-gradient-cyan {
-    background: linear-gradient(135deg, #22D3EE 0%, #06B6D4 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .page-enter {
-    animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .card-border-gradient {
-    position: relative;
-    background-clip: padding-box;
-    border: 1px solid transparent;
-  }
-  .card-border-gradient::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(34,211,238,0.2), transparent 50%, transparent 80%, rgba(34,211,238,0.08));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-  .card-border-gradient:hover::before {
-    opacity: 1;
-  }
-
-  .glow-dot {
-    position: relative;
-  }
-  .glow-dot::after {
-    content: '';
-    position: absolute;
+  .brutal-divider {
+    height: 4px;
+    background: #000000;
     width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    background: inherit;
-    animation: pingSlow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
-    pointer-events: none;
+    margin: 24px 0;
+  }
+
+  .brutal-card {
+    border: 3px solid #000000;
+    background: #FFFFFF;
+  }
+
+  .section-heading {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border-bottom: 3px solid #000000;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
   }
 }

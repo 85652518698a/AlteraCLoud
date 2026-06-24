@@ -92,7 +92,7 @@ export const SmartSearch: React.FC = () => {
 
   return (
     <div ref={containerRef} className="w-full relative mb-6">
-      <div className="absolute inset-y-0 left-4 flex items-center justify-center text-neutral-500 pointer-events-none">
+      <div className="absolute inset-y-0 left-4 flex items-center justify-center text-neutral-600 pointer-events-none">
         <Search className="w-4 h-4 stroke-[1.5]" />
       </div>
 
@@ -104,33 +104,33 @@ export const SmartSearch: React.FC = () => {
         onChange={handleChange}
         onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); if (e.key === 'Escape') setShowDropdown(false); }}
         onFocus={() => { if (results.length > 0) setShowDropdown(true); }}
-        className="w-full pl-11 pr-11 py-3 px-4 bg-neutral-950/70 text-xs text-white tracking-wide placeholder-neutral-600 border border-neutral-900 focus:border-neutral-700 hover:border-neutral-850 rounded focus:outline-none transition-colors duration-150 font-mono"
+        className="w-full pl-11 pr-11 py-3 px-4 bg-white text-xs text-black tracking-wide placeholder-neutral-500 border-2 border-black focus:border-[#FF3B30] font-mono font-bold"
       />
 
       {(localQuery || searchQuery) && (
         <button
           onClick={handleClear}
-          className="absolute inset-y-0 right-4 flex items-center justify-center text-neutral-500 hover:text-white transition-colors"
+          className="absolute inset-y-0 right-4 flex items-center justify-center text-neutral-600 hover:text-[#FF3B30] transition-colors"
         >
           <X className="w-4 h-4 stroke-[2]" />
         </button>
       )}
 
       {showDropdown && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-[#0d0d0d] border border-neutral-800 rounded-lg shadow-2xl z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border-3 border-black shadow-[6px_6px_0px_0px_#000000] z-50 overflow-hidden">
           {loading ? (
             <div className="px-4 py-6 text-center">
-              <div className="w-4 h-4 border border-neutral-600 border-t-transparent rounded-full animate-spin mx-auto" />
-              <span className="text-[10px] font-mono text-neutral-500 mt-2 block">Searching vault...</span>
+              <div className="w-4 h-4 border-2 border-black border-t-transparent animate-spin mx-auto" />
+              <span className="text-[10px] font-mono text-neutral-700 mt-2 block font-bold">Searching vault...</span>
             </div>
           ) : results.length === 0 ? (
             <div className="px-4 py-6 text-center">
-              <span className="text-[10px] font-mono text-neutral-600">No files matched your query</span>
+              <span className="text-[10px] font-mono text-neutral-700 font-bold">No files matched your query</span>
             </div>
           ) : (
             <div>
-              <div className="px-3 py-1.5 text-[9px] font-mono text-neutral-600 uppercase tracking-wider border-b border-neutral-900 bg-neutral-950/50">
-                {results.length} results — click to open
+              <div className="px-3 py-1.5 text-[9px] font-mono text-neutral-700 uppercase tracking-wider border-b-2 border-black bg-white font-bold">
+                {results.length} results — click to search
               </div>
               {results.map(file => {
                 const sectionLabel = SECTION_BADGE[file.section] || file.section;
@@ -139,30 +139,30 @@ export const SmartSearch: React.FC = () => {
                   <button
                     key={file.id}
                     onClick={() => handleSelect(file)}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-neutral-900/80 transition-colors text-left border-b border-neutral-900/50 last:border-b-0 cursor-pointer group"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-[#FF3B30] hover:text-white transition-colors text-left border-b-2 border-black last:border-b-0 cursor-pointer group"
                   >
-                    <div className="p-1.5 bg-neutral-900 rounded border border-neutral-850 shrink-0">
+                    <div className="p-1.5 bg-white border-2 border-black shrink-0">
                       <FileIcon extension={file.file_type} className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-xs font-mono text-zinc-200 truncate group-hover:text-white transition-colors">
+                      <div className="text-xs font-mono text-black font-bold truncate group-hover:text-white transition-colors">
                         {file.name}
                       </div>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-neutral-900 text-neutral-400 uppercase border border-neutral-850">
+                        <span className="text-[9px] font-mono px-1.5 py-0.5 bg-white text-black border-2 border-black uppercase font-bold">
                           {sectionLabel}
                         </span>
                         {courseLabel && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-neutral-900 text-neutral-400 uppercase border border-neutral-850">
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 bg-white text-black border-2 border-black uppercase font-bold">
                             {courseLabel}
                           </span>
                         )}
-                        <span className="text-[9px] font-mono text-neutral-600 uppercase">
+                        <span className="text-[9px] font-mono text-neutral-700 uppercase font-bold">
                           {file.file_type?.toUpperCase()}
                         </span>
                       </div>
                     </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-neutral-600 group-hover:text-neutral-400 transition-colors shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 text-black group-hover:text-white transition-colors shrink-0" />
                   </button>
                 );
               })}

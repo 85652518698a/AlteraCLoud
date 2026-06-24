@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useUIStore, uiStore } from '../../store/uiStore';
-import { callEdgeFunction } from '../../lib/edgeFunction';
 import { FileRecord } from '../../types';
-import { FileIcon } from '../ui/FileIcon';
-import { Download, X } from 'lucide-react';
+import { callEdgeFunction } from '../../lib/edgeFunction';
+import { Download } from 'lucide-react';
+import JSZip from 'jszip';
 import toast from 'react-hot-toast';
 
 interface ZipDownloadBarProps {
@@ -12,93 +12,71 @@ interface ZipDownloadBarProps {
 
 export const ZipDownloadBar: React.FC<ZipDownloadBarProps> = ({ files }) => {
   const selectedIds = useUIStore(s => s.selectedFileIds);
-  const [loading, setLoading] = useState(false);
+  const count = selectedIds.size;
 
-  const selectedFiles = files.filter(f => selectedIds.has(f.id));
-  const count = selectedFiles.length;
-
-  if (count === 0) return null;
-
-  const handleClearSelection = () => {
-    uiStore.clearFileSelection();
-  };
-
-  const handleDownloadZip = async () => {
-    setLoading(true);
-    const toastId = toast.loading(`Preparing ${count} file(s) for ZIP download...`);
+  const handleZipDownload = async () => {
+    if (count === 0) return;
+    const toastId = toast.loading(`Preparing ${count} files for download...`);
     try {
-      const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
+      const selectedFiles = files.filter(f => selectedIds.has(f.id));
+      let successCount = 0;
 
-      for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        toast.loading(`Fetching ${file.name} (${i + 1}/${count})...`, { id: toastId });
+      for (const file of selectedFiles) {
         try {
           const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id }, false);
-          const resp = await fetch(url);
-          if (!resp.ok) throw new Error('Fetch failed');
-          const blob = await resp.blob();
+          const res = await fetch(url);
+          const blob = await res.blob();
           zip.file(file.name, blob);
+          successCount++;
         } catch {
-          toast.error(`Failed to add ${file.name}`, { id: toastId });
+          // skip failed files
         }
       }
 
-      toast.loading('Compressing archive...', { id: toastId });
-      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      if (successCount === 0) {
+        toast.error('Could not fetch any of the selected files', { id: toastId });
+        return;
+      }
+
+      const content = await zip.generateAsync({ type: 'blob' });
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(zipBlob);
-      link.download = `alteracloud-batch-${Date.now()}.zip`;
+      link.href = URL.createObjectURL(content);
+      link.download = `altera-cloud-batch-${Date.now()}.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
-
-      toast.success(`Downloaded ${count} file(s) as ZIP`, { id: toastId });
       uiStore.clearFileSelection();
+      toast.success(`Downloaded ${successCount} file(s) as ZIP`, { id: toastId });
     } catch (err) {
-      toast.error(`ZIP download failed: ${err instanceof Error ? err.message : 'Unknown'}`, { id: toastId });
-    } finally {
-      setLoading(false);
+      toast.error('ZIP download failed', { id: toastId });
     }
   };
 
+  if (count === 0) return null;
+
   return (
-    <div className="flex items-center gap-3 px-4 py-2.5 mb-4 bg-neutral-900/80 border border-neutral-800 rounded-lg animate-in fade-in slide-in-from-top-2 duration-200">
-      <div className="flex items-center gap-2 text-xs font-mono text-neutral-300">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-neutral-400"><polyline points="21 16 17 16 14 21 10 21 7 16 3 16"/><line x1="12" y1="2" x2="12" y2="10"/><polyline points="9 5 12 2 15 5"/></svg>
-        <span className="font-bold">{count}</span>
-        <span className="text-neutral-500">file{count !== 1 ? 's' : ''} selected</span>
-      </div>
-
-      <div className="flex items-center gap-1.5 flex-1 overflow-x-auto scrollbar-none">
-        {selectedFiles.slice(0, 5).map(f => (
-          <div key={f.id} className="flex items-center gap-1 px-1.5 py-0.5 bg-neutral-950 border border-neutral-800 rounded text-[9px] font-mono text-neutral-400 shrink-0">
-            <FileIcon extension={f.file_type} className="w-2.5 h-2.5" />
-            <span className="max-w-[60px] truncate">{f.name}</span>
-          </div>
-        ))}
-        {count > 5 && (
-          <span className="text-[9px] font-mono text-neutral-600 shrink-0">+{count - 5} more</span>
-        )}
-      </div>
-
+    <div className="flex items-center gap-3 mb-4 p-3 bg-white border-2 border-black">
+      <span className="text-[10px] font-mono text-black font-bold">
+        {count} file{count !== 1 ? 's' : ''} selected
+      </span>
       <button
-        onClick={handleDownloadZip}
-        disabled={loading}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-black rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-neutral-200 transition-all cursor-pointer disabled:opacity-50 shrink-0"
+        onClick={handleZipDownload}
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[10px] font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer active:translate-y-0.5"
       >
-        <Download className="w-3 h-3" />
-        <span>{loading ? 'ZIPPING...' : 'ZIP'}</span>
+        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+          <path d="M16 21H8" />
+          <path d="M12 17v4" />
+        </svg>
+        <span>DOWNLOAD AS ZIP</span>
       </button>
-
       <button
-        onClick={handleClearSelection}
-        disabled={loading}
-        className="flex items-center justify-center p-1.5 text-neutral-500 hover:text-white hover:bg-neutral-800 rounded transition-colors cursor-pointer disabled:opacity-50 shrink-0"
-        title="Clear selection"
+        onClick={() => uiStore.clearFileSelection()}
+        className="text-[10px] font-mono text-neutral-700 hover:text-[#FF3B30] font-bold uppercase tracking-wider transition-colors duration-150 cursor-pointer ml-2"
       >
-        <X className="w-3.5 h-3.5" />
+        CLEAR
       </button>
     </div>
   );

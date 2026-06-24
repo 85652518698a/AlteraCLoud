@@ -55,10 +55,10 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-center text-white select-none">
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center text-black select-none">
         <Spinner size="lg" />
-        <span className="text-[10px] font-mono tracking-widest text-neutral-500 mt-4 uppercase">
-          Decrypting Secure Handshake Files...
+        <span className="text-[10px] font-mono tracking-widest text-neutral-600 mt-4 uppercase">
+          Loading encrypted vault...
         </span>
       </div>
     );
@@ -85,25 +85,25 @@ export default function App() {
       <Toaster 
         position="bottom-right"
         toastOptions={{
-          className: 'border border-neutral-900 bg-[#0c0c0c] text-white font-mono text-xs shadow-xl rounded px-4.5 py-3',
+          className: 'border-2 border-black bg-white text-black font-mono text-xs font-bold px-4.5 py-3',
           duration: 3500,
           style: {
-            background: '#0d0d0d',
-            color: '#fff',
-            border: '1px solid #1a1a1a',
-            borderRadius: '4px',
+            background: '#FFFFFF',
+            color: '#000000',
+            border: '3px solid #000000',
+            borderRadius: '0',
             fontSize: '11px',
           },
           success: {
             iconTheme: {
-              primary: '#fff',
-              secondary: '#000',
+              primary: '#000',
+              secondary: '#fff',
             },
           },
           error: {
             iconTheme: {
-              primary: '#ef4444',
-              secondary: '#000',
+              primary: '#FF3B30',
+              secondary: '#fff',
             },
           },
         }}

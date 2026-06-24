@@ -8,20 +8,20 @@ const REPO = '85652518698a/AlteraCLoud';
 
 export const DownloadPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex flex-col justify-between text-white selection:bg-white selection:text-black">
+    <div className="min-h-screen bg-white flex flex-col justify-between text-black selection:bg-[#FF3B30] selection:text-white">
       <div className="flex-1">
         <Navbar />
         <PageWrapper>
           <div className="max-w-3xl mx-auto">
-            <div className="mb-12 text-left select-none">
-              <div className="flex items-center gap-1.5 text-[10px] font-mono text-neutral-500 uppercase tracking-[0.2em] mb-2 font-bold select-none">
-                <Download className="w-3 h-3 text-white fill-white/10" />
+            <div className="mb-12 text-left select-none border-b-4 border-black pb-8">
+              <div className="section-heading">
+                <Download className="w-3 h-3 inline-block mr-1" />
                 <span>DESKTOP APPLICATION</span>
               </div>
-              <h2 className="font-display font-black text-2xl md:text-3xl tracking-wide uppercase text-zinc-100">
+              <h2 className="font-display font-black text-2xl md:text-3xl tracking-wide uppercase text-black">
                 Download Altera Cloud
               </h2>
-              <p className="text-xs text-neutral-400 font-sans mt-2.5 leading-relaxed max-w-lg font-light">
+              <p className="text-xs text-neutral-600 font-sans mt-2.5 leading-relaxed max-w-lg font-medium">
                 Get the desktop app for a faster, native experience. Available for Windows, macOS, and Linux.
               </p>
             </div>
@@ -29,20 +29,20 @@ export const DownloadPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
               <a
                 href={`https://github.com/${REPO}/releases/latest/download/Altera.Cloud.Setup.exe`}
-                className="group border border-neutral-900 rounded-lg p-6 bg-neutral-950/30 hover:border-neutral-700 hover:shadow-card-hover transition-all duration-300"
+                className="group border-3 border-black p-6 bg-white hover:translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150 block"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-neutral-900/80 border border-neutral-850 rounded shrink-0">
-                    <Download className="w-6 h-6 text-neutral-300" />
+                  <div className="p-3 bg-white border-2 border-black shrink-0">
+                    <Download className="w-6 h-6 text-black" />
                   </div>
                   <div className="space-y-2 flex-1">
-                    <h3 className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider group-hover:text-accent transition-colors">
+                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-[#FF3B30] transition-colors">
                       Windows
                     </h3>
-                    <p className="text-[10px] font-mono text-neutral-500">Installer (.exe) — 64-bit</p>
+                    <p className="text-[10px] font-mono text-neutral-600 font-bold">Installer (.exe) — 64-bit</p>
                     <div className="flex items-center gap-2 pt-2">
-                      <Download className="w-3.5 h-3.5 text-accent" />
-                      <span className="text-[10px] font-mono text-accent font-bold uppercase tracking-wider">Download</span>
+                      <Download className="w-3.5 h-3.5 text-[#FF3B30]" />
+                      <span className="text-[10px] font-mono text-[#FF3B30] font-bold uppercase tracking-wider">Download</span>
                     </div>
                   </div>
                 </div>
@@ -50,20 +50,20 @@ export const DownloadPage: React.FC = () => {
 
               <a
                 href={`https://github.com/${REPO}/releases/latest/download/Altera.Cloud.AppImage`}
-                className="group border border-neutral-900 rounded-lg p-6 bg-neutral-950/30 hover:border-neutral-700 hover:shadow-card-hover transition-all duration-300"
+                className="group border-3 border-black p-6 bg-white hover:translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150 block"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-neutral-900/80 border border-neutral-850 rounded shrink-0">
-                    <FileText className="w-6 h-6 text-neutral-300" />
+                  <div className="p-3 bg-white border-2 border-black shrink-0">
+                    <FileText className="w-6 h-6 text-black" />
                   </div>
                   <div className="space-y-2 flex-1">
-                    <h3 className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider group-hover:text-accent transition-colors">
+                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-[#FF3B30] transition-colors">
                       Linux
                     </h3>
-                    <p className="text-[10px] font-mono text-neutral-500">AppImage + .deb packages</p>
+                    <p className="text-[10px] font-mono text-neutral-600 font-bold">AppImage + .deb packages</p>
                     <div className="flex items-center gap-2 pt-2">
-                      <Download className="w-3.5 h-3.5 text-accent" />
-                      <span className="text-[10px] font-mono text-accent font-bold uppercase tracking-wider">Download</span>
+                      <Download className="w-3.5 h-3.5 text-[#FF3B30]" />
+                      <span className="text-[10px] font-mono text-[#FF3B30] font-bold uppercase tracking-wider">Download</span>
                     </div>
                   </div>
                 </div>
@@ -71,20 +71,20 @@ export const DownloadPage: React.FC = () => {
 
               <a
                 href={`https://github.com/${REPO}/releases/latest/download/Altera.Cloud.dmg`}
-                className="group border border-neutral-900 rounded-lg p-6 bg-neutral-950/30 hover:border-neutral-700 hover:shadow-card-hover transition-all duration-300"
+                className="group border-3 border-black p-6 bg-white hover:translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150 block"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-neutral-900/80 border border-neutral-850 rounded shrink-0">
-                    <FileText className="w-6 h-6 text-neutral-300" />
+                  <div className="p-3 bg-white border-2 border-black shrink-0">
+                    <FileText className="w-6 h-6 text-black" />
                   </div>
                   <div className="space-y-2 flex-1">
-                    <h3 className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider group-hover:text-accent transition-colors">
+                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-[#FF3B30] transition-colors">
                       macOS
                     </h3>
-                    <p className="text-[10px] font-mono text-neutral-500">Disk Image (.dmg) — Apple Silicon + Intel</p>
+                    <p className="text-[10px] font-mono text-neutral-600 font-bold">Disk Image (.dmg) — Apple Silicon + Intel</p>
                     <div className="flex items-center gap-2 pt-2">
-                      <Download className="w-3.5 h-3.5 text-accent" />
-                      <span className="text-[10px] font-mono text-accent font-bold uppercase tracking-wider">Download</span>
+                      <Download className="w-3.5 h-3.5 text-[#FF3B30]" />
+                      <span className="text-[10px] font-mono text-[#FF3B30] font-bold uppercase tracking-wider">Download</span>
                     </div>
                   </div>
                 </div>
@@ -94,27 +94,27 @@ export const DownloadPage: React.FC = () => {
                 href={`https://github.com/${REPO}/releases`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group border border-neutral-900 rounded-lg p-6 bg-neutral-950/30 hover:border-neutral-700 hover:shadow-card-hover transition-all duration-300"
+                className="group border-3 border-black p-6 bg-white hover:translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150 block"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-neutral-900/80 border border-neutral-850 rounded shrink-0">
-                    <Library className="w-6 h-6 text-neutral-300" />
+                  <div className="p-3 bg-white border-2 border-black shrink-0">
+                    <Library className="w-6 h-6 text-black" />
                   </div>
                   <div className="space-y-2 flex-1">
-                    <h3 className="text-xs font-mono font-bold text-zinc-200 uppercase tracking-wider group-hover:text-accent transition-colors">
+                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-[#FF3B30] transition-colors">
                       All Releases
                     </h3>
-                    <p className="text-[10px] font-mono text-neutral-500">View all versions and release notes on GitHub</p>
+                    <p className="text-[10px] font-mono text-neutral-600 font-bold">View all versions and release notes on GitHub</p>
                     <div className="flex items-center gap-2 pt-2">
-                      <span className="text-[10px] font-mono text-accent font-bold uppercase tracking-wider">GitHub →</span>
+                      <span className="text-[10px] font-mono text-[#FF3B30] font-bold uppercase tracking-wider">GitHub →</span>
                     </div>
                   </div>
                 </div>
               </a>
             </div>
 
-            <div className="p-6 border border-neutral-900 rounded-lg bg-neutral-950/20 text-center">
-              <p className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider leading-relaxed">
+            <div className="p-6 border-4 border-black bg-white text-center">
+              <p className="text-[10px] font-mono text-black uppercase tracking-wider leading-relaxed font-bold">
                 Desktop app built with Electron • Source code available on GitHub<br />
                 ALTERA CLOUD • CHANNABASWESHWAR SYSTEM MANAGEMENT
               </p>

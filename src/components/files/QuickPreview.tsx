@@ -60,52 +60,52 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
   };
 
   return (
-    <div className="w-[320px] bg-[#0d0d0d] border border-neutral-800 rounded-lg shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+    <div className="w-[320px] bg-white border-3 border-black shadow-[6px_6px_0px_0px_#000000] overflow-hidden">
       {isImage && (
-        <div className="h-40 bg-neutral-950 overflow-hidden border-b border-neutral-900 flex items-center justify-center">
+        <div className="h-40 bg-white overflow-hidden border-b-2 border-black flex items-center justify-center">
           {loadingPreview ? (
-            <div className="w-5 h-5 border border-neutral-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-black border-t-transparent animate-spin" />
           ) : previewUrl ? (
             <img src={previewUrl} alt={file.name} className="w-full h-full object-cover" />
           ) : (
-            <FileIcon extension={file.file_type} className="w-8 h-8 opacity-30" />
+            <FileIcon extension={file.file_type} className="w-8 h-8 opacity-40" />
           )}
         </div>
       )}
 
       <div className="p-4">
         <div className="flex items-start gap-3 mb-3">
-          <div className="p-2 bg-neutral-900 rounded border border-neutral-850 shrink-0">
+          <div className="p-2 bg-white border-2 border-black shrink-0">
             <FileIcon extension={file.file_type} className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="text-xs font-mono font-bold text-zinc-200 truncate" title={file.name}>
+            <h4 className="text-xs font-mono font-bold text-black truncate" title={file.name}>
               {file.name}
             </h4>
-            <p className="text-[10px] font-mono text-neutral-500 mt-0.5">
+            <p className="text-[10px] font-mono text-neutral-700 mt-0.5 font-bold">
               {formatBytes(file.size_bytes)} • {file.file_type?.toUpperCase()}
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap gap-1 mb-3">
-          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-neutral-900 text-neutral-400 uppercase border border-neutral-850">
+          <span className="text-[9px] font-mono px-1.5 py-0.5 bg-white text-black border-2 border-black uppercase font-bold">
             {sectionLabel}
           </span>
           {courseLabel && (
-            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-neutral-900 text-neutral-400 uppercase border border-neutral-850">
+            <span className="text-[9px] font-mono px-1.5 py-0.5 bg-white text-black border-2 border-black uppercase font-bold">
               {courseLabel}
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-3 text-[9px] font-mono text-neutral-500 mb-3">
+        <div className="flex items-center gap-3 text-[9px] font-mono text-neutral-700 mb-3 font-bold">
           <span className="flex items-center gap-1">
             <Download className="w-2.5 h-2.5" />
             {file.downloads ?? 0}
           </span>
           <span className="flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-2.5 h-2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-2.5 h-2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             {file.views ?? 0}
           </span>
           <span className="flex items-center gap-1">
@@ -114,10 +114,10 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
           </span>
         </div>
 
-        <div className="flex gap-2 pt-3 border-t border-neutral-900">
+        <div className="flex gap-2 pt-3 border-t-2 border-black">
           <button
             onClick={handleDownload}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-white text-black rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-neutral-200 transition-all duration-200 cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-black border-2 border-black text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer"
           >
             <Download className="w-3 h-3" />
             <span>DOWNLOAD</span>

@@ -47,24 +47,24 @@ export const RenameModal: React.FC<RenameModalProps> = ({ onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-[fadeIn_0.12s_ease-out]">
-      <div className="w-full max-w-md bg-neutral-950 border border-neutral-900 rounded p-6 shadow-[0_24px_50px_rgba(0,0,0,0.85)] relative text-left">
-        <button onClick={handleClose} className="absolute top-4 right-4 text-neutral-500 hover:text-white rounded-full p-1 hover:bg-neutral-900 transition-colors"><X className="w-4 h-4" /></button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90">
+      <div className="w-full max-w-md bg-white border-3 border-black p-6 shadow-[8px_8px_0px_0px_#000000] relative text-left">
+        <button onClick={handleClose} className="absolute top-4 right-4 text-black hover:text-[#FF3B30] p-1 transition-colors"><X className="w-4 h-4" /></button>
         <div className="flex items-center gap-3 mb-5">
-          <div className="p-2.5 bg-neutral-900 text-neutral-300 border border-neutral-850 rounded"><Edit2 className="w-4 h-4" /></div>
-          <div><h3 className="text-zinc-100 font-display font-semibold tracking-wider text-sm uppercase">RENAME ARCHIVE ENTRY</h3><p className="text-[10px] font-mono text-neutral-500">CORRECT LOG ENTRY METADATA</p></div>
+          <div className="p-2.5 bg-white text-black border-2 border-black"><Edit2 className="w-4 h-4" /></div>
+          <div><h3 className="text-black font-display font-bold tracking-wider text-sm uppercase">RENAME ARCHIVE ENTRY</h3><p className="text-[10px] font-mono text-neutral-700 font-bold">CORRECT LOG ENTRY METADATA</p></div>
         </div>
         <form onSubmit={handleRenameSubmit} className="space-y-4">
           <div>
-            <label className="block text-[10px] font-mono text-neutral-500 uppercase mb-1.5 tracking-wider">Asset Display Title</label>
+            <label className="block text-[10px] font-mono text-black font-bold uppercase mb-1.5 tracking-wider">Asset Display Title</label>
             <div className="relative">
               <input type="text" required value={newName} onChange={(e) => setNewName(e.target.value)}
                 placeholder="Type new name..."
-                className="w-full px-3.5 py-2.5 bg-neutral-950 border border-neutral-900 text-xs text-white rounded focus:border-zinc-500 focus:outline-none transition-colors font-mono" />
+                className="w-full px-3.5 py-2.5 bg-white border-2 border-black text-xs text-black placeholder-neutral-500 font-mono" />
               {(() => { const di = file.name.lastIndexOf('.'); const ext = di !== -1 ? file.name.substring(di + 1) : ''; return ext ? <span className="absolute right-4.5 top-1/2 -translate-y-1/2 text-neutral-500 text-xs font-mono select-none">.{ext}</span> : null; })()}
             </div>
           </div>
-          <div className="pt-3 border-t border-neutral-950 flex justify-end gap-3 select-none">
+          <div className="pt-3 border-t-2 border-black flex justify-end gap-3 select-none">
             <Button variant="outline" size="sm" type="button" onClick={handleClose}>Dismiss</Button>
             <Button variant="primary" size="sm" type="submit" isLoading={loading}>Save Rename</Button>
           </div>
