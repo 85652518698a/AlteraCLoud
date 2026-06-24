@@ -125,7 +125,7 @@ export const FileGrid: React.FC = () => {
             onClick={() => uiStore.setActiveCourse(activeCourse === c.id ? '' : c.id)}
             className={`text-[10px] font-mono px-2.5 py-1 border-2 transition-colors duration-150 cursor-pointer whitespace-nowrap font-bold ${
               activeCourse === c.id
-                ? 'text-white bg-black border-black'
+                ? 'text-white bg-blue-600 border-blue-600'
                 : 'text-black bg-white border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
             }`}
           >
@@ -153,7 +153,7 @@ export const FileGrid: React.FC = () => {
               <button
                 onClick={() => setPage(p => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="flex items-center gap-1 px-3 py-1.5 bg-white border-2 border-black text-xs font-mono text-black font-bold hover:bg-black hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer active:translate-y-0.5"
+                className="flex items-center gap-1 px-3 py-1.5 bg-white border-2 border-black text-xs font-mono text-black font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer active:translate-y-0.5"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
                 <span>PREV</span>
@@ -164,7 +164,7 @@ export const FileGrid: React.FC = () => {
               <button
                 onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
                 disabled={page >= totalPages - 1}
-                className="flex items-center gap-1 px-3 py-1.5 bg-white border-2 border-black text-xs font-mono text-black font-bold hover:bg-black hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer active:translate-y-0.5"
+                className="flex items-center gap-1 px-3 py-1.5 bg-white border-2 border-black text-xs font-mono text-black font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer active:translate-y-0.5"
               >
                 <span>NEXT</span>
                 <ChevronRight className="w-3.5 h-3.5" />

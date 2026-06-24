@@ -99,7 +99,7 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
           ) : (
             <button
               onClick={() => setCreating(true)}
-              className="w-full flex items-center justify-center gap-1 px-2 py-1.5 bg-white border-2 border-black text-[10px] font-mono font-bold text-black hover:bg-black hover:text-white transition-colors duration-150 cursor-pointer uppercase tracking-wider"
+              className="w-full flex items-center justify-center gap-1 px-2 py-1.5 bg-white border-2 border-black text-[10px] font-mono font-bold text-black hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-colors duration-150 cursor-pointer uppercase tracking-wider"
             >
               <Plus className="w-3 h-3" />
               NEW COLLECTION
@@ -113,7 +113,7 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
           onClick={() => onSelectCollection(null)}
           className={`w-full text-left px-3 py-2 text-[10px] font-mono border-2 transition-colors duration-150 cursor-pointer font-bold ${
             !activeCollectionId
-              ? 'bg-black text-white border-black'
+              ? 'bg-blue-600 text-white border-blue-600'
                     : 'bg-white text-black border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
           }`}
         >
@@ -131,7 +131,7 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
                 onClick={() => onSelectCollection(col.id)}
                 className={`flex-1 text-left px-3 py-2 text-[10px] font-mono border-2 transition-colors duration-150 cursor-pointer font-bold ${
                   activeCollectionId === col.id
-                    ? 'bg-black text-white border-black'
+                    ? 'bg-blue-600 text-white border-blue-600'
               : 'bg-white text-black border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
                 }`}
               >

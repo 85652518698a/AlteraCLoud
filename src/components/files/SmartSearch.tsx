@@ -149,11 +149,11 @@ export const SmartSearch: React.FC = () => {
                         {file.name}
                       </div>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-[9px] font-mono px-1.5 py-0.5 bg-white text-black border-2 border-black uppercase font-bold">
+                        <span className="text-[9px] font-mono px-1.5 py-0.5 bg-blue-600 text-white border-2 border-blue-600 uppercase font-bold">
                           {sectionLabel}
                         </span>
                         {courseLabel && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.5 bg-white text-black border-2 border-black uppercase font-bold">
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 bg-amber-400 text-black border-2 border-amber-400 uppercase font-bold">
                             {courseLabel}
                           </span>
                         )}

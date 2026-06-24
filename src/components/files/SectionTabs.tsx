@@ -23,8 +23,8 @@ export const SectionTabs: React.FC = () => {
           onClick={() => uiStore.setActiveSection(s.id)}
           className={`text-[10px] font-mono px-3 py-1.5 border-2 transition-colors duration-150 cursor-pointer whitespace-nowrap uppercase tracking-wider font-bold ${
             activeSection === s.id
-              ? 'bg-black text-white border-black'
-            : 'bg-white text-black border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
+              ? 'bg-[#FF3B30] text-white border-[#FF3B30]'
+              : 'bg-white text-black border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
           }`}
         >
           {s.label}

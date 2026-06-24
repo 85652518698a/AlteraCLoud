@@ -63,13 +63,22 @@ export const TermsPage: React.FC = () => {
             </div>
 
             <div className="space-y-6">
-              {sections.map((section) => {
+              {sections.map((section, i) => {
                 const Icon = section.icon;
+                const iconColors = [
+                  'bg-blue-600 text-white border-blue-600',
+                  'bg-green-600 text-white border-green-600',
+                  'bg-amber-400 text-black border-amber-400',
+                  'bg-[#FF3B30] text-white border-[#FF3B30]',
+                  'bg-blue-600 text-white border-blue-600',
+                  'bg-green-600 text-white border-green-600',
+                  'bg-amber-400 text-black border-amber-400',
+                ];
                 return (
                   <div key={section.title} className="border-3 border-black p-6 bg-white hover:translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150">
                     <div className="flex items-start gap-4">
-                      <div className="p-2.5 bg-white border-2 border-black shrink-0 mt-0.5">
-                        <Icon className="w-4 h-4 text-black" />
+                      <div className={`p-2.5 border-2 shrink-0 mt-0.5 ${iconColors[i % iconColors.length]}`}>
+                        <Icon className="w-4 h-4" />
                       </div>
                       <div className="space-y-2">
                         <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider">

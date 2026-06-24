@@ -88,7 +88,7 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
   : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><rect x="3" y="3" width="18" height="18" rx="0" ry="0"/></svg>
 }
             </button>
-            <div className="text-[9px] font-mono text-black bg-white border-2 border-black px-2.5 py-0.5 uppercase font-bold tracking-wider">
+            <div className="text-[9px] font-mono text-white bg-blue-600 border-2 border-blue-600 px-2.5 py-0.5 uppercase font-bold tracking-wider">
               {file.file_type || 'RAW'}
             </div>
           </div>
@@ -113,7 +113,7 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
         <button
           onClick={handleDownload}
           disabled={downloading}
-              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-black border-2 border-black text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer disabled:opacity-50 active:translate-y-0.5"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-[#FF3B30] border-2 border-[#FF3B30] text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer disabled:opacity-50 active:translate-y-0.5"
         >
           <Download className="w-3.5 h-3.5" />
           <span>{downloading ? 'FETCHING' : 'DOWNLOAD'}</span>

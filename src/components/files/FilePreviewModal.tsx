@@ -85,7 +85,7 @@ export const FilePreviewModal: React.FC = () => {
           <div className="flex items-center gap-3 select-none">
             <button
               onClick={handleDownload}
-              className="px-3.5 py-1.5 bg-white border-2 border-black text-black font-bold hover:bg-black hover:text-white text-[10px] font-mono uppercase tracking-wider transition-colors duration-150 flex items-center gap-1 cursor-pointer"
+              className="px-3.5 py-1.5 bg-white border-2 border-black text-black font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 text-[10px] font-mono uppercase tracking-wider transition-colors duration-150 flex items-center gap-1 cursor-pointer"
             >
               <Download className="w-3 h-3" />
               <span>DOWNLOAD</span>

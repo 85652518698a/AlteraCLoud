@@ -36,13 +36,13 @@ export const DownloadPage: React.FC = () => {
                     <Download className="w-6 h-6 text-black" />
                   </div>
                   <div className="space-y-2 flex-1">
-                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-[#FF3B30] transition-colors">
+                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-blue-600 transition-colors">
                       Windows
                     </h3>
                     <p className="text-[10px] font-mono text-neutral-600 font-bold">Installer (.exe) — 64-bit</p>
                     <div className="flex items-center gap-2 pt-2">
-                      <Download className="w-3.5 h-3.5 text-[#FF3B30]" />
-                      <span className="text-[10px] font-mono text-[#FF3B30] font-bold uppercase tracking-wider">Download</span>
+                      <Download className="w-3.5 h-3.5 text-blue-600" />
+                      <span className="text-[10px] font-mono text-blue-600 font-bold uppercase tracking-wider">Download</span>
                     </div>
                   </div>
                 </div>
@@ -57,13 +57,13 @@ export const DownloadPage: React.FC = () => {
                     <FileText className="w-6 h-6 text-black" />
                   </div>
                   <div className="space-y-2 flex-1">
-                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-[#FF3B30] transition-colors">
+                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-blue-600 transition-colors">
                       Linux
                     </h3>
                     <p className="text-[10px] font-mono text-neutral-600 font-bold">AppImage + .deb packages</p>
                     <div className="flex items-center gap-2 pt-2">
-                      <Download className="w-3.5 h-3.5 text-[#FF3B30]" />
-                      <span className="text-[10px] font-mono text-[#FF3B30] font-bold uppercase tracking-wider">Download</span>
+                      <Download className="w-3.5 h-3.5 text-blue-600" />
+                      <span className="text-[10px] font-mono text-blue-600 font-bold uppercase tracking-wider">Download</span>
                     </div>
                   </div>
                 </div>
@@ -78,13 +78,13 @@ export const DownloadPage: React.FC = () => {
                     <FileText className="w-6 h-6 text-black" />
                   </div>
                   <div className="space-y-2 flex-1">
-                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-[#FF3B30] transition-colors">
+                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-blue-600 transition-colors">
                       macOS
                     </h3>
                     <p className="text-[10px] font-mono text-neutral-600 font-bold">Disk Image (.dmg) — Apple Silicon + Intel</p>
                     <div className="flex items-center gap-2 pt-2">
-                      <Download className="w-3.5 h-3.5 text-[#FF3B30]" />
-                      <span className="text-[10px] font-mono text-[#FF3B30] font-bold uppercase tracking-wider">Download</span>
+                      <Download className="w-3.5 h-3.5 text-blue-600" />
+                      <span className="text-[10px] font-mono text-blue-600 font-bold uppercase tracking-wider">Download</span>
                     </div>
                   </div>
                 </div>
@@ -101,12 +101,12 @@ export const DownloadPage: React.FC = () => {
                     <Library className="w-6 h-6 text-black" />
                   </div>
                   <div className="space-y-2 flex-1">
-                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-[#FF3B30] transition-colors">
+                    <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider group-hover:text-blue-600 transition-colors">
                       All Releases
                     </h3>
                     <p className="text-[10px] font-mono text-neutral-600 font-bold">View all versions and release notes on GitHub</p>
                     <div className="flex items-center gap-2 pt-2">
-                      <span className="text-[10px] font-mono text-[#FF3B30] font-bold uppercase tracking-wider">GitHub →</span>
+                      <span className="text-[10px] font-mono text-blue-600 font-bold uppercase tracking-wider">GitHub →</span>
                     </div>
                   </div>
                 </div>
