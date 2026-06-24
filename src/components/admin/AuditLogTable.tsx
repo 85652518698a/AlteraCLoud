@@ -41,12 +41,12 @@ export const AuditLogTable: React.FC = () => {
 
   const getActionBadge = (action: string) => {
     switch (action) {
-      case 'upload': return <span className="text-white bg-black border-2 border-black px-2 py-0.5 text-[10px] font-bold">INGEST</span>;
+      case 'upload': return <span className="text-white bg-green-600 border-2 border-green-600 px-2 py-0.5 text-[10px] font-bold">INGEST</span>;
       case 'delete': return <span className="text-white bg-[#FF3B30] border-2 border-[#FF3B30] px-2 py-0.5 text-[10px] font-bold">PURGE</span>;
-      case 'rename': return <span className="text-black bg-white border-2 border-black px-2 py-0.5 text-[10px] font-bold">RENAME</span>;
-      case 'deploy': return <span className="text-white bg-black border-2 border-black px-2 py-0.5 text-[10px] font-bold">DEPLOY</span>;
-      case 'undeploy': return <span className="text-black bg-neutral-200 border-2 border-black px-2 py-0.5 text-[10px] font-bold">DRAFT</span>;
-      case 'edit_meta': return <span className="text-white bg-black border-2 border-black px-2 py-0.5 text-[10px] font-bold">META</span>;
+      case 'rename': return <span className="text-white bg-blue-600 border-2 border-blue-600 px-2 py-0.5 text-[10px] font-bold">RENAME</span>;
+      case 'deploy': return <span className="text-white bg-green-600 border-2 border-green-600 px-2 py-0.5 text-[10px] font-bold">DEPLOY</span>;
+      case 'undeploy': return <span className="text-black bg-amber-400 border-2 border-amber-400 px-2 py-0.5 text-[10px] font-bold">DRAFT</span>;
+      case 'edit_meta': return <span className="text-white bg-blue-600 border-2 border-blue-600 px-2 py-0.5 text-[10px] font-bold">META</span>;
       default: return <span className="text-black bg-white border-2 border-black px-2 py-0.5 text-[10px] font-bold">ACTION</span>;
     }
   };

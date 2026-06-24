@@ -52,7 +52,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => uiStore.setCurrentPage(user ? 'dashboard' : 'landing')}
-              className="text-[10px] font-mono font-bold text-black flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30] transition-all duration-150 cursor-pointer uppercase tracking-wider"
+              className="text-[10px] font-mono font-bold text-black flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-150 cursor-pointer uppercase tracking-wider"
             >
               <Library className="w-3.5 h-3.5" />
               {user ? 'BACK TO PORTAL' : 'BACK TO HOME'}
@@ -64,7 +64,7 @@ export const Navbar: React.FC = () => {
               {currentPage === 'admin' ? (
                 <button
                   onClick={navigateToDashboard}
-                  className="text-[10px] font-mono font-bold text-black flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30] transition-all duration-150 cursor-pointer uppercase tracking-wider"
+              className="text-[10px] font-mono font-bold text-black flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-black hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-150 cursor-pointer uppercase tracking-wider"
                 >
                   <Library className="w-3.5 h-3.5" />
                   STUDENT PORTAL
@@ -73,7 +73,7 @@ export const Navbar: React.FC = () => {
                 user.role === 'admin' && (
                   <button
                     onClick={navigateToAdmin}
-                    className="text-[10px] font-mono font-bold text-white flex items-center gap-1.5 px-3.5 py-1.5 bg-black border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer uppercase tracking-wider"
+                    className="text-[10px] font-mono font-bold text-white flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 border-2 border-blue-600 hover:bg-black hover:border-black transition-all duration-150 cursor-pointer uppercase tracking-wider"
                   >
                     <ShieldCheck className="w-3.5 h-3.5" />
                     ADMIN CABINET

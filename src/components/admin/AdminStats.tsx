@@ -25,7 +25,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
             {totalFiles}
           </div>
         </div>
-        <div className="p-2.5 bg-white border-2 border-black text-black">
+        <div className="p-2.5 bg-blue-600 border-2 border-blue-600 text-white">
           <Files className="w-5 h-5 stroke-[1.5]" />
         </div>
       </div>
@@ -39,7 +39,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
             {deployedCount}
           </div>
         </div>
-        <div className="p-2.5 bg-black text-white border-2 border-black">
+        <div className="p-2.5 bg-green-600 text-white border-2 border-green-600">
           <CircleDot className="w-5 h-5 stroke-[1.5]" />
         </div>
       </div>
@@ -53,7 +53,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
             {draftCount}
           </div>
         </div>
-        <div className="p-2.5 bg-white text-black border-2 border-black">
+        <div className="p-2.5 bg-amber-400 text-black border-2 border-amber-400">
           <ShieldCheck className="w-5 h-5 stroke-[1.5]" />
         </div>
       </div>
@@ -67,7 +67,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
             {formatBytes(totalStorage, 1)}
           </div>
         </div>
-        <div className="p-2.5 bg-white text-black border-2 border-black">
+        <div className="p-2.5 bg-[#FF3B30] text-white border-2 border-[#FF3B30]">
           <HardDrive className="w-5 h-5 stroke-[1.5]" />
         </div>
       </div>

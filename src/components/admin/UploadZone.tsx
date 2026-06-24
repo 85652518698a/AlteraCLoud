@@ -284,7 +284,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
               <button type="submit" disabled={selectedFiles.length === 0}
                 className={`w-full py-3 text-xs font-bold font-mono tracking-wider uppercase text-center border-2 transition-all duration-150 ${
                   selectedFiles.length > 0
-                    ? 'bg-black text-white border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] cursor-pointer active:translate-y-0.5'
+                    ? 'bg-black text-white border-black hover:bg-blue-600 hover:border-blue-600 cursor-pointer active:translate-y-0.5'
                     : 'bg-white text-neutral-600 border-black cursor-not-allowed'
                 }`}>
                 DEPLOY {selectedFiles.length > 1 ? `ALL ${selectedFiles.length} FILES` : 'FILE'} TO CLOUD

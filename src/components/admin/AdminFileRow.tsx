@@ -95,7 +95,7 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
             <Badge status={file.is_deployed ? 'deployed' : 'draft'}>{file.is_deployed ? 'Deployed' : 'Draft'}</Badge>
             <button onClick={handleToggleDeploy} disabled={updating}
               title={file.is_deployed ? "Draft this file" : "Deploy this file"}
-              className={`w-8 h-4.5 flex items-center p-0.5 cursor-pointer relative transition-colors duration-150 shrink-0 ${file.is_deployed ? 'bg-black' : 'bg-neutral-300'}`}>
+              className={`w-8 h-4.5 flex items-center p-0.5 cursor-pointer relative transition-colors duration-150 shrink-0 ${file.is_deployed ? 'bg-green-600' : 'bg-neutral-300'}`}>
               <div className={`w-3.5 h-3.5 bg-white shadow transform transition-transform duration-150 ${file.is_deployed ? 'translate-x-3.5' : 'translate-x-0'}`} />
             </button>
           </div>
@@ -103,11 +103,11 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
         <td className="py-4 px-3 text-right select-none">
           <div className="flex items-center justify-end gap-1 text-black">
             <button onClick={handleTriggerRename} title="Rename file"
-              className="p-1.5 hover:text-[#FF3B30] hover:bg-neutral-100 border-2 border-black transition-colors cursor-pointer">
+              className="p-1.5 hover:text-blue-600 hover:bg-blue-50 border-2 border-black transition-colors cursor-pointer">
               <Edit2 className="w-3.5 h-3.5" />
             </button>
             <button onClick={handleTriggerMeta} title="Edit metadata"
-              className="p-1.5 hover:text-[#FF3B30] hover:bg-neutral-100 border-2 border-black transition-colors cursor-pointer">
+              className="p-1.5 hover:text-blue-600 hover:bg-blue-50 border-2 border-black transition-colors cursor-pointer">
               <Settings className="w-3.5 h-3.5" />
             </button>
             <button onClick={handleDeleteTrigger} title="Purge file"
@@ -142,17 +142,17 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
             <div className="flex items-center gap-3 mt-2">
               <Badge status={file.is_deployed ? 'deployed' : 'draft'}>{file.is_deployed ? 'Deployed' : 'Draft'}</Badge>
               <button onClick={handleToggleDeploy} disabled={updating}
-                className={`w-7 h-4 flex items-center p-0.5 cursor-pointer relative transition-colors duration-150 ${file.is_deployed ? 'bg-black' : 'bg-neutral-300'}`}>
+                className={`w-7 h-4 flex items-center p-0.5 cursor-pointer relative transition-colors duration-150 ${file.is_deployed ? 'bg-green-600' : 'bg-neutral-300'}`}>
                 <div className={`w-3 h-3 bg-white shadow transform transition-transform duration-150 ${file.is_deployed ? 'translate-x-3' : 'translate-x-0'}`} />
               </button>
             </div>
             <div className="flex items-center gap-2 mt-3 pt-3 border-t-2 border-black text-black">
               <button onClick={handleTriggerRename} title="Rename"
-                className="flex items-center gap-1 text-[10px] font-mono hover:text-[#FF3B30] font-bold transition-colors cursor-pointer px-2 py-1">
+                className="flex items-center gap-1 text-[10px] font-mono hover:text-blue-600 font-bold transition-colors cursor-pointer px-2 py-1">
                 <Edit2 className="w-3 h-3" /> RENAME
               </button>
               <button onClick={handleTriggerMeta} title="Edit metadata"
-                className="flex items-center gap-1 text-[10px] font-mono hover:text-[#FF3B30] font-bold transition-colors cursor-pointer px-2 py-1">
+                className="flex items-center gap-1 text-[10px] font-mono hover:text-blue-600 font-bold transition-colors cursor-pointer px-2 py-1">
                 <Settings className="w-3 h-3" /> META
               </button>
               <button onClick={handleDeleteTrigger} title="Purge"

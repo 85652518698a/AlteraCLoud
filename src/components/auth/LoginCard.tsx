@@ -43,7 +43,7 @@ export const LoginCard: React.FC = () => {
           <div className="flex flex-col items-center gap-5 pt-4">
             <button
               onClick={handleOpenApp}
-              className="px-10 py-3.5 bg-black text-white text-xs md:text-sm font-bold tracking-[0.15em] uppercase border-4 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] active:translate-y-0.5 transition-all duration-150 cursor-pointer"
+              className="px-10 py-3.5 bg-blue-600 text-white text-xs md:text-sm font-bold tracking-[0.15em] uppercase border-4 border-blue-600 hover:bg-black hover:border-black active:translate-y-0.5 transition-all duration-150 cursor-pointer"
             >
               <span className="flex items-center gap-2">
                 OPEN THE APP
@@ -58,7 +58,7 @@ export const LoginCard: React.FC = () => {
 
             <button
               onClick={handleOpenApp}
-              className="text-[10px] text-neutral-700 hover:text-[#FF3B30] uppercase tracking-widest font-mono flex items-center gap-1.5 transition-all duration-150 cursor-pointer font-bold"
+              className="text-[10px] text-neutral-700 hover:text-blue-600 uppercase tracking-widest font-mono flex items-center gap-1.5 transition-all duration-150 cursor-pointer font-bold"
             >
               <LogIn className="w-3.5 h-3.5" />
               <span>SIGN IN WITH GOOGLE AUTH</span>

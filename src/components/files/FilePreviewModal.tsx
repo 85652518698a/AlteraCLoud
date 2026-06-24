@@ -93,7 +93,7 @@ export const FilePreviewModal: React.FC = () => {
             
             <button
               onClick={handleClose}
-              className="text-black hover:text-white hover:bg-[#FF3B30] p-1.5 border-2 border-black hover:border-[#FF3B30] transition-colors duration-150 cursor-pointer"
+              className="text-black hover:text-white hover:bg-blue-600 p-1.5 border-2 border-black hover:border-blue-600 transition-colors duration-150 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -119,7 +119,7 @@ export const FilePreviewModal: React.FC = () => {
                   />
                 ) : (
                   <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center text-neutral-700 bg-white select-none">
-                    <button onClick={handlePreview} className="px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer">
+                    <button onClick={handlePreview} className="px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer">
                       LOAD PREVIEW
                     </button>
                   </div>
@@ -141,7 +141,7 @@ export const FilePreviewModal: React.FC = () => {
                     className="max-w-full max-h-full object-contain"
                   />
                 ) : (
-                  <button onClick={handlePreview} className="px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer">
+                  <button onClick={handlePreview} className="px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer">
                     LOAD IMAGE
                   </button>
                 )}
@@ -168,7 +168,7 @@ export const FilePreviewModal: React.FC = () => {
 
               <button
                 onClick={handleDownload}
-                className="w-full bg-black text-white font-bold text-xs font-mono py-3 border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] uppercase tracking-wider transition-colors duration-150 cursor-pointer"
+                className="w-full bg-black text-white font-bold text-xs font-mono py-3 border-2 border-black hover:bg-blue-600 hover:border-blue-600 uppercase tracking-wider transition-colors duration-150 cursor-pointer"
               >
                 Download & View Locally
               </button>

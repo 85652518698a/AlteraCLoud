@@ -92,7 +92,7 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
                 className="flex-1 text-[10px] font-mono px-2 py-1 bg-white border-2 border-black text-black placeholder-neutral-500 font-bold"
                 autoFocus
               />
-              <button onClick={handleCreate} className="px-2 py-1 bg-black text-white text-[10px] font-mono font-bold border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-colors duration-150 cursor-pointer">
+              <button onClick={handleCreate} className="px-2 py-1 bg-black text-white text-[10px] font-mono font-bold border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-colors duration-150 cursor-pointer">
                 <Plus className="w-3 h-3" />
               </button>
             </div>
@@ -114,7 +114,7 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
           className={`w-full text-left px-3 py-2 text-[10px] font-mono border-2 transition-colors duration-150 cursor-pointer font-bold ${
             !activeCollectionId
               ? 'bg-black text-white border-black'
-              : 'bg-white text-black border-black hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30]'
+                    : 'bg-white text-black border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
           }`}
         >
           <div className="flex items-center gap-2">
@@ -132,7 +132,7 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
                 className={`flex-1 text-left px-3 py-2 text-[10px] font-mono border-2 transition-colors duration-150 cursor-pointer font-bold ${
                   activeCollectionId === col.id
                     ? 'bg-black text-white border-black'
-                    : 'bg-white text-black border-black hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30]'
+              : 'bg-white text-black border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -144,7 +144,7 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
               {user && (
                 <button
                   onClick={() => handleDelete(col.id, col.name)}
-                  className="px-2 py-2 bg-white border-2 border-black text-neutral-700 hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30] transition-colors duration-150 cursor-pointer"
+                  className="px-2 py-2 bg-white border-2 border-black text-neutral-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-colors duration-150 cursor-pointer"
                   title={`Delete "${col.name}"`}
                 >
                   <Trash2 className="w-3 h-3" />

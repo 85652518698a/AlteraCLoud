@@ -11,21 +11,21 @@ export const Footer: React.FC = () => {
         <div className="flex items-center gap-6">
           <button
             onClick={() => uiStore.setCurrentPage('download')}
-            className="hover:text-[#FF3B30] transition-colors duration-150 cursor-pointer uppercase tracking-wider"
+            className="hover:text-blue-600 transition-colors duration-150 cursor-pointer uppercase tracking-wider"
           >
             DOWNLOAD APP
           </button>
           <span className="hidden sm:inline-block text-black font-black">/</span>
           <button
             onClick={() => uiStore.setCurrentPage('privacy')}
-            className="hover:text-[#FF3B30] transition-colors duration-150 cursor-pointer uppercase tracking-wider"
+            className="hover:text-blue-600 transition-colors duration-150 cursor-pointer uppercase tracking-wider"
           >
             PRIVACY
           </button>
           <span className="hidden sm:inline-block text-black font-black">/</span>
           <button
             onClick={() => uiStore.setCurrentPage('terms')}
-            className="hover:text-[#FF3B30] transition-colors duration-150 cursor-pointer uppercase tracking-wider"
+            className="hover:text-blue-600 transition-colors duration-150 cursor-pointer uppercase tracking-wider"
           >
             TERMS
           </button>

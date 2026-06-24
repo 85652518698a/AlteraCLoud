@@ -180,7 +180,7 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
           <span className="text-black font-bold whitespace-nowrap">{selectedIds.size} SELECTED</span>
           <div className="w-px h-4 bg-black" />
           <button onClick={() => bulkAction('deploy')} disabled={bulkLoading}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-colors duration-150 cursor-pointer disabled:opacity-40 text-[10px] font-mono font-bold uppercase">
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white border-2 border-black hover:bg-green-600 hover:border-green-600 transition-colors duration-150 cursor-pointer disabled:opacity-40 text-[10px] font-mono font-bold uppercase">
             <Upload className="w-3 h-3" /> DEPLOY
           </button>
           <button onClick={() => bulkAction('draft')} disabled={bulkLoading}
@@ -200,11 +200,11 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
             ))}
           </select>
           <button onClick={bulkAssignCourse} disabled={bulkLoading || !bulkCourse}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-colors duration-150 cursor-pointer disabled:opacity-40 text-[10px] font-mono font-bold uppercase">
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-colors duration-150 cursor-pointer disabled:opacity-40 text-[10px] font-mono font-bold uppercase">
             <Bookmark className="w-3 h-3" /> ASSIGN
           </button>
           <button onClick={clearSelection}
-            className="text-neutral-700 hover:text-[#FF3B30] cursor-pointer px-2 ml-auto font-bold uppercase tracking-wider text-[10px]">
+            className="text-neutral-700 hover:text-blue-600 cursor-pointer px-2 ml-auto font-bold uppercase tracking-wider text-[10px]">
             CLEAR
           </button>
         </div>

@@ -112,7 +112,7 @@ export const FileGrid: React.FC = () => {
         <button
           onClick={handleReload}
           title="Force-synchronize vault files"
-          className="text-neutral-600 hover:text-[#FF3B30] transition-colors cursor-pointer p-1 border-2 border-black hover:border-[#FF3B30]"
+          className="text-neutral-600 hover:text-blue-600 transition-colors cursor-pointer p-1 border-2 border-black hover:border-blue-600"
         >
           <RefreshCw className="w-3.5 h-3.5" />
         </button>
@@ -126,7 +126,7 @@ export const FileGrid: React.FC = () => {
             className={`text-[10px] font-mono px-2.5 py-1 border-2 transition-colors duration-150 cursor-pointer whitespace-nowrap font-bold ${
               activeCourse === c.id
                 ? 'text-white bg-black border-black'
-                : 'text-black bg-white border-black hover:bg-[#FF3B30] hover:text-white hover:border-[#FF3B30]'
+                : 'text-black bg-white border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
             }`}
           >
             {c.label}

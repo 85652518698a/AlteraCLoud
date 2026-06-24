@@ -104,13 +104,13 @@ export const SmartSearch: React.FC = () => {
         onChange={handleChange}
         onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); if (e.key === 'Escape') setShowDropdown(false); }}
         onFocus={() => { if (results.length > 0) setShowDropdown(true); }}
-        className="w-full pl-11 pr-11 py-3 px-4 bg-white text-xs text-black tracking-wide placeholder-neutral-500 border-2 border-black focus:border-[#FF3B30] font-mono font-bold"
+         className="w-full pl-11 pr-11 py-3 px-4 bg-white text-xs text-black tracking-wide placeholder-neutral-500 border-2 border-black focus:border-blue-600 font-mono font-bold"
       />
 
       {(localQuery || searchQuery) && (
         <button
           onClick={handleClear}
-          className="absolute inset-y-0 right-4 flex items-center justify-center text-neutral-600 hover:text-[#FF3B30] transition-colors"
+          className="absolute inset-y-0 right-4 flex items-center justify-center text-neutral-600 hover:text-blue-600 transition-colors"
         >
           <X className="w-4 h-4 stroke-[2]" />
         </button>
@@ -139,7 +139,7 @@ export const SmartSearch: React.FC = () => {
                   <button
                     key={file.id}
                     onClick={() => handleSelect(file)}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-[#FF3B30] hover:text-white transition-colors text-left border-b-2 border-black last:border-b-0 cursor-pointer group"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-blue-600 hover:text-white transition-colors text-left border-b-2 border-black last:border-b-0 cursor-pointer group"
                   >
                     <div className="p-1.5 bg-white border-2 border-black shrink-0">
                       <FileIcon extension={file.file_type} className="w-4 h-4" />

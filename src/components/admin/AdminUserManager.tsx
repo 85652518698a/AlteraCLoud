@@ -83,7 +83,7 @@ export const AdminUserManager: React.FC = () => {
         <button
           type="submit"
           disabled={adding || !newEmail.trim()}
-          className="flex items-center gap-1.5 px-4 py-2 bg-black hover:bg-[#FF3B30] text-white text-[10px] font-mono font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-40 border-2 border-black"
+          className="flex items-center gap-1.5 px-4 py-2 bg-black hover:bg-blue-600 text-white text-[10px] font-mono font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-40 border-2 border-black"
         >
           <Mail className="w-3.5 h-3.5" />
           Add

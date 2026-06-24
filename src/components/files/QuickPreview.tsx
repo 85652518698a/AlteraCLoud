@@ -105,7 +105,7 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
             {file.downloads ?? 0}
           </span>
           <span className="flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-2.5 h-2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-2.5 h-2.5 text-blue-600"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             {file.views ?? 0}
           </span>
           <span className="flex items-center gap-1">
@@ -117,7 +117,7 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
         <div className="flex gap-2 pt-3 border-t-2 border-black">
           <button
             onClick={handleDownload}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-black border-2 border-black text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-black border-2 border-black text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer"
           >
             <Download className="w-3 h-3" />
             <span>DOWNLOAD</span>

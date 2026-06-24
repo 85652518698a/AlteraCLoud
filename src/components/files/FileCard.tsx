@@ -80,7 +80,7 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
           <div className="flex items-center gap-1.5">
             <button
               onClick={(e) => { e.stopPropagation(); uiStore.toggleFileSelection(file.id); }}
-              className={`p-0.5 transition-colors cursor-pointer ${isSelected ? 'text-black' : 'text-neutral-600 hover:text-black'}`}
+              className={`p-0.5 transition-colors cursor-pointer ${isSelected ? 'text-amber-400' : 'text-neutral-600 hover:text-amber-400'}`}
               title={isSelected ? 'Deselect' : 'Select for batch download'}
             >
               {isSelected
@@ -113,7 +113,7 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
         <button
           onClick={handleDownload}
           disabled={downloading}
-          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-black border-2 border-black text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer disabled:opacity-50 active:translate-y-0.5"
+              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-black border-2 border-black text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer disabled:opacity-50 active:translate-y-0.5"
         >
           <Download className="w-3.5 h-3.5" />
           <span>{downloading ? 'FETCHING' : 'DOWNLOAD'}</span>

@@ -8,9 +8,9 @@ interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = ({ status, children, className = '' }) => {
   const styles = {
-    deployed: 'bg-white text-black font-mono font-bold tracking-wider uppercase text-[10px] px-2.5 py-0.5 rounded-sm shadow-[0_0_8px_rgba(255,255,255,0.2)]',
-    draft: 'bg-transparent text-neutral-500 font-mono font-medium tracking-wider uppercase text-[10px] border border-neutral-800 px-2.5 py-0.5 rounded-sm',
-    normal: 'bg-neutral-900 text-neutral-300 font-mono text-[10px] uppercase border border-neutral-800 px-2 py-0.5 rounded-sm pointer-events-none'
+    deployed: 'bg-green-600 text-white font-mono font-bold tracking-wider uppercase text-[10px] px-2.5 py-0.5 border-2 border-green-600',
+    draft: 'bg-amber-400 text-black font-mono font-bold tracking-wider uppercase text-[10px] px-2.5 py-0.5 border-2 border-amber-400',
+    normal: 'bg-white text-black font-mono text-[10px] uppercase border-2 border-black px-2 py-0.5 font-bold'
   };
 
   return (

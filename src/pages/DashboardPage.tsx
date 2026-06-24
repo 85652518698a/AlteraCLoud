@@ -53,7 +53,7 @@ export const DashboardPage: React.FC = () => {
                 Academic Resource Portal
               </h2>
               <div className="hidden sm:block w-px h-8 bg-black" />
-              <span className="hidden sm:inline-block text-[9px] font-mono text-[#FF3B30] border-2 border-[#FF3B30] bg-white px-2 py-0.5 uppercase tracking-wider font-bold">
+              <span className="hidden sm:inline-block text-[9px] font-mono text-green-600 border-2 border-green-600 bg-white px-2 py-0.5 uppercase tracking-wider font-bold">
                 LIVE
               </span>
             </div>

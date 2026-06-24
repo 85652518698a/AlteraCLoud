@@ -63,7 +63,7 @@ export const ZipDownloadBar: React.FC<ZipDownloadBarProps> = ({ files }) => {
       </span>
       <button
         onClick={handleZipDownload}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[10px] font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-[#FF3B30] hover:border-[#FF3B30] transition-all duration-150 cursor-pointer active:translate-y-0.5"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[10px] font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer active:translate-y-0.5"
       >
         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
