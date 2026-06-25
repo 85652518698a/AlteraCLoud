@@ -141,7 +141,7 @@ export const FileGrid: React.FC = () => {
         />
       ) : (
         <>
-          <ZipDownloadBar files={files} />
+          <ZipDownloadBar />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {pagedFiles.map((file) => (
               <FileCard key={file.id} file={file} />

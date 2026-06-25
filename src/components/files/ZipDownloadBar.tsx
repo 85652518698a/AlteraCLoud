@@ -1,33 +1,39 @@
 import React from 'react';
 import { useUIStore, uiStore } from '../../store/uiStore';
-import { FileRecord } from '../../types';
+import { supabase } from '../../config/supabase';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { Download } from 'lucide-react';
 import JSZip from 'jszip';
 import toast from 'react-hot-toast';
 
-interface ZipDownloadBarProps {
-  files: FileRecord[];
-}
-
-export const ZipDownloadBar: React.FC<ZipDownloadBarProps> = ({ files }) => {
+export const ZipDownloadBar: React.FC = () => {
   const selectedIds = useUIStore(s => s.selectedFileIds);
   const count = selectedIds.size;
 
   const handleZipDownload = async () => {
     if (count === 0) return;
-    const toastId = toast.loading(`Preparing ${count} files for download...`);
+    const toastId = toast.loading(`Preparing ${count} file${count !== 1 ? 's' : ''} for download...`);
     try {
+      const ids = Array.from(selectedIds);
+      const { data: dbFiles, error } = await supabase
+        .from('files')
+        .select('id, name')
+        .in('id', ids);
+      if (error || !dbFiles || dbFiles.length === 0) {
+        toast.error('Could not find selected files in database', { id: toastId });
+        return;
+      }
+
       const zip = new JSZip();
-      const selectedFiles = files.filter(f => selectedIds.has(f.id));
       let successCount = 0;
 
-      for (const file of selectedFiles) {
+      for (const dbFile of dbFiles) {
         try {
-          const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id }, false);
+          const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: dbFile.id, recordView: false }, false);
           const res = await fetch(url);
+          if (!res.ok) continue;
           const blob = await res.blob();
-          zip.file(file.name, blob);
+          zip.file(dbFile.name, blob);
           successCount++;
         } catch {
           // skip failed files
