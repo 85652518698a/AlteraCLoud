@@ -9,8 +9,6 @@ import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
 import { DownloadPage } from './pages/DownloadPage';
 
-import { Spinner } from './components/ui/Spinner';
-
 export default function App() {
   const loading = useAuthStore(s => s.loading);
   const user = useAuthStore(s => s.user);
@@ -55,11 +53,39 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center text-black select-none">
-        <Spinner size="lg" />
-        <span className="text-[10px] font-mono tracking-widest text-neutral-600 mt-4 uppercase">
-          Loading encrypted vault...
-        </span>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center text-black select-none p-8">
+        {/* Brand */}
+        <div className="flex flex-col items-center gap-8">
+          <div className="text-center">
+            <div className="text-4xl md:text-6xl font-display font-black tracking-[0.08em] text-black leading-none">
+              A<span className="text-[#FF3B30]">L</span>TERA
+            </div>
+            <div className="text-[10px] font-mono tracking-[0.3em] text-neutral-600 mt-3 font-bold">
+              CLOUD STORAGE FACILITY
+            </div>
+          </div>
+
+          {/* Brutalist animated bar */}
+          <div className="w-64 border-3 border-black p-1">
+            <div className="h-2 bg-[#FF3B30] animate-load-bar" />
+          </div>
+
+          {/* Cycling message */}
+          <span className="text-[10px] font-mono tracking-widest text-neutral-700 font-bold animate-fade-msg">
+            INITIALIZING SECURE SESSION...
+          </span>
+
+          {/* Terminal blocks */}
+          <div className="flex gap-1.5">
+            {[0, 1, 2, 3].map(i => (
+              <div
+                key={i}
+                className="w-2 h-2 border-2 border-black bg-white animate-blink"
+                style={{ animationDelay: `${i * 0.15}s` }}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
