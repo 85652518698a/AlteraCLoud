@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useUIStore, uiStore } from '../../store/uiStore';
 import { FileIcon } from '../ui/FileIcon';
 import { formatBytes } from '../../lib/formatBytes';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { addRecentlyViewed } from '../../lib/recentlyViewed';
+import { isTextFile, getHighlightLanguage } from '../../lib/textPreview';
+import hljs from '../../lib/highlightSetup';
 import { Download, X, ShieldAlert, FileText, Image as ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -11,12 +13,21 @@ export const FilePreviewModal: React.FC = () => {
   const file = useUIStore(s => s.selectedFileForPreview);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [textContent, setTextContent] = useState<string | null>(null);
+  const codeRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (textContent && codeRef.current) {
+      hljs.highlightElement(codeRef.current);
+    }
+  }, [textContent]);
 
   if (!file) return null;
 
   const handleClose = () => {
     uiStore.setSelectedFileForPreview(null);
     setPreviewUrl(null);
+    setTextContent(null);
   };
 
   const getSignedUrl = async () => {
@@ -49,12 +60,24 @@ export const FilePreviewModal: React.FC = () => {
 
   const handlePreview = async () => {
     const url = await getSignedUrl();
-    if (url) setPreviewUrl(url);
+    if (url) {
+      if (isTextFile(file.file_type)) {
+        try {
+          const res = await fetch(url);
+          const text = await res.text();
+          setTextContent(text);
+        } catch {
+          toast.error('Failed to load file content');
+        }
+      }
+      setPreviewUrl(url);
+    }
   };
 
   const mime = file.mime_type?.toLowerCase() || '';
   const isPDF = mime === 'application/pdf' || file.file_type?.toLowerCase() === 'pdf';
   const isImage = mime.startsWith('image/') || ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(file.file_type?.toLowerCase());
+  const isText = isTextFile(file.file_type);
 
   const displayDate = new Date(file.created_at).toLocaleDateString(undefined, {
     year: 'numeric',
@@ -144,6 +167,31 @@ export const FilePreviewModal: React.FC = () => {
                   <button onClick={handlePreview} className="px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer">
                     LOAD IMAGE
                   </button>
+                )}
+              </div>
+            </div>
+          ) : isText ? (
+            <div className="w-full h-full flex flex-col">
+              <div className="flex-1 bg-white border-2 border-black overflow-auto relative">
+                {loadingPreview ? (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center text-neutral-700 bg-white select-none">
+                    <svg className="w-12 h-12 stroke-[1] text-black mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    <span className="text-xs font-mono uppercase tracking-wider font-bold">Loading file content...</span>
+                  </div>
+                ) : textContent ? (
+                  <pre className="p-4 text-xs leading-relaxed overflow-x-auto m-0 bg-white">
+                    <code ref={codeRef} className={`language-${getHighlightLanguage(file.file_type)} hljs bg-white`}>
+                      {textContent}
+                    </code>
+                  </pre>
+                ) : (
+                  <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center text-neutral-700 bg-white select-none">
+                    <svg className="w-12 h-12 stroke-[1] text-black mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    <p className="text-xs font-mono text-neutral-700 mb-4 font-bold">Text file ready to preview</p>
+                    <button onClick={handlePreview} className="px-6 py-3 bg-black text-white text-xs font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer">
+                      LOAD CONTENT
+                    </button>
+                  </div>
                 )}
               </div>
             </div>

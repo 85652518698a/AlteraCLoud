@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FileRecord } from '../../types';
 import { formatBytes } from '../../lib/formatBytes';
 import { FileIcon } from '../ui/FileIcon';
@@ -7,6 +7,7 @@ import { callEdgeFunction } from '../../lib/edgeFunction';
 import { uiStore } from '../../store/uiStore';
 import { Edit2, Settings, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { deleteWithUndo } from '../../lib/deleteWithUndo';
 
 interface AdminFileRowProps {
   file: FileRecord;
@@ -45,15 +46,8 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
       description: `You are requesting to permanently delete "${file.name}" from CSF locker storage. Active links will break and students will lose access immediately.`,
       confirmText: "Type file title below...",
       targetName: file.name,
-      onConfirm: async () => {
-        const toastId = toast.loading(`Purging ${file.name} from server...`);
-        try {
-          await callEdgeFunction('delete-file', { fileId: file.id });
-          toast.success(`ERASED: "${file.name}" has been wiped clean.`, { id: toastId });
-          onActionComplete();
-        } catch (err) {
-          toast.error('Purge transaction failed', { id: toastId });
-        }
+      onConfirm: () => {
+        deleteWithUndo(file.id, file.name, onActionComplete);
       }
     });
   };
