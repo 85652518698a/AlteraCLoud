@@ -82,24 +82,24 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
             <h4 className="text-xs font-mono font-bold text-black truncate" title={file.name}>
               {file.name}
             </h4>
-            <p className="text-[10px] font-mono text-neutral-700 mt-0.5 font-bold">
+            <p className="text-xs font-mono text-neutral-700 mt-0.5 font-bold">
               {formatBytes(file.size_bytes)} • {file.file_type?.toUpperCase()}
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap gap-1 mb-3">
-          <span className="text-[9px] font-mono px-1.5 py-0.5 bg-blue-600 text-white border-2 border-blue-600 uppercase font-bold">
+          <span className="text-2xs font-mono px-1.5 py-0.5 bg-blue-600 text-white border-2 border-blue-600 uppercase font-bold">
             {sectionLabel}
           </span>
           {courseLabel && (
-            <span className="text-[9px] font-mono px-1.5 py-0.5 bg-amber-400 text-black border-2 border-amber-400 uppercase font-bold">
+            <span className="text-2xs font-mono px-1.5 py-0.5 bg-amber-400 text-black border-2 border-amber-400 uppercase font-bold">
               {courseLabel}
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-3 text-[9px] font-mono text-neutral-700 mb-3 font-bold">
+        <div className="flex items-center gap-3 text-2xs font-mono text-neutral-700 mb-3 font-bold">
           <span className="flex items-center gap-1">
             <Download className="w-2.5 h-2.5" />
             {file.downloads ?? 0}
@@ -117,7 +117,7 @@ export const QuickPreview: React.FC<QuickPreviewProps> = ({ file }) => {
         <div className="flex gap-2 pt-3 border-t-2 border-black">
           <button
             onClick={handleDownload}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-[#FF3B30] border-2 border-[#FF3B30] text-white text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 bg-[#FF3B30] border-2 border-[#FF3B30] text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer"
           >
             <Download className="w-3 h-3" />
             <span>DOWNLOAD</span>

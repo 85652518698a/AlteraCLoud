@@ -41,13 +41,13 @@ export const AuditLogTable: React.FC = () => {
 
   const getActionBadge = (action: string) => {
     switch (action) {
-      case 'upload': return <span className="text-white bg-green-600 border-2 border-green-600 px-2 py-0.5 text-[10px] font-bold">INGEST</span>;
-      case 'delete': return <span className="text-white bg-[#FF3B30] border-2 border-[#FF3B30] px-2 py-0.5 text-[10px] font-bold">PURGE</span>;
-      case 'rename': return <span className="text-white bg-blue-600 border-2 border-blue-600 px-2 py-0.5 text-[10px] font-bold">RENAME</span>;
-      case 'deploy': return <span className="text-white bg-green-600 border-2 border-green-600 px-2 py-0.5 text-[10px] font-bold">DEPLOY</span>;
-      case 'undeploy': return <span className="text-black bg-amber-400 border-2 border-amber-400 px-2 py-0.5 text-[10px] font-bold">DRAFT</span>;
-      case 'edit_meta': return <span className="text-white bg-blue-600 border-2 border-blue-600 px-2 py-0.5 text-[10px] font-bold">META</span>;
-      default: return <span className="text-black bg-white border-2 border-black px-2 py-0.5 text-[10px] font-bold">ACTION</span>;
+      case 'upload': return <span className="text-white bg-green-600 border-2 border-green-600 px-2 py-0.5 text-xs font-bold">INGEST</span>;
+      case 'delete': return <span className="text-white bg-[#FF3B30] border-2 border-[#FF3B30] px-2 py-0.5 text-xs font-bold">PURGE</span>;
+      case 'rename': return <span className="text-white bg-blue-600 border-2 border-blue-600 px-2 py-0.5 text-xs font-bold">RENAME</span>;
+      case 'deploy': return <span className="text-white bg-green-600 border-2 border-green-600 px-2 py-0.5 text-xs font-bold">DEPLOY</span>;
+      case 'undeploy': return <span className="text-black bg-amber-400 border-2 border-amber-400 px-2 py-0.5 text-xs font-bold">DRAFT</span>;
+      case 'edit_meta': return <span className="text-white bg-blue-600 border-2 border-blue-600 px-2 py-0.5 text-xs font-bold">META</span>;
+      default: return <span className="text-black bg-white border-2 border-black px-2 py-0.5 text-xs font-bold">ACTION</span>;
     }
   };
 
@@ -57,7 +57,7 @@ export const AuditLogTable: React.FC = () => {
         <div className="flex items-center gap-2">
           <Terminal className="w-4 h-4 text-black" />
           <h3 className="text-black font-display font-bold tracking-wider text-xs uppercase">AUDIT TRANSACTION LOGS</h3>
-          <span className="text-[10px] font-mono text-neutral-700 font-bold">/ SYSTEM LEDGER ({logs.length} REGISTERED)</span>
+          <span className="text-xs font-mono text-neutral-700 font-bold">/ SYSTEM LEDGER ({logs.length} REGISTERED)</span>
         </div>
         <button className="text-black hover:text-[#FF3B30]">{collapsed ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}</button>
       </div>
@@ -69,7 +69,7 @@ export const AuditLogTable: React.FC = () => {
             <div className="py-8 text-center text-xs font-mono text-neutral-700 font-bold">NO TRANSACTIONS COMMITTED YET</div>
           ) : (
             <div className="overflow-x-auto max-h-72 overflow-y-auto">
-              <table className="w-full text-left font-mono text-[10px] select-none border-collapse">
+              <table className="w-full text-left font-mono text-xs select-none border-collapse">
                 <thead>
                   <tr className="border-b-2 border-black text-neutral-700 uppercase tracking-wider select-text pb-2 font-bold">
                     <th className="py-2.5 px-3">Timestamp</th>

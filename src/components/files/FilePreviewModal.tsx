@@ -76,7 +76,7 @@ export const FilePreviewModal: React.FC = () => {
               <h3 className="text-black font-mono text-xs font-bold leading-none select-all truncate max-w-lg" title={file.name}>
                 {file.name}
               </h3>
-              <p className="text-[10px] font-mono text-neutral-700 uppercase mt-1 font-bold">
+              <p className="text-xs font-mono text-neutral-700 uppercase mt-1 font-bold">
                 {file.section} • {formatBytes(file.size_bytes)} • ↓{file.downloads ?? 0} • CHECKED IN {displayDate}
               </p>
             </div>
@@ -85,7 +85,7 @@ export const FilePreviewModal: React.FC = () => {
           <div className="flex items-center gap-3 select-none">
             <button
               onClick={handleDownload}
-              className="px-3.5 py-1.5 bg-white border-2 border-black text-black font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 text-[10px] font-mono uppercase tracking-wider transition-colors duration-150 flex items-center gap-1 cursor-pointer"
+              className="px-3.5 py-1.5 bg-white border-2 border-black text-black font-bold hover:bg-blue-600 hover:text-white hover:border-blue-600 text-xs font-mono uppercase tracking-wider transition-colors duration-150 flex items-center gap-1 cursor-pointer"
             >
               <Download className="w-3 h-3" />
               <span>DOWNLOAD</span>
@@ -108,7 +108,7 @@ export const FilePreviewModal: React.FC = () => {
                 {loadingPreview ? (
                   <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-8 text-center text-neutral-700 bg-white select-none">
                     <FileText className="w-12 h-12 stroke-[1] text-black mb-2" />
-                    <span className="text-[10px] font-mono uppercase tracking-wider font-bold">Decrypting and streaming document...</span>
+                    <span className="text-xs font-mono uppercase tracking-wider font-bold">Decrypting and streaming document...</span>
                   </div>
                 ) : previewUrl ? (
                   <iframe
@@ -132,7 +132,7 @@ export const FilePreviewModal: React.FC = () => {
                 {loadingPreview ? (
                   <div className="flex flex-col items-center justify-center text-neutral-700 select-none">
                     <ImageIcon className="w-12 h-12 stroke-[1] text-black mb-2" />
-                    <span className="text-[10px] font-mono uppercase tracking-wider font-bold">Loading image...</span>
+                    <span className="text-xs font-mono uppercase tracking-wider font-bold">Loading image...</span>
                   </div>
                 ) : previewUrl ? (
                   <img
@@ -155,13 +155,13 @@ export const FilePreviewModal: React.FC = () => {
               <h4 className="text-black font-mono text-xs font-bold leading-relaxed break-all mb-1 uppercase select-all">
                 {file.name}
               </h4>
-              <p className="text-[10px] font-mono text-neutral-700 mb-6 font-bold">
+              <p className="text-xs font-mono text-neutral-700 mb-6 font-bold">
                 FORMAT: {(file.file_type || 'bin').toUpperCase()} • SIZE: {formatBytes(file.size_bytes)}
               </p>
 
               <div className="p-4.5 bg-white border-2 border-black text-left flex gap-3 text-xs mb-6 max-w-sm">
                 <ShieldAlert className="w-5 h-5 text-black shrink-0 mt-0.5" />
-                <p className="text-neutral-700 leading-relaxed font-sans text-[11px] font-medium">
+                <p className="text-neutral-700 leading-relaxed font-sans text-xs font-medium">
                   Direct in-browser visualization is reserved exclusively for PDF format documents due to browser safety requirements.
                 </p>
               </div>

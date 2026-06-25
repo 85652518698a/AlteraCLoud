@@ -93,7 +93,7 @@ export const FileGrid: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center p-20">
         <Spinner size="lg" />
-        <span className="text-[10px] font-mono tracking-widest text-neutral-600 mt-4 uppercase font-bold">
+        <span className="text-xs font-mono tracking-widest text-neutral-600 mt-4 uppercase font-bold">
           Synthesizing Encrypted Vault Indices...
         </span>
       </div>
@@ -103,7 +103,7 @@ export const FileGrid: React.FC = () => {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-2 mt-8 px-1 select-none">
-        <div className="text-[11px] font-mono text-neutral-700 flex items-center gap-2 flex-wrap font-bold">
+        <div className="text-xs font-mono text-neutral-700 flex items-center gap-2 flex-wrap font-bold">
           <span>DIRECTORY:</span>
           <span className="text-black font-bold uppercase">{activeSection === 'all' ? 'ALL DIRECTORIES' : activeSection}</span>
           <span>•</span>
@@ -123,7 +123,7 @@ export const FileGrid: React.FC = () => {
           <button
             key={c.id}
             onClick={() => uiStore.setActiveCourse(activeCourse === c.id ? '' : c.id)}
-            className={`text-[10px] font-mono px-2.5 py-1 border-2 transition-colors duration-150 cursor-pointer whitespace-nowrap font-bold ${
+            className={`text-xs font-mono px-2.5 py-1 border-2 transition-colors duration-150 cursor-pointer whitespace-nowrap font-bold ${
               activeCourse === c.id
                 ? 'text-white bg-blue-600 border-blue-600'
                 : 'text-black bg-white border-black hover:bg-blue-600 hover:text-white hover:border-blue-600'
@@ -142,7 +142,7 @@ export const FileGrid: React.FC = () => {
       ) : (
         <>
           <ZipDownloadBar />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {pagedFiles.map((file) => (
               <FileCard key={file.id} file={file} />
             ))}
@@ -158,7 +158,7 @@ export const FileGrid: React.FC = () => {
                 <ChevronLeft className="w-3.5 h-3.5" />
                 <span>PREV</span>
               </button>
-              <span className="text-[10px] font-mono text-neutral-700 font-bold">
+              <span className="text-xs font-mono text-neutral-700 font-bold">
                 PAGE {page + 1} OF {totalPages}
               </span>
               <button

@@ -52,11 +52,11 @@ export const RenameModal: React.FC<RenameModalProps> = ({ onSuccess }) => {
         <button onClick={handleClose} className="absolute top-4 right-4 text-black hover:text-[#FF3B30] p-1 transition-colors"><X className="w-4 h-4" /></button>
         <div className="flex items-center gap-3 mb-5">
           <div className="p-2.5 bg-white text-black border-2 border-black"><Edit2 className="w-4 h-4" /></div>
-          <div><h3 className="text-black font-display font-bold tracking-wider text-sm uppercase">RENAME ARCHIVE ENTRY</h3><p className="text-[10px] font-mono text-neutral-700 font-bold">CORRECT LOG ENTRY METADATA</p></div>
+          <div><h3 className="text-black font-display font-bold tracking-wider text-sm uppercase">RENAME ARCHIVE ENTRY</h3><p className="text-xs font-mono text-neutral-700 font-bold">CORRECT LOG ENTRY METADATA</p></div>
         </div>
         <form onSubmit={handleRenameSubmit} className="space-y-4">
           <div>
-            <label className="block text-[10px] font-mono text-black font-bold uppercase mb-1.5 tracking-wider">Asset Display Title</label>
+            <label className="block text-xs font-mono text-black font-bold uppercase mb-1.5 tracking-wider">Asset Display Title</label>
             <div className="relative">
               <input type="text" required value={newName} onChange={(e) => setNewName(e.target.value)}
                 placeholder="Type new name..."

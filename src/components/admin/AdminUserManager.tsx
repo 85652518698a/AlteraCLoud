@@ -61,12 +61,12 @@ export const AdminUserManager: React.FC = () => {
       <div className="flex items-center gap-2 mb-4 select-none">
         <ShieldCheck className="w-4 h-4 text-black" />
         <h3 className="text-black font-display font-bold tracking-wider text-xs uppercase">ADMIN USER MANAGEMENT</h3>
-        <span className="text-neutral-700 font-mono text-[9px] font-bold">/ ACCESS CONTROL</span>
+        <span className="text-neutral-700 font-mono text-2xs font-bold">/ ACCESS CONTROL</span>
       </div>
 
       <form onSubmit={handleAdd} className="flex items-end gap-3 mb-6">
         <div className="flex-1">
-          <label className="block text-[10px] font-mono text-black font-bold uppercase mb-1.5 tracking-wider">Add New Admin Email</label>
+          <label className="block text-xs font-mono text-black font-bold uppercase mb-1.5 tracking-wider">Add New Admin Email</label>
           <div className="relative">
             <span className="absolute inset-y-0 left-3 flex items-center text-black">
               <Mail className="w-3.5 h-3.5" />
@@ -83,7 +83,7 @@ export const AdminUserManager: React.FC = () => {
         <button
           type="submit"
           disabled={adding || !newEmail.trim()}
-          className="flex items-center gap-1.5 px-4 py-2 bg-black hover:bg-blue-600 text-white text-[10px] font-mono font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-40 border-2 border-black"
+          className="flex items-center gap-1.5 px-4 py-2 bg-black hover:bg-blue-600 text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-40 border-2 border-black"
         >
           <Mail className="w-3.5 h-3.5" />
           Add
@@ -96,7 +96,7 @@ export const AdminUserManager: React.FC = () => {
         <div className="py-8 text-center text-xs font-mono text-black font-bold">NO ADMINS REGISTERED</div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-left font-mono text-[10px] select-none border-collapse">
+          <table className="w-full text-left font-mono text-xs select-none border-collapse">
             <thead>
               <tr className="border-b-2 border-black text-neutral-700 uppercase tracking-wider font-bold">
                 <th className="py-2.5 px-3">Email</th>

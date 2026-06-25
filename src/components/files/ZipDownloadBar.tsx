@@ -64,12 +64,12 @@ export const ZipDownloadBar: React.FC = () => {
 
   return (
     <div className="flex items-center gap-3 mb-4 p-3 bg-white border-2 border-black">
-      <span className="text-[10px] font-mono text-black font-bold">
+      <span className="text-xs font-mono text-black font-bold">
         {count} file{count !== 1 ? 's' : ''} selected
       </span>
       <button
         onClick={handleZipDownload}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-[10px] font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer active:translate-y-0.5"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-xs font-mono font-bold uppercase tracking-wider border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer active:translate-y-0.5"
       >
         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
@@ -80,7 +80,7 @@ export const ZipDownloadBar: React.FC = () => {
       </button>
       <button
         onClick={() => uiStore.clearFileSelection()}
-        className="text-[10px] font-mono text-neutral-700 hover:text-[#FF3B30] font-bold uppercase tracking-wider transition-colors duration-150 cursor-pointer ml-2"
+        className="text-xs font-mono text-neutral-700 hover:text-[#FF3B30] font-bold uppercase tracking-wider transition-colors duration-150 cursor-pointer ml-2"
       >
         CLEAR
       </button>

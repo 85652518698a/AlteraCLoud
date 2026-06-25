@@ -43,7 +43,7 @@ export const ConfirmDialog: React.FC = () => {
             {data.targetName}
           </div>
           <div className="space-y-1.5">
-            <label className="block text-[10px] uppercase tracking-widest text-neutral-700 font-mono font-bold">
+            <label className="block text-xs uppercase tracking-widest text-neutral-700 font-mono font-bold">
               Type the file name below to authorize:
             </label>
             <input

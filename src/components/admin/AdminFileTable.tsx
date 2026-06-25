@@ -136,7 +136,7 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
             <select
               value={sectionFilter}
               onChange={(e) => setSectionFilter(e.target.value)}
-              className="bg-transparent text-[11px] font-mono text-black uppercase font-bold focus:outline-none"
+              className="bg-transparent text-xs font-mono text-black uppercase font-bold focus:outline-none"
             >
               <option value="all" className="bg-white text-xs font-bold">ALL DIRECTORIES</option>
               {SECTIONS.map(s => (
@@ -150,7 +150,7 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
             <select
               value={courseFilter}
               onChange={(e) => setCourseFilter(e.target.value)}
-              className="bg-transparent text-[11px] font-mono text-black uppercase font-bold focus:outline-none"
+              className="bg-transparent text-xs font-mono text-black uppercase font-bold focus:outline-none"
             >
               <option value="" className="bg-white text-xs font-bold">ALL COURSES</option>
               {COURSES.map(c => (
@@ -164,7 +164,7 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-transparent text-[11px] font-mono text-black uppercase font-bold focus:outline-none"
+              className="bg-transparent text-xs font-mono text-black uppercase font-bold focus:outline-none"
             >
               <option value="all" className="bg-white text-xs font-bold">ALL VISIONS</option>
               <option value="deployed" className="bg-white text-xs font-bold">DEPLOYED</option>
@@ -176,35 +176,35 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
 
       {/* Bulk action bar */}
       {selectedIds.size > 0 && (
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 p-3 bg-white border-2 border-black text-[10px] sm:text-[11px] font-mono font-bold">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 p-3 bg-white border-2 border-black text-xs sm:text-xs font-mono font-bold">
           <span className="text-black font-bold whitespace-nowrap">{selectedIds.size} SELECTED</span>
           <div className="w-px h-4 bg-black" />
           <button onClick={() => bulkAction('deploy')} disabled={bulkLoading}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white border-2 border-black hover:bg-green-600 hover:border-green-600 transition-colors duration-150 cursor-pointer disabled:opacity-40 text-[10px] font-mono font-bold uppercase">
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white border-2 border-black hover:bg-green-600 hover:border-green-600 transition-colors duration-150 cursor-pointer disabled:opacity-40 text-xs font-mono font-bold uppercase">
             <Upload className="w-3 h-3" /> DEPLOY
           </button>
           <button onClick={() => bulkAction('draft')} disabled={bulkLoading}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-black border-2 border-black hover:bg-black hover:text-white transition-colors duration-150 cursor-pointer disabled:opacity-40 text-[10px] font-mono font-bold uppercase">
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-black border-2 border-black hover:bg-black hover:text-white transition-colors duration-150 cursor-pointer disabled:opacity-40 text-xs font-mono font-bold uppercase">
             <Download className="w-3 h-3" /> DRAFT
           </button>
           <button onClick={() => bulkAction('delete')} disabled={bulkLoading}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-[#FF3B30] border-2 border-[#FF3B30] hover:bg-[#FF3B30] hover:text-white transition-colors duration-150 cursor-pointer disabled:opacity-40 text-[10px] font-mono font-bold uppercase">
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-[#FF3B30] border-2 border-[#FF3B30] hover:bg-[#FF3B30] hover:text-white transition-colors duration-150 cursor-pointer disabled:opacity-40 text-xs font-mono font-bold uppercase">
             <Trash2 className="w-3 h-3" /> DELETE
           </button>
           <div className="w-px h-4 bg-black" />
           <select value={bulkCourse} onChange={(e) => setBulkCourse(e.target.value)} disabled={bulkLoading}
-            className="bg-white border-2 border-black px-2 py-1 text-[10px] text-black font-mono font-bold">
+            className="bg-white border-2 border-black px-2 py-1 text-xs text-black font-mono font-bold">
             <option value="" className="bg-white font-bold">COURSE...</option>
             {COURSES.map(c => (
               <option key={c.id} value={c.id} className="bg-white font-bold">{c.label.toUpperCase()}</option>
             ))}
           </select>
           <button onClick={bulkAssignCourse} disabled={bulkLoading || !bulkCourse}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-colors duration-150 cursor-pointer disabled:opacity-40 text-[10px] font-mono font-bold uppercase">
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white border-2 border-black hover:bg-blue-600 hover:border-blue-600 transition-colors duration-150 cursor-pointer disabled:opacity-40 text-xs font-mono font-bold uppercase">
             <Bookmark className="w-3 h-3" /> ASSIGN
           </button>
           <button onClick={clearSelection}
-            className="text-neutral-700 hover:text-blue-600 cursor-pointer px-2 ml-auto font-bold uppercase tracking-wider text-[10px]">
+            className="text-neutral-700 hover:text-blue-600 cursor-pointer px-2 ml-auto font-bold uppercase tracking-wider text-xs">
             CLEAR
           </button>
         </div>
@@ -220,14 +220,14 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
             <h4 className="text-black font-display font-bold text-xs uppercase tracking-wider mb-0.5">
               No matching records
             </h4>
-            <p className="text-[10px] font-mono text-neutral-700 max-w-xs mx-auto font-bold">
+            <p className="text-xs font-mono text-neutral-700 max-w-xs mx-auto font-bold">
               No lockers found corresponding to current search inputs or filters.
             </p>
           </div>
         ) : (
           <table className="w-full border-collapse border-spacing-0 text-left">
             <thead>
-              <tr className="border-b-2 border-black font-display font-bold tracking-wider text-[10px] uppercase text-neutral-700 select-none">
+              <tr className="border-b-2 border-black font-display font-bold tracking-wider text-xs uppercase text-neutral-700 select-none">
                 <th className="py-3 px-3 w-10">
                   <input type="checkbox" checked={allFilteredSelected} onChange={handleToggleAll}
                     className="accent-white w-4 h-4 cursor-pointer" />
@@ -265,18 +265,18 @@ export const AdminFileTable: React.FC<AdminFileTableProps> = ({ files, onActionC
             <h4 className="text-black font-display font-bold text-xs uppercase tracking-wider mb-0.5">
               No matching records
             </h4>
-            <p className="text-[10px] font-mono text-neutral-700 max-w-xs mx-auto font-bold">
+            <p className="text-xs font-mono text-neutral-700 max-w-xs mx-auto font-bold">
               No lockers found corresponding to current search inputs or filters.
             </p>
           </div>
         ) : (
           <div>
             <div className="flex items-center gap-2 mb-3 px-1 select-none">
-              <label className="flex items-center gap-1.5 text-[10px] font-mono text-black font-bold hover:text-[#FF3B30] transition-colors cursor-pointer">
+              <label className="flex items-center gap-1.5 text-xs font-mono text-black font-bold hover:text-[#FF3B30] transition-colors cursor-pointer">
                 <input type="checkbox" checked={allFilteredSelected} onChange={handleToggleAll} className="accent-black w-3.5 h-3.5 cursor-pointer" />
                 SELECT ALL
               </label>
-              <span className="text-[10px] font-mono text-neutral-700 font-bold">({filtered.length} FILES)</span>
+              <span className="text-xs font-mono text-neutral-700 font-bold">({filtered.length} FILES)</span>
             </div>
             {filtered.map((file) => (
               <AdminFileRow 

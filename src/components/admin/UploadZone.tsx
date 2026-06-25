@@ -177,7 +177,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
     <div className="bg-white border-3 border-black p-6 mb-8">
       <div className="section-heading">
         <span>DEPOT VAULT GATEWAY</span>
-        <span className="text-neutral-600 font-mono text-[9px] font-normal ml-2">/ INGESTION POINT</span>
+        <span className="text-neutral-600 font-mono text-2xs font-normal ml-2">/ INGESTION POINT</span>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <div className="md:col-span-7">
@@ -203,8 +203,8 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
                 <div className="max-h-36 overflow-y-auto space-y-1 px-2">
                   {selectedFiles.map((f, i) => (
                     <div key={`${f.name}-${f.size}-${i}`} className="flex items-center justify-between gap-2 text-left pointer-events-auto">
-                      <span className="text-[10px] font-mono text-black truncate flex-1 font-bold">{f.name}</span>
-                      <span className="text-[9px] font-mono text-neutral-700 shrink-0 font-bold">{(f.size / (1024 * 1024)).toFixed(1)}MB</span>
+                      <span className="text-xs font-mono text-black truncate flex-1 font-bold">{f.name}</span>
+                      <span className="text-2xs font-mono text-neutral-700 shrink-0 font-bold">{(f.size / (1024 * 1024)).toFixed(1)}MB</span>
                       {!isUploading && (
                         <button
                           onClick={(e) => { e.stopPropagation(); removeFile(i); }}
@@ -216,7 +216,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
                     </div>
                   ))}
                 </div>
-                <p className="text-[9px] font-mono text-neutral-700 font-bold">
+                <p className="text-2xs font-mono text-neutral-700 font-bold">
                   TOTAL: {(totalSize / (1024 * 1024)).toFixed(2)} MB • CLICK TO ADD MORE
                 </p>
               </div>
@@ -227,7 +227,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
                 </div>
                 <div>
                   <p className="text-xs text-black font-sans tracking-wide font-bold">Drag and drop files here, or <span className="underline">browse local directory</span></p>
-                  <p className="text-[9px] font-mono text-neutral-700 mt-2 uppercase tracking-widest font-bold">PDF, DOCUMENT, EXCEL, PRESENTATION, ZIP (MAX 50MB EACH)</p>
+                  <p className="text-2xs font-mono text-neutral-700 mt-2 uppercase tracking-widest font-bold">PDF, DOCUMENT, EXCEL, PRESENTATION, ZIP (MAX 50MB EACH)</p>
                 </div>
               </div>
             )}
@@ -236,14 +236,14 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
         <form onSubmit={handleUploadSubmit} className="md:col-span-5 flex flex-col justify-between">
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Section Folder</label>
+              <label className="block text-xs font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Section Folder</label>
               <select value={section} onChange={(e) => setSection(e.target.value as SectionId)} disabled={isUploading}
                 className="w-full px-3 py-2 bg-white border-2 border-black text-xs text-black font-mono font-bold">
                 {SECTIONS.map(s => <option key={s.id} value={s.id} className="bg-white text-xs font-bold">{s.label.toUpperCase()}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-[10px] font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Course (Optional)</label>
+              <label className="block text-xs font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Course (Optional)</label>
               <select value={course} onChange={(e) => setCourse(e.target.value)} disabled={isUploading}
                 className="w-full px-3 py-2 bg-white border-2 border-black text-xs text-black font-mono font-bold">
                 <option value="" className="bg-white text-xs font-bold">GENERAL</option>
@@ -252,7 +252,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
             </div>
             {selectedFiles.length === 1 && (
               <div>
-                <label className="block text-[10px] font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Display Name inside Locker</label>
+                <label className="block text-xs font-mono text-neutral-700 uppercase mb-1.5 tracking-wider font-bold">Display Name inside Locker</label>
                 <input type="text" disabled={isUploading}
                   placeholder="Name display inside system..." value={customName} onChange={(e) => setCustomName(e.target.value)}
                   className="w-full px-3 py-2 bg-white border-2 border-black text-xs text-black font-mono font-bold disabled:opacity-40" />
@@ -261,7 +261,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
             <div className="flex items-center justify-between p-3.5 bg-white border-2 border-black">
               <div>
                 <div className="text-xs font-bold text-black">DEPLOY DOCUMENTS NOW</div>
-                <div className="text-[10px] font-mono text-neutral-700 uppercase tracking-tight mt-0.5 font-bold">Make instantly visible to CSMU Students</div>
+                <div className="text-xs font-mono text-neutral-700 uppercase tracking-tight mt-0.5 font-bold">Make instantly visible to CSMU Students</div>
               </div>
               <button type="button" role="switch" disabled={isUploading || selectedFiles.length === 0}
                 onClick={() => setIsDeployed(!isDeployed)}
@@ -274,7 +274,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess }) => {
             {isUploading ? (
               <div className="space-y-2">
                 {currentFileIndex >= 0 && (
-                  <p className="text-[10px] font-mono text-neutral-700 text-center font-bold">
+                  <p className="text-xs font-mono text-neutral-700 text-center font-bold">
                     UPLOADING {currentFileIndex + 1} OF {selectedFiles.length}: {selectedFiles[currentFileIndex]?.name}
                   </p>
                 )}

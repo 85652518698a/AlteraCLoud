@@ -49,11 +49,11 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <h2 className="font-display font-black text-2xl md:text-3xl tracking-wide uppercase text-black">
+              <h2 className="font-display font-black text-xl sm:text-2xl md:text-3xl tracking-wide uppercase text-black">
                 Academic Resource Portal
               </h2>
               <div className="hidden sm:block w-px h-8 bg-black" />
-              <span className="hidden sm:inline-block text-[9px] font-mono text-green-600 border-2 border-green-600 bg-white px-2 py-0.5 uppercase tracking-wider font-bold">
+              <span className="hidden sm:inline-block text-2xs font-mono text-green-600 border-2 border-green-600 bg-white px-2 py-0.5 uppercase tracking-wider font-bold">
                 LIVE
               </span>
             </div>

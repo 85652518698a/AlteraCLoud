@@ -121,15 +121,15 @@ export const SmartSearch: React.FC = () => {
           {loading ? (
             <div className="px-4 py-6 text-center">
               <div className="w-4 h-4 border-2 border-black border-t-transparent animate-spin mx-auto" />
-              <span className="text-[10px] font-mono text-neutral-700 mt-2 block font-bold">Searching vault...</span>
+              <span className="text-xs font-mono text-neutral-700 mt-2 block font-bold">Searching vault...</span>
             </div>
           ) : results.length === 0 ? (
             <div className="px-4 py-6 text-center">
-              <span className="text-[10px] font-mono text-neutral-700 font-bold">No files matched your query</span>
+              <span className="text-xs font-mono text-neutral-700 font-bold">No files matched your query</span>
             </div>
           ) : (
             <div>
-              <div className="px-3 py-1.5 text-[9px] font-mono text-neutral-700 uppercase tracking-wider border-b-2 border-black bg-white font-bold">
+              <div className="px-3 py-1.5 text-2xs font-mono text-neutral-700 uppercase tracking-wider border-b-2 border-black bg-white font-bold">
                 {results.length} results — click to search
               </div>
               {results.map(file => {
@@ -149,15 +149,15 @@ export const SmartSearch: React.FC = () => {
                         {file.name}
                       </div>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-[9px] font-mono px-1.5 py-0.5 bg-blue-600 text-white border-2 border-blue-600 uppercase font-bold">
+                        <span className="text-2xs font-mono px-1.5 py-0.5 bg-blue-600 text-white border-2 border-blue-600 uppercase font-bold">
                           {sectionLabel}
                         </span>
                         {courseLabel && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.5 bg-amber-400 text-black border-2 border-amber-400 uppercase font-bold">
+                          <span className="text-2xs font-mono px-1.5 py-0.5 bg-amber-400 text-black border-2 border-amber-400 uppercase font-bold">
                             {courseLabel}
                           </span>
                         )}
-                        <span className="text-[9px] font-mono text-neutral-700 uppercase font-bold">
+                        <span className="text-2xs font-mono text-neutral-700 uppercase font-bold">
                           {file.file_type?.toUpperCase()}
                         </span>
                       </div>

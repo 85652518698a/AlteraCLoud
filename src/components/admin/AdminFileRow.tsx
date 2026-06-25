@@ -76,7 +76,7 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
             </div>
             <div className="truncate flex flex-col justify-center min-w-0">
               <span className="text-black font-mono text-xs font-bold truncate select-all hover:text-[#FF3B30]" title={file.name}>{file.name}</span>
-              <span className="text-[10px] font-mono text-neutral-700 font-bold uppercase flex items-center gap-1 mt-0.5 flex-wrap">
+              <span className="text-xs font-mono text-neutral-700 font-bold uppercase flex items-center gap-1 mt-0.5 flex-wrap">
                 <span>{(file.file_type || 'bin').toUpperCase()}</span>
                 <span>•</span>
                 <span>By {file.uploaded_by.split('@')[0]}</span>
@@ -86,7 +86,7 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
         </td>
         <td className="py-4 px-3 uppercase text-neutral-700 font-bold tracking-wide whitespace-nowrap">
           <div>{file.section}</div>
-          {file.course && <div className="text-[9px] text-neutral-500 font-bold">{file.course.toUpperCase()}</div>}
+          {file.course && <div className="text-2xs text-neutral-500 font-bold">{file.course.toUpperCase()}</div>}
         </td>
         <td className="py-4 px-3 text-neutral-700 font-bold whitespace-nowrap">{formatBytes(file.size_bytes)}</td>
         <td className="py-4 px-3 text-neutral-700 font-bold whitespace-nowrap">{displayDate}</td>
@@ -129,7 +129,7 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
               </div>
               <span className="text-black font-mono text-xs font-bold truncate select-all">{file.name}</span>
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-700 font-bold flex-wrap">
+            <div className="flex items-center gap-2 text-xs font-mono text-neutral-700 font-bold flex-wrap">
               <span className="uppercase">{(file.file_type || 'bin').toUpperCase()}</span>
               <span>•</span>
               <span>{file.section}</span>
@@ -148,15 +148,15 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
             </div>
             <div className="flex items-center gap-2 mt-3 pt-3 border-t-2 border-black text-black">
               <button onClick={handleTriggerRename} title="Rename"
-                className="flex items-center gap-1 text-[10px] font-mono hover:text-blue-600 font-bold transition-colors cursor-pointer px-2 py-1">
+                className="flex items-center gap-1 text-xs font-mono hover:text-blue-600 font-bold transition-colors cursor-pointer px-2 py-1">
                 <Edit2 className="w-3 h-3" /> RENAME
               </button>
               <button onClick={handleTriggerMeta} title="Edit metadata"
-                className="flex items-center gap-1 text-[10px] font-mono hover:text-blue-600 font-bold transition-colors cursor-pointer px-2 py-1">
+                className="flex items-center gap-1 text-xs font-mono hover:text-blue-600 font-bold transition-colors cursor-pointer px-2 py-1">
                 <Settings className="w-3 h-3" /> META
               </button>
               <button onClick={handleDeleteTrigger} title="Purge"
-                className="flex items-center gap-1 text-[10px] font-mono hover:text-white hover:bg-[#FF3B30] font-bold transition-colors cursor-pointer px-2 py-1 ml-auto border-2 border-black">
+                className="flex items-center gap-1 text-xs font-mono hover:text-white hover:bg-[#FF3B30] font-bold transition-colors cursor-pointer px-2 py-1 ml-auto border-2 border-black">
                 <Trash2 className="w-3 h-3" /> PURGE
               </button>
             </div>

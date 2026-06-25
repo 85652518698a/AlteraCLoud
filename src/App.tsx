@@ -60,7 +60,7 @@ export default function App() {
             <div className="text-4xl md:text-6xl font-display font-black tracking-[0.08em] text-black leading-none">
               A<span className="text-[#FF3B30]">L</span>TERA
             </div>
-            <div className="text-[10px] font-mono tracking-[0.3em] text-neutral-600 mt-3 font-bold">
+            <div className="text-xs font-mono tracking-[0.3em] text-neutral-600 mt-3 font-bold">
               CLOUD STORAGE FACILITY
             </div>
           </div>
@@ -71,7 +71,7 @@ export default function App() {
           </div>
 
           {/* Cycling message */}
-          <span className="text-[10px] font-mono tracking-widest text-neutral-700 font-bold animate-fade-msg">
+          <span className="text-xs font-mono tracking-widest text-neutral-700 font-bold animate-fade-msg">
             INITIALIZING SECURE SESSION...
           </span>
 

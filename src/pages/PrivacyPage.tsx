@@ -84,7 +84,7 @@ export const PrivacyPage: React.FC = () => {
                         <h3 className="text-xs font-mono font-bold text-black uppercase tracking-wider">
                           {section.title}
                         </h3>
-                        <p className="text-[11px] font-sans text-neutral-700 leading-relaxed font-medium">
+                        <p className="text-xs font-sans text-neutral-700 leading-relaxed font-medium">
                           {section.content}
                         </p>
                       </div>
@@ -95,7 +95,7 @@ export const PrivacyPage: React.FC = () => {
             </div>
 
             <div className="mt-12 p-6 border-4 border-black bg-white text-center">
-              <p className="text-[10px] font-mono text-black uppercase tracking-wider font-bold">
+              <p className="text-xs font-mono text-black uppercase tracking-wider font-bold">
                 ALTERA CLOUD • CHANNABASWESHWAR SYSTEM MANAGEMENT • CSMU RESOURCE LOCKER
               </p>
             </div>

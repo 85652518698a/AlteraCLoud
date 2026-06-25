@@ -61,7 +61,7 @@
   }
 
   .section-heading {
-    font-size: 11px;
+    font-size: clamp(10px, 0.15vw + 9.5px, 12px);
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;

@@ -18,7 +18,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
     <><div className="grid grid-cols-2 lg:grid-cols-4 gap-6 select-none my-6">
       <div className="bg-white border-3 border-black p-5 flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-mono tracking-wider text-neutral-700 uppercase font-bold">
+          <div className="text-xs font-mono tracking-wider text-neutral-700 uppercase font-bold">
             Total Files
           </div>
           <div className="text-xl font-display font-black text-black mt-1.5 tracking-wide">
@@ -32,7 +32,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
 
       <div className="bg-white border-3 border-black p-5 flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-mono tracking-wider text-neutral-700 uppercase font-bold">
+          <div className="text-xs font-mono tracking-wider text-neutral-700 uppercase font-bold">
             Deployed
           </div>
           <div className="text-xl font-display font-black text-black mt-1.5 tracking-wide">
@@ -46,7 +46,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
 
       <div className="bg-white border-3 border-black p-5 flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-mono tracking-wider text-neutral-700 uppercase font-bold">
+          <div className="text-xs font-mono tracking-wider text-neutral-700 uppercase font-bold">
             Drafts / Queue
           </div>
           <div className="text-xl font-display font-black text-black mt-1.5 tracking-wide">
@@ -60,7 +60,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
 
       <div className="bg-white border-3 border-black p-5 flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-mono tracking-wider text-neutral-700 uppercase font-bold">
+          <div className="text-xs font-mono tracking-wider text-neutral-700 uppercase font-bold">
             Space Occupied
           </div>
           <div className="text-xl font-mono font-bold text-black mt-1.5 tracking-wide uppercase">
@@ -77,7 +77,7 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
       <div className="flex items-center gap-2 mb-4 border-b-2 border-black pb-3">
         <Bookmark className="w-4 h-4 text-black" />
         <h3 className="text-black font-display font-bold tracking-wider text-xs uppercase">COURSE BREAKDOWN</h3>
-        <span className="text-neutral-600 font-mono text-[9px] font-normal">/ FILES PER COURSE</span>
+        <span className="text-neutral-600 font-mono text-2xs font-normal">/ FILES PER COURSE</span>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
         {COURSES.map(c => {
@@ -86,9 +86,9 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
           if (courseFiles.length === 0) return null;
           return (
             <div key={c.id} className="bg-white border-2 border-black p-3 text-center">
-              <div className="text-[11px] font-display font-bold text-black uppercase tracking-wide">{c.label}</div>
+              <div className="text-xs font-display font-bold text-black uppercase tracking-wide">{c.label}</div>
               <div className="text-xl font-display font-black text-black mt-1">{courseFiles.length}</div>
-              <div className="text-[8px] font-mono text-neutral-700 uppercase mt-0.5 font-bold">{formatBytes(courseStorage, 1)}</div>
+              <div className="text-2xs font-mono text-neutral-700 uppercase mt-0.5 font-bold">{formatBytes(courseStorage, 1)}</div>
             </div>
           );
         })}
@@ -96,9 +96,9 @@ export const AdminStats: React.FC<AdminStatsProps> = ({ files }) => {
           const uncategorized = files.filter(f => !f.course);
           return (
             <div key="uncategorized" className="bg-white border-2 border-black p-3 text-center">
-              <div className="text-[11px] font-display font-bold text-neutral-700 uppercase tracking-wide">General</div>
+              <div className="text-xs font-display font-bold text-neutral-700 uppercase tracking-wide">General</div>
               <div className="text-xl font-display font-black text-black mt-1">{uncategorized.length}</div>
-              <div className="text-[8px] font-mono text-neutral-700 uppercase mt-0.5 font-bold">{formatBytes(uncategorized.reduce((a, f) => a + f.size_bytes, 0), 1)}</div>
+              <div className="text-2xs font-mono text-neutral-700 uppercase mt-0.5 font-bold">{formatBytes(uncategorized.reduce((a, f) => a + f.size_bytes, 0), 1)}</div>
             </div>
           );
         })()}

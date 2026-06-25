@@ -53,7 +53,7 @@ export const AdminPage: React.FC = () => {
       <div className="min-h-screen bg-white flex flex-col items-center justify-center text-center p-6 text-black select-none">
         <ShieldAlert className="w-12 h-12 text-[#FF3B30] mb-3" />
         <h3 className="font-display font-bold text-xs tracking-widest uppercase text-[#FF3B30] mb-1 border-2 border-[#FF3B30] p-2">REJECTED: HANDSHAKE REJECTED</h3>
-        <p className="text-[10px] font-mono text-neutral-700 max-w-sm font-bold">Please authenticate with an elevated administrator whitelisted identity to unlock these keys.</p>
+        <p className="text-xs font-mono text-neutral-700 max-w-sm font-bold">Please authenticate with an elevated administrator whitelisted identity to unlock these keys.</p>
       </div>
     );
   }
@@ -68,10 +68,10 @@ export const AdminPage: React.FC = () => {
               <div className="section-heading">
                 <ShieldCheck className="w-3.5 h-3.5 inline-block mr-1" /><span>ELEVATED CABINET HUB</span>
               </div>
-              <h2 className="font-display font-black text-2xl tracking-wide uppercase text-black">Locker Inventory Manager</h2>
+              <h2 className="font-display font-black text-xl sm:text-2xl tracking-wide uppercase text-black">Locker Inventory Manager</h2>
               <p className="text-xs text-neutral-700 font-sans mt-2 max-w-md font-medium">Secure ingestion platform. Upload new learning folders, toggle public student access, rename objects, and view operations.</p>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-black font-mono text-[10px] font-bold">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-black font-mono text-xs font-bold">
               <span className="h-2 w-2 bg-[#FF3B30]"></span>
               <span className="text-black">MUTATIONS ENGAGED</span>
             </div>
@@ -81,7 +81,7 @@ export const AdminPage: React.FC = () => {
           <div className="mb-8">
             <div className="section-heading">
               <span>EXPLORE FILE DIRECTORY</span>
-              <span className="text-neutral-600 font-mono text-[9px] font-normal ml-2">/ FULL CATALOG INDEX</span>
+              <span className="text-neutral-600 font-mono text-2xs font-normal ml-2">/ FULL CATALOG INDEX</span>
             </div>
             <AdminFileTable files={files} onActionComplete={triggerUpdate} />
           </div>
