@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthStore, authStore } from './store/authStore';
 import { Toaster } from 'react-hot-toast';
 import { useUIStore, uiStore } from './store/uiStore';
@@ -8,11 +8,16 @@ import { AdminPage } from './pages/AdminPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
 import { DownloadPage } from './pages/DownloadPage';
+import { SharePage } from './pages/SharePage';
 
 export default function App() {
   const loading = useAuthStore(s => s.loading);
   const user = useAuthStore(s => s.user);
   const currentPage = useUIStore(s => s.currentPage);
+  const [shareToken, setShareToken] = useState<string | null>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('t') || null;
+  });
 
   // Initialize secure session upon mount
   useEffect(() => {
@@ -33,8 +38,8 @@ export default function App() {
     const path = window.location.pathname.replace(/\/$/, '');
     const page = currentPage;
     const expected = page === 'privacy' ? '/privacy' : page === 'terms' ? '/terms' : page === 'download' ? '/download' : page === 'admin' ? '/admin' : '/';
-    if (path !== expected) window.history.replaceState(null, '', expected);
-  }, [currentPage]);
+    if (path !== expected && !shareToken) window.history.replaceState(null, '', expected);
+  }, [currentPage, shareToken]);
 
   useEffect(() => {
     const handlePop = () => {
@@ -93,7 +98,9 @@ export default function App() {
   return (
     <>
       {/* Visual Routing Hub */}
-      {currentPage === 'privacy' ? (
+      {shareToken ? (
+        <SharePage token={shareToken} />
+      ) : currentPage === 'privacy' ? (
         <PrivacyPage />
       ) : currentPage === 'terms' ? (
         <TermsPage />

@@ -38,9 +38,10 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
     const toastId = toast.loading(`Generating share link for ${file.name}...`);
     try {
       addRecentlyViewed(file);
-      const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id }, false);
-      await navigator.clipboard.writeText(url);
-      toast.success(`Share link copied to clipboard (expires in 1 hour)`, { id: toastId });
+      const { token } = await callEdgeFunction<{ token: string }>('create-share-token', { fileId: file.id }, false);
+      const link = `https://alteracloud.space/?t=${token}`;
+      await navigator.clipboard.writeText(link);
+      toast.success(`Share link copied to clipboard!`, { id: toastId });
     } catch (err) {
       toast.error(`Failed to generate share link: ${err instanceof Error ? err.message : 'Unknown error'}`, { id: toastId });
     }
