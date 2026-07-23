@@ -63,6 +63,7 @@ export const AdminPage: React.FC = () => {
       <div>
         <Navbar />
         <PageWrapper>
+          {/* Header */}
           <div className="mb-8 select-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-4 border-black pb-6">
             <div>
               <div className="section-heading">
@@ -76,17 +77,39 @@ export const AdminPage: React.FC = () => {
               <span className="text-black">MUTATIONS ENGAGED</span>
             </div>
           </div>
-          <AdminStats files={files} />
-          <UploadZone onUploadSuccess={triggerUpdate} />
-          <div className="mb-8">
+
+          {/* Overview Stats */}
+          <section className="mb-8">
             <div className="section-heading">
-              <span>EXPLORE FILE DIRECTORY</span>
+              <span>OVERVIEW</span>
+              <span className="text-neutral-600 font-mono text-2xs font-normal ml-2">/ SYSTEM METRICS</span>
+            </div>
+            <AdminStats files={files} />
+          </section>
+
+          {/* Upload Section */}
+          <section className="mb-8">
+            <UploadZone onUploadSuccess={triggerUpdate} />
+          </section>
+
+          {/* File Management */}
+          <section className="mb-8">
+            <div className="section-heading">
+              <span>FILE DIRECTORY</span>
               <span className="text-neutral-600 font-mono text-2xs font-normal ml-2">/ FULL CATALOG INDEX</span>
             </div>
             <AdminFileTable files={files} onActionComplete={triggerUpdate} />
+          </section>
+
+          {/* Admin & Audit */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+            <section>
+              <AdminUserManager />
+            </section>
+            <section>
+              <AuditLogTable />
+            </section>
           </div>
-          <AdminUserManager />
-          <AuditLogTable />
         </PageWrapper>
       </div>
       <Footer />
