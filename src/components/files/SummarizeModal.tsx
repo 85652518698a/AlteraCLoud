@@ -37,8 +37,11 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ file, onClose })
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white">
-      <div className="w-full max-w-lg bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000000] max-h-[80vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <div
+        className="w-full max-w-lg m-4 bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000000] max-h-[80vh] flex flex-col"
+        style={{ transform: 'none' }}
+      >
         <div className="flex items-center justify-between border-b-4 border-black px-5 py-4 shrink-0">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-black" />
