@@ -1,11 +1,20 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { resolvePDFJS } from 'https://esm.sh/pdfjs-serverless@0.4.2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'authorization, content-type, x-client-info, apikey',
 };
+
+class BadRequestError extends Error {
+  status: number;
+  constructor(message: string, status = 422) {
+    super(message);
+    this.status = status;
+  }
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
@@ -17,11 +26,11 @@ serve(async (req) => {
     );
 
     const { fileId } = await req.json();
-    if (!fileId) throw new Error('Missing fileId');
+    if (!fileId) throw new BadRequestError('Missing fileId', 400);
 
     const { data: file, error: fileError } = await supabase
       .from('files').select('*').eq('id', fileId).single();
-    if (fileError || !file) throw new Error('File not found');
+    if (fileError || !file) throw new BadRequestError('File not found', 404);
 
     const { data: signed } = await supabase.storage
       .from('altera-resources').createSignedUrl(file.storage_path, 300);
@@ -33,17 +42,27 @@ serve(async (req) => {
     let content: string;
     if (['pdf', 'application/pdf'].includes(fileType)) {
       try {
-        const pdfParse = (await import('https://esm.sh/pdf-parse@1.1.1')).default;
-        const data = await pdfParse(new Uint8Array(buffer));
-        content = data.text;
+        const pdfjsLib = await resolvePDFJS();
+        const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) }).promise;
+        const pageTexts: string[] = [];
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items
+            .filter((item: any) => 'str' in item)
+            .map((item: any) => item.str)
+            .join(' ');
+          if (pageText.trim()) pageTexts.push(pageText);
+        }
+        content = pageTexts.join('\n');
       } catch {
-        throw new Error('Could not extract text from PDF. The file may be scanned or image-based.');
+        throw new BadRequestError('No readable text found in PDF. The file may be scanned or image-based.', 422);
       }
     } else {
       content = new TextDecoder().decode(buffer);
     }
 
-    if (!content.trim()) throw new Error('File content is empty');
+    if (!content.trim()) throw new BadRequestError('File content is empty', 422);
 
     const preview = content.slice(0, 30000);
 
@@ -77,8 +96,10 @@ serve(async (req) => {
       status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
     });
   } catch (err: any) {
+    const status = err.status || 500;
     return new Response(JSON.stringify({ error: err.message }), {
-      status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      status,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
     });
   }
 });
