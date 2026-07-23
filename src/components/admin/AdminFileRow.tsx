@@ -5,7 +5,7 @@ import { FileIcon } from '../ui/FileIcon';
 import { Badge } from '../ui/Badge';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { uiStore } from '../../store/uiStore';
-import { Edit2, Settings, Trash2 } from 'lucide-react';
+import { Edit2, Settings, Trash2, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { deleteWithUndo } from '../../lib/deleteWithUndo';
 
@@ -39,6 +39,24 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
 
   const handleTriggerRename = () => uiStore.setRenameModalFile(file);
   const handleTriggerMeta = () => uiStore.setEditMetaModalFile(file);
+
+  const handleAutoTag = async () => {
+    const toastId = toast.loading(`AI analyzing "${file.name}"...`);
+    try {
+      const data = await callEdgeFunction<{
+        suggestedCourse: string;
+        suggestedSection: string;
+        currentCourse: string;
+        currentSection: string;
+      }>('ai-tag', { fileId: file.id });
+      toast.success(
+        `AI suggests: Course="${data.suggestedCourse || 'none'}", Section="${data.suggestedSection || 'none'}"`,
+        { id: toastId, duration: 6000 }
+      );
+    } catch {
+      toast.error('AI tagging failed', { id: toastId });
+    }
+  };
 
   const handleDeleteTrigger = () => {
     uiStore.showConfirmDialog({
@@ -96,6 +114,10 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
         </td>
         <td className="py-4 px-3 text-right select-none">
           <div className="flex items-center justify-end gap-1 text-black">
+            <button onClick={handleAutoTag} title="AI Auto-tag"
+              className="p-1.5 hover:text-amber-500 hover:bg-amber-50 border-2 border-black transition-colors cursor-pointer">
+              <Sparkles className="w-3.5 h-3.5" />
+            </button>
             <button onClick={handleTriggerRename} title="Rename file"
               className="p-1.5 hover:text-blue-600 hover:bg-blue-50 border-2 border-black transition-colors cursor-pointer">
               <Edit2 className="w-3.5 h-3.5" />
@@ -141,6 +163,10 @@ export const AdminFileRow: React.FC<AdminFileRowProps> = ({ file, onActionComple
               </button>
             </div>
             <div className="flex items-center gap-2 mt-3 pt-3 border-t-2 border-black text-black">
+              <button onClick={handleAutoTag} title="AI Auto-tag"
+                className="flex items-center gap-1 text-xs font-mono hover:text-amber-500 font-bold transition-colors cursor-pointer px-2 py-1">
+                <Sparkles className="w-3 h-3" /> TAG
+              </button>
               <button onClick={handleTriggerRename} title="Rename"
                 className="flex items-center gap-1 text-xs font-mono hover:text-blue-600 font-bold transition-colors cursor-pointer px-2 py-1">
                 <Edit2 className="w-3 h-3" /> RENAME

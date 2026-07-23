@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUIStore, uiStore } from '../../store/uiStore';
 import { supabase } from '../../config/supabase';
+import { callEdgeFunction } from '../../lib/edgeFunction';
 import { FileRecord } from '../../types';
 import { FileIcon } from '../ui/FileIcon';
 import { SECTIONS } from '../../constants/sections';
 import { COURSES } from '../../constants/courses';
-import { Search, X, ChevronRight } from 'lucide-react';
+import { Search, X, ChevronRight, Sparkles } from 'lucide-react';
 
 const SECTION_BADGE: Record<string, string> = {};
 SECTIONS.forEach(s => { SECTION_BADGE[s.id] = s.label });
@@ -19,6 +20,7 @@ export const SmartSearch: React.FC = () => {
   const [results, setResults] = useState<FileRecord[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [aiMode, setAiMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
@@ -50,11 +52,26 @@ export const SmartSearch: React.FC = () => {
     }
   }, []);
 
+  const doAiSearch = useCallback(async (query: string) => {
+    const trimmed = query.trim();
+    if (!trimmed) { setResults([]); setShowDropdown(false); return; }
+    setLoading(true);
+    try {
+      const data = await callEdgeFunction<{ files: FileRecord[] }>('ai-search', { query: trimmed }, false);
+      setResults(data.files || []);
+      setShowDropdown(true);
+    } catch {
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setLocalQuery(val);
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => doSearch(val), 250);
+    debounceRef.current = setTimeout(() => aiMode ? doAiSearch(val) : doSearch(val), 250);
   };
 
   const handleClear = () => {
@@ -99,7 +116,7 @@ export const SmartSearch: React.FC = () => {
       <input
         ref={inputRef}
         type="text"
-        placeholder="Search files by name, type, or course — type to see instant results..."
+        placeholder={aiMode ? 'AI search: "3rd sem AIML maths notes" or "civil engineering question bank"...' : 'Search files by name, type, or course...'}
         value={localQuery}
         onChange={handleChange}
         onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); if (e.key === 'Escape') setShowDropdown(false); }}
@@ -110,11 +127,20 @@ export const SmartSearch: React.FC = () => {
       {(localQuery || searchQuery) && (
         <button
           onClick={handleClear}
-          className="absolute inset-y-0 right-4 flex items-center justify-center text-neutral-600 hover:text-blue-600 transition-colors"
+          className="absolute inset-y-0 right-12 flex items-center justify-center text-neutral-600 hover:text-blue-600 transition-colors"
         >
           <X className="w-4 h-4 stroke-[2]" />
         </button>
       )}
+      <button
+        onClick={() => { setAiMode(!aiMode); setLocalQuery(''); setResults([]); setShowDropdown(false); }}
+        title={aiMode ? 'Switch to basic search' : 'Switch to AI search'}
+        className={`absolute inset-y-0 right-0 flex items-center justify-center px-3 transition-colors duration-150 cursor-pointer border-l-2 ${
+          aiMode ? 'text-amber-500 border-amber-400' : 'text-neutral-600 border-black hover:text-amber-500'
+        }`}
+      >
+        <Sparkles className={`w-4 h-4 ${aiMode ? 'fill-amber-400' : ''}`} />
+      </button>
 
       {showDropdown && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border-3 border-black shadow-[6px_6px_0px_0px_#000000] z-50 overflow-hidden">

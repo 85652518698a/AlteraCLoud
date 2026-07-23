@@ -6,7 +6,7 @@ import { callEdgeFunction } from '../../lib/edgeFunction';
 import { uiStore, useUIStore } from '../../store/uiStore';
 import { addRecentlyViewed } from '../../lib/recentlyViewed';
 import { QuickPreview } from './QuickPreview';
-import { Download, Share2 } from 'lucide-react';
+import { Download, Share2, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface FileCardProps {
@@ -16,6 +16,7 @@ interface FileCardProps {
 export const FileCard: React.FC<FileCardProps> = ({ file }) => {
   const [downloading, setDownloading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showSummarize, setShowSummarize] = useState(false);
   const isSelected = useUIStore(s => s.selectedFileIds.has(file.id));
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -84,6 +85,7 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
           <QuickPreview file={file} />
         </div>
       )}
+      {showSummarize && <SummarizeModal file={file} onClose={() => setShowSummarize(false)} />}
       <div>
         <div className="flex justify-between items-start gap-3">
           <div className="p-2 bg-white border-2 border-black text-black">
@@ -123,8 +125,15 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
       </div>
       <div className="flex gap-2 select-none pt-4 border-t-2 border-black">
         <button
+          onClick={() => setShowSummarize(true)}
+          className="flex items-center justify-center gap-1 px-2.5 py-2 bg-white border-2 border-black text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-amber-400 hover:text-black hover:border-amber-400 transition-all duration-150 cursor-pointer active:translate-y-0.5"
+          title="AI Summarize"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+        </button>
+        <button
           onClick={handleShare}
-          className="flex items-center justify-center gap-1 px-3 py-2 bg-white border-2 border-black text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-150 cursor-pointer active:translate-y-0.5"
+          className="flex items-center justify-center gap-1 px-2.5 py-2 bg-white border-2 border-black text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-150 cursor-pointer active:translate-y-0.5"
           title="Copy share link"
         >
           <Share2 className="w-3.5 h-3.5" />
