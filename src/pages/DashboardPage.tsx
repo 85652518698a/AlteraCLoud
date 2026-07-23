@@ -9,14 +9,13 @@ import { SmartSearch } from '../components/files/SmartSearch';
 import { FileGrid } from '../components/files/FileGrid';
 import { FileCard } from '../components/files/FileCard';
 import { FilePreviewModal } from '../components/files/FilePreviewModal';
-import { CollectionSidebar, SidebarToggle } from '../components/files/CollectionSidebar';
+import { CollectionSidebar } from '../components/files/CollectionSidebar';
 import { Footer } from '../components/layout/Footer';
 import { Clock, HardDrive } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const activeFileForPreview = useUIStore((state) => state.selectedFileForPreview);
   const activeCollectionId = useUIStore(s => s.activeCollectionId);
-  const sidebarOpen = useUIStore(s => s.sidebarOpen);
   const [recentFiles, setRecentFiles] = useState<FileRecord[]>([]);
 
   useEffect(() => {
@@ -35,20 +34,6 @@ export const DashboardPage: React.FC = () => {
       <div className="flex-1">
         <Navbar />
 
-        <CollectionSidebar
-          files={[]}
-          onSelectCollection={(id) => uiStore.setActiveCollectionId(id)}
-          activeCollectionId={activeCollectionId}
-        />
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black/20 z-20"
-            onClick={() => uiStore.setSidebarOpen(false)}
-          />
-        )}
-        <SidebarToggle />
-
-        <div>
         <PageWrapper>
           <div className="mb-10 text-left select-none border-l-4 border-black pl-5">
             <div className="flex items-center gap-3 mb-1">
@@ -84,6 +69,13 @@ export const DashboardPage: React.FC = () => {
               <HardDrive className="w-3 h-3 inline-block mr-1" />
               <span>FILE BROWSER</span>
             </div>
+            <div className="flex items-center gap-3 mb-4">
+              <CollectionSidebar
+                files={[]}
+                onSelectCollection={(id) => uiStore.setActiveCollectionId(id)}
+                activeCollectionId={activeCollectionId}
+              />
+            </div>
             <SectionTabs />
             <SmartSearch />
             <FileGrid />
@@ -91,8 +83,6 @@ export const DashboardPage: React.FC = () => {
         </PageWrapper>
 
         <Footer />
-      </div>
-
       </div>
 
       {activeFileForPreview && <FilePreviewModal />}

@@ -19,7 +19,6 @@ interface UIState {
   } | null;
   selectedFileIds: Set<string>;
   activeCollectionId: string | null;
-  sidebarOpen: boolean;
 }
 
 let state: UIState = {
@@ -33,7 +32,6 @@ let state: UIState = {
   confirmDialogData: null,
   selectedFileIds: new Set(),
   activeCollectionId: null,
-  sidebarOpen: true,
 };
 
 const listeners = new Set<(state: UIState) => void>();
@@ -98,10 +96,6 @@ export const uiStore = {
 
   setActiveCollectionId: (id: string | null) => {
     set({ activeCollectionId: id });
-  },
-
-  setSidebarOpen: (open: boolean) => {
-    set({ sidebarOpen: open });
   },
 
   selectAllFiles: (ids: string[]) => {
