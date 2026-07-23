@@ -35,15 +35,14 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
   }, []);
 
   const handleShare = async () => {
-    const toastId = toast.loading(`Generating share link for ${file.name}...`);
     try {
-      addRecentlyViewed(file);
-      const { token } = await callEdgeFunction<{ token: string }>('create-share-token', { fileId: file.id });
-      const link = `https://alteracloud.space/?t=${token}`;
+      const slug = encodeURIComponent(file.name);
+      const course = file.course || 'general';
+      const link = `https://alteracloud.space/${course}/${file.section}/${file.id}/${slug}`;
       await navigator.clipboard.writeText(link);
-      toast.success(`Share link copied to clipboard!`, { id: toastId });
+      toast.success(`Share link copied to clipboard!`);
     } catch (err) {
-      toast.error(`Failed to generate share link: ${err instanceof Error ? err.message : 'Unknown error'}`, { id: toastId });
+      toast.error(`Failed to copy: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   };
 

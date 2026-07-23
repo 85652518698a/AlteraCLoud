@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuthStore, authStore } from './store/authStore';
 import { Toaster } from 'react-hot-toast';
 import { useUIStore, uiStore } from './store/uiStore';
@@ -10,47 +10,47 @@ import { TermsPage } from './pages/TermsPage';
 import { DownloadPage } from './pages/DownloadPage';
 import { SharePage } from './pages/SharePage';
 
+function isSharePath(): boolean {
+  const segments = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+  return segments.length >= 3 && segments[2].length >= 20;
+}
+
 export default function App() {
   const loading = useAuthStore(s => s.loading);
   const user = useAuthStore(s => s.user);
   const currentPage = useUIStore(s => s.currentPage);
-  const [shareToken, setShareToken] = useState<string | null>(() => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('t') || null;
-  });
+  const showingShare = isSharePath();
 
-  // Initialize secure session upon mount
   useEffect(() => {
     authStore.initSession();
   }, []);
 
-  // Sync URL path ↔ store-based routing
   useEffect(() => {
+    if (showingShare) return;
     const path = window.location.pathname.replace(/\/$/, '');
     if (path === '/privacy') uiStore.setCurrentPage('privacy');
     else if (path === '/terms') uiStore.setCurrentPage('terms');
     else if (path === '/download') uiStore.setCurrentPage('download');
     else if (path === '/admin') uiStore.setCurrentPage('admin');
-
-  }, []);
+  }, [showingShare]);
 
   useEffect(() => {
+    if (showingShare) return;
     const path = window.location.pathname.replace(/\/$/, '');
     const page = currentPage;
     const expected = page === 'privacy' ? '/privacy' : page === 'terms' ? '/terms' : page === 'download' ? '/download' : page === 'admin' ? '/admin' : '/';
-    if (path !== expected && !shareToken) window.history.replaceState(null, '', expected);
-  }, [currentPage, shareToken]);
+    if (path !== expected) window.history.replaceState(null, '', expected);
+  }, [currentPage, showingShare]);
 
   useEffect(() => {
     const handlePop = () => {
+      if (isSharePath()) return;
       const path = window.location.pathname.replace(/\/$/, '');
       if (path === '/privacy') uiStore.setCurrentPage('privacy');
       else if (path === '/terms') uiStore.setCurrentPage('terms');
       else if (path === '/download') uiStore.setCurrentPage('download');
       else if (path === '/admin') uiStore.setCurrentPage('admin');
-      else {
-        uiStore.setCurrentPage('landing');
-      }
+      else uiStore.setCurrentPage('landing');
     };
     window.addEventListener('popstate', handlePop);
     return () => window.removeEventListener('popstate', handlePop);
@@ -59,7 +59,6 @@ export default function App() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center text-black select-none p-8">
-        {/* Brand */}
         <div className="flex flex-col items-center gap-8">
           <div className="text-center">
             <div className="text-4xl md:text-6xl font-display font-black tracking-[0.08em] text-black leading-none">
@@ -69,25 +68,15 @@ export default function App() {
               CLOUD STORAGE FACILITY
             </div>
           </div>
-
-          {/* Brutalist animated bar */}
           <div className="w-64 border-3 border-black p-1">
             <div className="h-2 bg-[#FF3B30] animate-load-bar" />
           </div>
-
-          {/* Cycling message */}
           <span className="text-xs font-mono tracking-widest text-neutral-700 font-bold animate-fade-msg">
             INITIALIZING SECURE SESSION...
           </span>
-
-          {/* Terminal blocks */}
           <div className="flex gap-1.5">
             {[0, 1, 2, 3].map(i => (
-              <div
-                key={i}
-                className="w-2 h-2 border-2 border-black bg-white animate-blink"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              />
+              <div key={i} className="w-2 h-2 border-2 border-black bg-white animate-blink" style={{ animationDelay: `${i * 0.15}s` }} />
             ))}
           </div>
         </div>
@@ -97,9 +86,8 @@ export default function App() {
 
   return (
     <>
-      {/* Visual Routing Hub */}
-      {shareToken ? (
-        <SharePage token={shareToken} />
+      {showingShare ? (
+        <SharePage />
       ) : currentPage === 'privacy' ? (
         <PrivacyPage />
       ) : currentPage === 'terms' ? (
@@ -114,7 +102,6 @@ export default function App() {
         <DashboardPage />
       )}
 
-      {/* Styled feedback notification toaster */}
       <Toaster 
         position="bottom-right"
         toastOptions={{

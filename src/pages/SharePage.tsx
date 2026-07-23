@@ -1,43 +1,47 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../config/supabase';
 import { callEdgeFunction } from '../lib/edgeFunction';
+import { FileRecord } from '../types';
 import { FileIcon } from '../components/ui/FileIcon';
 import { formatBytes } from '../lib/formatBytes';
 import { Download, ShieldAlert } from 'lucide-react';
 
-interface SharedFile {
-  id: string;
-  name: string;
-  section: string;
-  file_type: string;
-  size_bytes: number;
-  course: string | null;
-}
-
-interface SharePageProps {
-  token: string;
-}
-
-export const SharePage: React.FC<SharePageProps> = ({ token }) => {
-  const [file, setFile] = useState<SharedFile | null>(null);
+export const SharePage: React.FC = () => {
+  const [file, setFile] = useState<FileRecord | null>(null);
   const [url, setUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    callEdgeFunction<{ file: SharedFile; url: string }>('resolve-share-token', { token }, false)
-      .then((data) => {
-        setFile(data.file);
-        setUrl(data.url);
+    const path = window.location.pathname.replace(/\/$/, '').split('/');
+    // path format: /:course/:section/:fileId/:fileName
+    const fileId = path.length >= 4 ? path[3] : null;
+
+    if (!fileId || fileId.length < 20) {
+      setError('Invalid file link');
+      setLoading(false);
+      return;
+    }
+
+    supabase.from('files').select('*').eq('id', fileId).single()
+      .then(async ({ data, error: dbError }) => {
+        if (dbError || !data) {
+          setError('File not found');
+          return;
+        }
+        setFile(data);
+        const res = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: data.id }, false);
+        setUrl(res.url);
       })
-      .catch((err) => setError(err.message || 'Invalid or expired share link'))
+      .catch(() => setError('Failed to load file'))
       .finally(() => setLoading(false));
-  }, [token]);
+  }, []);
 
   const handleDownload = () => {
-    if (!url) return;
+    if (!url || !file) return;
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', file?.name || 'download');
+    link.setAttribute('download', file.name);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -59,9 +63,9 @@ export const SharePage: React.FC<SharePageProps> = ({ token }) => {
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center border-4 border-black p-8 shadow-[8px_8px_0px_0px_#000000]">
           <ShieldAlert className="w-10 h-10 mx-auto text-[#FF3B30] mb-4" />
-          <h2 className="font-display font-black text-lg uppercase tracking-wider text-black mb-2">Share Link Invalid</h2>
+          <h2 className="font-display font-black text-lg uppercase tracking-wider text-black mb-2">File Not Found</h2>
           <p className="text-xs font-mono text-neutral-700 font-bold">
-            This share link is invalid or has expired. Please ask the sender to generate a new one.
+            This file could not be found. It may have been removed or the link is incorrect.
           </p>
         </div>
       </div>
@@ -79,37 +83,30 @@ export const SharePage: React.FC<SharePageProps> = ({ token }) => {
         </div>
 
         {file && (
-          <div className="border-2 border-black p-4 mb-6">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 bg-white border-2 border-black">
+          <>
+            <div className="flex items-center gap-3 mb-4 pb-4 border-b-2 border-black">
+              <div className="p-2 bg-white border-2 border-black shrink-0">
                 <FileIcon extension={file.file_type} className="w-6 h-6" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-xs font-mono font-bold text-black truncate">{file.name}</h3>
-                <p className="text-2xs font-mono text-neutral-600 mt-0.5 font-bold uppercase">{file.section} • {formatBytes(file.size_bytes)}</p>
+                <p className="text-2xs font-mono text-neutral-600 mt-0.5 font-bold uppercase">
+                  {file.section} {file.course ? `• ${file.course}` : ''} • {formatBytes(file.size_bytes)}
+                </p>
               </div>
             </div>
-
-            <div className="flex items-center gap-2 text-2xs font-mono text-neutral-700 font-bold">
-              <span className="px-2 py-0.5 bg-blue-600 text-white border-2 border-blue-600 uppercase">{file.file_type || 'FILE'}</span>
-              {file.course && (
-                <span className="px-2 py-0.5 bg-amber-400 text-black border-2 border-amber-400 uppercase">{file.course}</span>
-              )}
-            </div>
-          </div>
+            <p className="text-2xs font-mono text-neutral-500 mb-5 font-bold uppercase tracking-wider">
+              Shared via Altera Cloud • CSMU Academic Portal
+            </p>
+            <button
+              onClick={handleDownload}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-[#FF3B30] border-2 border-[#FF3B30] text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer active:translate-y-0.5"
+            >
+              <Download className="w-4 h-4" />
+              DOWNLOAD FILE
+            </button>
+          </>
         )}
-
-        <button
-          onClick={handleDownload}
-          className="w-full flex items-center justify-center gap-2 py-3 bg-[#FF3B30] border-2 border-[#FF3B30] text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer active:translate-y-0.5"
-        >
-          <Download className="w-4 h-4" />
-          DOWNLOAD FILE
-        </button>
-
-        <p className="text-2xs font-mono text-neutral-500 text-center mt-4 font-bold uppercase tracking-wider">
-          alteracloud.space
-        </p>
       </div>
     </div>
   );
