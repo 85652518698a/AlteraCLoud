@@ -19,15 +19,19 @@ serve(async (req) => {
     const { query } = await req.json();
     if (!query || typeof query !== 'string') throw new Error('Missing query');
 
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${Deno.env.get('GEMINI_API_KEY')}`,
+    const ZEN_KEY = Deno.env.get('ZEN_API_KEY') || '';
+    if (!ZEN_KEY) throw new Error('ZEN_API_KEY not configured');
+
+    const zenRes = await fetch(
+      'https://opencode.ai/zen/v1/chat/completions',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ZEN_KEY}` },
         body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `You are a search assistant for an academic file repository (CSMU). 
+          model: 'deepseek-v4-flash-free',
+          messages: [{
+            role: 'user',
+            content: `You are a search assistant for an academic file repository (CSMU). 
 Extract structured search filters from this student query: "${query}"
 
 Available courses: btech_cse_aiml, btech_cse_ds, btech_cse_cyber, btech_aids, btech_mech, btech_civil, btech_ece, btech_eee, bba, bca, mca, mba, mpharm, bpharm, dpharm, general
@@ -39,14 +43,17 @@ Return ONLY valid JSON with these optional fields:
 - keywords: array of search terms extracted
 
 Example: {"course":"btech_cse_aiml","section":"","keywords":["maths","3rd sem"]}`
-            }]
           }]
         }),
       }
     );
 
-    const geminiData = await geminiRes.json();
-    const text = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const zenData = await zenRes.json();
+    if (!zenRes.ok) {
+      const msg = zenData?.error?.message || `Zen API error: ${zenRes.status}`;
+      throw new Error(msg);
+    }
+    const text = zenData?.choices?.[0]?.message?.content || '';
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     const filters = jsonMatch ? JSON.parse(jsonMatch[0]) : { keywords: [query] };
 

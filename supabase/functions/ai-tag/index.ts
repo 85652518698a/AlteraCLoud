@@ -22,29 +22,36 @@ serve(async (req) => {
     const { data: file } = await supabase
       .from('files').select('name, section, course').eq('id', fileId).single();
 
+    const ZEN_KEY = Deno.env.get('ZEN_API_KEY') || '';
+    if (!ZEN_KEY) throw new Error('ZEN_API_KEY not configured');
+
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${Deno.env.get('GEMINI_API_KEY')}`,
+      'https://opencode.ai/zen/v1/chat/completions',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ZEN_KEY}` },
         body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `Suggest course and section for this academic file name: "${file?.name}"
+          model: 'deepseek-v4-flash-free',
+          messages: [{
+            role: 'user',
+            content: `Suggest course and section for this academic file name: "${file?.name}"
 
 Available courses: btech_cse_aiml, btech_cse_ds, btech_cse_cyber, btech_aids, btech_mech, btech_civil, btech_ece, btech_eee, bba, bca, mca, mba, mpharm, bpharm, dpharm, general
 Available sections: notes, assignments, question_bank, lab_manuals, projects, reference_books, syllabi, timetables, exam_circulars
 
 Return ONLY valid JSON: {"course":"course_id","section":"section_id","keywords":["keyword1","keyword2"]}
 Current values: course="${file?.course || 'none'}", section="${file?.section || 'none'}"`
-            }]
           }]
         }),
       }
     );
 
     const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    if (!response.ok) {
+      const msg = data?.error?.message || `Zen API error: ${response.status}`;
+      throw new Error(msg);
+    }
+    const text = data?.choices?.[0]?.message?.content || '';
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     const suggestion = jsonMatch ? JSON.parse(jsonMatch[0]) : { course: '', section: '' };
 

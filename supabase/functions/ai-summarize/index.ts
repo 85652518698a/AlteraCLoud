@@ -30,23 +30,31 @@ serve(async (req) => {
     const content = await res.text();
     const preview = content.slice(0, 30000);
 
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${Deno.env.get('GEMINI_API_KEY')}`,
+    const ZEN_KEY = Deno.env.get('ZEN_API_KEY') || '';
+    if (!ZEN_KEY) throw new Error('ZEN_API_KEY not configured');
+
+    const zenRes = await fetch(
+      'https://opencode.ai/zen/v1/chat/completions',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ZEN_KEY}` },
         body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `Summarize this academic document in 3-5 bullet points (in English):\n\n${preview}`
-            }]
+          model: 'deepseek-v4-flash-free',
+          messages: [{
+            role: 'user',
+            content: `Summarize this academic document in 3-5 bullet points (in English):\n\n${preview}`
           }]
         }),
       }
     );
 
-    const geminiData = await geminiRes.json();
-    const summary = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || 'Could not generate summary';
+    const zenData = await zenRes.json();
+    if (!zenRes.ok) {
+      const msg = zenData?.error?.message || `Zen API error: ${zenRes.status}`;
+      throw new Error(msg);
+    }
+    const summary = zenData?.choices?.[0]?.message?.content;
+    if (!summary) throw new Error('Zen returned empty response');
 
     return new Response(JSON.stringify({ summary, fileName: file.name }), {
       status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
