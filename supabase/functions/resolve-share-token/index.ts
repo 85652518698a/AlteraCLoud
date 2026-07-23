@@ -27,7 +27,6 @@ serve(async (req) => {
       });
     }
 
-    // Look up token
     const { data: link, error: linkError } = await supabase
       .from('share_links').select('file_id, expires_at').eq('token', token).single();
 
@@ -43,9 +42,9 @@ serve(async (req) => {
       });
     }
 
-    // Get file info
+    const fileId = link.file_id;
     const { data: file, error: fileError } = await supabase
-      .from('files').select('*').eq('id', link.file_id').single();
+      .from('files').select('*').eq('id', fileId).single();
 
     if (fileError || !file) {
       return new Response(JSON.stringify({ error: 'File not found' }), {
@@ -53,7 +52,6 @@ serve(async (req) => {
       });
     }
 
-    // Generate signed URL
     const { data: signedUrl, error: signError } = await supabase.storage
       .from('altera-resources').createSignedUrl(file.storage_path, 3600);
 
