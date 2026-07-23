@@ -6,7 +6,7 @@ import { callEdgeFunction } from '../../lib/edgeFunction';
 import { uiStore, useUIStore } from '../../store/uiStore';
 import { addRecentlyViewed } from '../../lib/recentlyViewed';
 import { QuickPreview } from './QuickPreview';
-import { Download } from 'lucide-react';
+import { Download, Share2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface FileCardProps {
@@ -33,6 +33,18 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
   useEffect(() => {
     return () => { if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current); };
   }, []);
+
+  const handleShare = async () => {
+    const toastId = toast.loading(`Generating share link for ${file.name}...`);
+    try {
+      addRecentlyViewed(file);
+      const { url } = await callEdgeFunction<{ url: string }>('get-signed-url', { fileId: file.id }, false);
+      await navigator.clipboard.writeText(url);
+      toast.success(`Share link copied to clipboard (expires in 1 hour)`, { id: toastId });
+    } catch (err) {
+      toast.error(`Failed to generate share link: ${err instanceof Error ? err.message : 'Unknown error'}`, { id: toastId });
+    }
+  };
 
   const handleDownload = async () => {
     setDownloading(true);
@@ -109,11 +121,18 @@ export const FileCard: React.FC<FileCardProps> = ({ file }) => {
           </p>
         </div>
       </div>
-      <div className="flex gap-2.5 select-none pt-4 border-t-2 border-black">
+      <div className="flex gap-2 select-none pt-4 border-t-2 border-black">
+        <button
+          onClick={handleShare}
+          className="flex items-center justify-center gap-1 px-3 py-2 bg-white border-2 border-black text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-150 cursor-pointer active:translate-y-0.5"
+          title="Copy share link"
+        >
+          <Share2 className="w-3.5 h-3.5" />
+        </button>
         <button
           onClick={handleDownload}
           disabled={downloading}
-              className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-[#FF3B30] border-2 border-[#FF3B30] text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer disabled:opacity-50 active:translate-y-0.5"
+          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 bg-[#FF3B30] border-2 border-[#FF3B30] text-white text-xs font-mono font-bold uppercase tracking-wider hover:bg-blue-600 hover:border-blue-600 transition-all duration-150 cursor-pointer disabled:opacity-50 active:translate-y-0.5"
         >
           <Download className="w-3.5 h-3.5" />
           <span>{downloading ? 'FETCHING' : 'DOWNLOAD'}</span>
