@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { FileRecord } from '../../types';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { FileIcon } from '../ui/FileIcon';
@@ -35,8 +36,8 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ file, onClose })
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/95" style={{ pointerEvents: 'auto' }}>
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white">
       <div className="w-full max-w-lg bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000000] max-h-[80vh] flex flex-col">
         <div className="flex items-center justify-between border-b-4 border-black px-5 py-4 shrink-0">
           <div className="flex items-center gap-2">
@@ -89,6 +90,7 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ file, onClose })
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
