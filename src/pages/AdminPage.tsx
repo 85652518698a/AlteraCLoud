@@ -64,17 +64,17 @@ export const AdminPage: React.FC = () => {
         <Navbar />
         <PageWrapper>
           {/* Header */}
-          <div className="mb-8 select-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-4 border-black pb-6">
-            <div>
-              <div className="section-heading">
-                <ShieldCheck className="w-3.5 h-3.5 inline-block mr-1" /><span>ELEVATED CABINET HUB</span>
-              </div>
+          <div className="mb-8 select-none border-l-4 border-black pl-5">
+            <div className="flex items-center gap-3 mb-1">
+              <ShieldCheck className="w-5 h-5 text-black" />
               <h2 className="font-display font-black text-xl sm:text-2xl tracking-wide uppercase text-black">Locker Inventory Manager</h2>
-              <p className="text-xs text-neutral-700 font-sans mt-2 max-w-md font-medium">Secure ingestion platform. Upload new learning folders, toggle public student access, rename objects, and view operations.</p>
+              <span className="flex items-center gap-1.5 px-2 py-1 bg-white border-2 border-black font-mono text-2xs font-bold">
+                <span className="h-1.5 w-1.5 bg-[#FF3B30]"></span>
+                MUTATIONS ENGAGED
+              </span>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-black font-mono text-xs font-bold">
-              <span className="h-2 w-2 bg-[#FF3B30]"></span>
-              <span className="text-black">MUTATIONS ENGAGED</span>
+            <div className="section-heading border-0 p-0 m-0 text-neutral-600 font-normal">
+              ELEVATED CABINET HUB — Secure ingestion platform. Upload new learning folders, toggle public student access, rename objects, and view operations.
             </div>
           </div>
 

@@ -40,27 +40,27 @@ export const DashboardPage: React.FC = () => {
           onSelectCollection={(id) => uiStore.setActiveCollectionId(id)}
           activeCollectionId={activeCollectionId}
         />
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/20 z-20"
+            onClick={() => uiStore.setSidebarOpen(false)}
+          />
+        )}
         <SidebarToggle />
 
-        <div className={`transition-all duration-200 ${sidebarOpen ? 'ml-56' : 'ml-0'}`}>
+        <div>
         <PageWrapper>
-          <div className="mb-8 text-left select-none">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="section-heading mb-0 pb-0 border-b-0">
-                <span>CSMU RESOURCE LOCKER</span>
-              </div>
+          <div className="mb-10 text-left select-none border-l-4 border-black pl-5">
+            <div className="flex items-center gap-3 mb-1">
+              <h2 className="font-display font-black text-xl sm:text-2xl md:text-3xl tracking-wide uppercase text-black">
+                Academic Resource Portal
+              </h2>
               <span className="text-2xs font-mono text-green-600 border-2 border-green-600 bg-white px-2 py-0.5 uppercase tracking-wider font-bold">
                 LIVE
               </span>
             </div>
-
-            <div className="border-l-4 border-black pl-4">
-              <h2 className="font-display font-black text-xl sm:text-2xl md:text-3xl tracking-wide uppercase text-black">
-                Academic Resource Portal
-              </h2>
-              <p className="text-xs text-neutral-700 font-sans mt-1.5 leading-relaxed max-w-lg font-medium">
-                Securely access notes, assignments, previous year question papers, and lab manuals approved directly by CSMU faculty examiners.
-              </p>
+            <div className="section-heading border-0 p-0 m-0 text-neutral-600 font-normal">
+              CSMU RESOURCE LOCKER — Securely access notes, assignments, previous year question papers, and lab manuals approved directly by CSMU faculty examiners.
             </div>
           </div>
 

@@ -68,7 +68,7 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
   };
 
   return (
-    <div className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r-2 border-black z-30 transition-all duration-200 flex flex-col ${open ? 'w-56' : 'w-0 overflow-hidden'}`}>
+    <div className={`fixed left-0 top-16 h-[calc(100vh-4rem)] bg-white border-r-2 border-black z-30 transition-all duration-200 flex flex-col w-56 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
       <div className="flex items-center justify-between p-3 border-b-2 border-black shrink-0">
         <span className="text-xs font-mono font-bold uppercase tracking-wider text-black">COLLECTIONS</span>
         <button
@@ -157,10 +157,11 @@ export const CollectionSidebar: React.FC<CollectionSidebarProps> = ({ files, onS
 
       <div className="border-t-2 border-black p-2">
         <button
-          onClick={() => uiStore.setSidebarOpen(true)}
+          onClick={() => uiStore.setSidebarOpen(false)}
           className="w-full flex items-center justify-center gap-1 px-3 py-2 bg-white border-2 border-black text-xs font-mono font-bold text-black hover:bg-black hover:text-white transition-colors duration-150 cursor-pointer"
         >
-          <ChevronRight className="w-3.5 h-3.5" />
+          <ChevronLeft className="w-3.5 h-3.5" />
+          <span>CLOSE</span>
         </button>
       </div>
     </div>
@@ -176,7 +177,7 @@ export const SidebarToggle: React.FC = () => {
     <button
       onClick={() => uiStore.setSidebarOpen(true)}
       className="fixed left-2 top-20 z-30 p-2 bg-white border-2 border-black hover:bg-black hover:text-white transition-colors duration-150 cursor-pointer"
-      title="Open collections"
+      title="Open collections sidebar"
     >
       <Bookmark className="w-4 h-4" />
     </button>
