@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FileRecord } from '../../types';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { FileIcon } from '../ui/FileIcon';
 import { Sparkles, X, Loader } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 interface SummarizeModalProps {
   file: FileRecord;
@@ -13,6 +16,11 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ file, onClose })
   const [summary, setSummary] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
 
   const handleSummarize = async () => {
     setLoading(true);
@@ -28,9 +36,9 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ file, onClose })
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/95">
-      <div className="w-full max-w-lg bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000000]">
-        <div className="flex items-center justify-between border-b-4 border-black px-5 py-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/95" style={{ pointerEvents: 'auto' }}>
+      <div className="w-full max-w-lg bg-white border-4 border-black shadow-[8px_8px_0px_0px_#000000] max-h-[80vh] flex flex-col">
+        <div className="flex items-center justify-between border-b-4 border-black px-5 py-4 shrink-0">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-black" />
             <h3 className="text-xs font-mono font-bold uppercase tracking-wider">AI Summary</h3>
@@ -40,7 +48,7 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ file, onClose })
           </button>
         </div>
 
-        <div className="p-5">
+        <div className="p-5 overflow-y-auto">
           <div className="flex items-center gap-3 mb-4 pb-3 border-b-2 border-black">
             <div className="p-1.5 bg-white border-2 border-black">
               <FileIcon extension={file.file_type} className="w-4 h-4" />
@@ -72,7 +80,11 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ file, onClose })
           {summary && (
             <div className="border-2 border-black p-4">
               <div className="text-2xs font-mono text-neutral-600 uppercase tracking-wider font-bold mb-2">SUMMARY</div>
-              <p className="text-xs font-sans text-black leading-relaxed whitespace-pre-line">{summary}</p>
+              <div className="text-xs font-sans text-black leading-relaxed prose prose-sm max-w-none prose-headings:font-mono prose-headings:text-black prose-strong:text-black prose-strong:font-bold prose-code:bg-neutral-100 prose-code:border prose-code:border-black prose-code:px-1 prose-code:font-mono">
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                  {summary}
+                </ReactMarkdown>
+              </div>
             </div>
           )}
         </div>
