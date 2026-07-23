@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import pdfParse from 'https://esm.sh/pdf-parse@1.1.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -27,7 +28,23 @@ serve(async (req) => {
       .from('altera-resources').createSignedUrl(file.storage_path, 300);
 
     const res = await fetch(signed.signedUrl);
-    const content = await res.text();
+    const buffer = await res.arrayBuffer();
+    const fileType = (file.file_type || '').toLowerCase();
+
+    let content: string;
+    if (['pdf', 'application/pdf'].includes(fileType)) {
+      try {
+        const data = await pdfParse(new Uint8Array(buffer));
+        content = data.text;
+      } catch {
+        throw new Error('Could not extract text from PDF. The file may be scanned or image-based.');
+      }
+    } else {
+      content = new TextDecoder().decode(buffer);
+    }
+
+    if (!content.trim()) throw new Error('File content is empty');
+
     const preview = content.slice(0, 30000);
 
     const ZEN_KEY = Deno.env.get('ZEN_API_KEY') || '';
