@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FileRecord } from '../../types';
 import { callEdgeFunction } from '../../lib/edgeFunction';
 import { FileIcon } from '../ui/FileIcon';
-import { Sparkles, X, Loader2 } from 'lucide-react';
+import { Sparkles, X, Loader } from 'lucide-react';
 
 interface SummarizeModalProps {
   file: FileRecord;
@@ -58,7 +58,7 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ file, onClose })
 
           {loading && (
             <div className="flex flex-col items-center gap-3 py-8">
-              <Loader2 className="w-6 h-6 animate-spin text-black" />
+              <Loader className="w-6 h-6 animate-spin text-black" />
               <span className="text-xs font-mono text-neutral-700 font-bold">Analyzing document...</span>
             </div>
           )}

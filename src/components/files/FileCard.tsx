@@ -6,6 +6,7 @@ import { callEdgeFunction } from '../../lib/edgeFunction';
 import { uiStore, useUIStore } from '../../store/uiStore';
 import { addRecentlyViewed } from '../../lib/recentlyViewed';
 import { QuickPreview } from './QuickPreview';
+import { SummarizeModal } from './SummarizeModal';
 import { Download, Share2, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 
