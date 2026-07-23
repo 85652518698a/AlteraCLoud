@@ -1,6 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import pdfParse from 'https://esm.sh/pdf-parse@1.1.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -34,6 +33,7 @@ serve(async (req) => {
     let content: string;
     if (['pdf', 'application/pdf'].includes(fileType)) {
       try {
+        const pdfParse = (await import('https://esm.sh/pdf-parse@1.1.1')).default;
         const data = await pdfParse(new Uint8Array(buffer));
         content = data.text;
       } catch {
